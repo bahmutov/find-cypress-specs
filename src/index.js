@@ -59,7 +59,8 @@ function findCypressSpecs(opts = {}) {
   }
 
   const filtered = files.filter(doesNotMatchAllIgnoredPatterns)
-  debug('filtered specs %o', filtered)
+  debug('filtered %d specs', filtered.length)
+  debug(filtered.join('\n'))
 
   // return spec files with the added integration folder prefix
   return filtered.map((file) => path.join(options.integrationFolder, file))
