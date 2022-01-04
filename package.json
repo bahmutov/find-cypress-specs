@@ -1,6 +1,6 @@
 {
   "name": "find-cypress-specs",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Find Cypress spec files using the config settings",
   "main": "src",
   "files": [
@@ -13,11 +13,12 @@
   "scripts": {
     "test": "ava",
     "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
-    "demo": "DEBUG=find-cypress-specs node ./bin/find"
+    "demo": "DEBUG=find-cypress-specs node ./bin/find",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bahmutov/find-cypress-specs.git"
+    "url": "https://github.com/bahmutov/find-cypress-specs.git"
   },
   "keywords": [
     "cypress-plugin"
@@ -31,7 +32,8 @@
   "devDependencies": {
     "ava": "^4.0.0",
     "cypress": "^9.2.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "semantic-release": "^18.0.1"
   },
   "dependencies": {
     "debug": "^4.3.3",
