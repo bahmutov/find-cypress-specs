@@ -1,4 +1,4 @@
-# find-cypress-specs
+# find-cypress-specs ![cypress version](https://img.shields.io/badge/cypress-9.2.0-brightgreen)
 
 > Find Cypress spec files using the config settings
 
