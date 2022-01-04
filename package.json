@@ -1,0 +1,31 @@
+{
+  "name": "find-cypress-specs",
+  "version": "1.0.0",
+  "description": "Find Cypress spec files using the config settings",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahmutov/find-cypress-specs.git"
+  },
+  "keywords": [
+    "cypress-plugin"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@mail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bahmutov/find-cypress-specs/issues"
+  },
+  "homepage": "https://github.com/bahmutov/find-cypress-specs#readme",
+  "devDependencies": {
+    "ava": "^4.0.0",
+    "cypress": "^9.2.0",
+    "prettier": "^2.5.1"
+  },
+  "dependencies": {
+    "debug": "^4.3.3"
+  }
+}

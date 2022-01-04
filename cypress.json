@@ -1,0 +1,8 @@
+{
+  "fixturesFolder": false,
+  "supportFile": false,
+  "pluginsFile": false,
+  "integrationFolder": "cypress/e2e",
+  "testFiles": "**/*.js",
+  "ignoreTestFiles": ["utils.js"]
+}
