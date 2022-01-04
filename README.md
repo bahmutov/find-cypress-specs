@@ -2,6 +2,14 @@
 
 > Find Cypress spec files using the config settings
 
+```bash
+$ npx find-cypress-specs
+# prints all spec files separated by a comma
+cypress/e2e/spec.js,cypress/e2e/featureA/user.js
+```
+
+## Details
+
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
 
 You can see how Cypress finds the specs using `DEBUG=cypress:cli,cypress:server:specs` environment variable to see verbose logs.
