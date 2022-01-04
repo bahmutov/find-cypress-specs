@@ -43,6 +43,8 @@ function findCypressSpecs(opts = {}) {
 
   // go through the files again and eliminate files that match
   // the ignore patterns
+  const ignorePatterns = [].concat(options.ignoreTestFiles)
+  debug('ignore patterns %o', ignorePatterns)
 
   // a function which returns true if the file does NOT match
   // all of our ignored patterns
@@ -51,7 +53,7 @@ function findCypressSpecs(opts = {}) {
     // as regular characters without needing an '.' in the
     // using {matchBase: true} here so that patterns without a globstar **
     // match against the basename of the file
-    return options.ignoreTestFiles.every((pattern) => {
+    return ignorePatterns.every((pattern) => {
       return !minimatch(file, pattern, MINIMATCH_OPTIONS)
     })
   }
