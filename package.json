@@ -2,10 +2,18 @@
   "name": "find-cypress-specs",
   "version": "1.0.0",
   "description": "Find Cypress spec files using the config settings",
-  "main": "index.js",
+  "main": "src",
+  "files": [
+    "bin",
+    "src"
+  ],
+  "bin": {
+    "find-cypress-specs": "bin/find.js"
+  },
   "scripts": {
     "test": "cypress run",
-    "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run"
+    "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
+    "demo": "DEBUG=find-cypress-specs node ./bin/find"
   },
   "repository": {
     "type": "git",
