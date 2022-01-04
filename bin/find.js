@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const { getConfig, findCypressSpecs } = require('../src')
+const { getSpecs } = require('../src')
 
-const options = getConfig()
-const specs = findCypressSpecs(options)
+const specs = getSpecs()
 console.log(specs.join(','))

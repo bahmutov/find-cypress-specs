@@ -40,7 +40,15 @@ function findCypressSpecs(opts = {}) {
   return files.map((file) => path.join(options.integrationFolder, file))
 }
 
+function getSpecs() {
+  const options = getConfig()
+  const specs = findCypressSpecs(options)
+  return specs
+}
+
 module.exports = {
+  getSpecs,
+  // individual utilities
   getConfig,
   findCypressSpecs,
 }

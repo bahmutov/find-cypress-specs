@@ -11,7 +11,7 @@
     "find-cypress-specs": "bin/find.js"
   },
   "scripts": {
-    "test": "cypress run",
+    "test": "ava",
     "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
     "demo": "DEBUG=find-cypress-specs node ./bin/find"
   },

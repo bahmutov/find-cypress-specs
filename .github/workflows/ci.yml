@@ -16,6 +16,9 @@ jobs:
       - name: Demo 💻
         run: npm run demo
 
+      - name: Unit tests 🧪
+        run: npm test
+
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v2
         with:
