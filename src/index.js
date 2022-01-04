@@ -25,8 +25,9 @@ function findCypressSpecs(opts = {}) {
     ignoreTestFiles: [],
   }
   const options = {
-    ...defaults,
-    ...opts,
+    integrationFolder: opts.integrationFolder || defaults.integrationFolder,
+    testFiles: opts.testFiles || defaults.testFiles,
+    ignoreTestFiles: opts.ignoreTestFiles || defaults.ignoreTestFiles,
   }
   debug('options %o', options)
 

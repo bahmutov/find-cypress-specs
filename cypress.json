@@ -3,6 +3,6 @@
   "supportFile": false,
   "pluginsFile": false,
   "integrationFolder": "cypress/e2e",
-  "testFiles": "**/*.js",
+  "testFiles2": "**/*.js",
   "ignoreTestFiles": ["utils.js"]
 }
