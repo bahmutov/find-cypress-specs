@@ -1,5 +1,7 @@
 const debug = require('debug')('find-cypress-specs')
 const fs = require('fs')
+const path = require('path')
+const globby = require('globby')
 
 /**
  * Reads the cypress config file and returns the relevant properties
@@ -27,7 +29,15 @@ function findCypressSpecs(opts = {}) {
     ...opts,
   }
   debug('options %o', options)
-  return []
+
+  const files = globby.sync(options.testFiles, {
+    cwd: options.integrationFolder,
+    ignore: options.ignoreTestFiles,
+  })
+  debug('found %d file(s) %o', files.length, files)
+
+  // return spec files with the added integration folder prefix
+  return files.map((file) => path.join(options.integrationFolder, file))
 }
 
 module.exports = {
