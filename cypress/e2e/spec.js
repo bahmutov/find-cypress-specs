@@ -1,3 +1,9 @@
 /// <reference types="cypress" />
 
-it('works', () => {})
+describe('parent suite', { tags: '@main' }, () => {
+  it('works', () => {})
+
+  describe('inner suite', () => {
+    it('shows something', { tags: '@user' }, () => {})
+  })
+})
