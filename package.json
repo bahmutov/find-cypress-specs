@@ -14,6 +14,7 @@
     "test": "ava",
     "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
     "demo": "DEBUG=find-cypress-specs node ./bin/find",
+    "demo-names": "node ./bin/find --names",
     "semantic-release": "semantic-release"
   },
   "repository": {
@@ -36,7 +37,9 @@
     "semantic-release": "^18.0.1"
   },
   "dependencies": {
+    "arg": "^5.0.1",
     "debug": "^4.3.3",
+    "find-test-names": "^1.9.2",
     "globby": "^11.0.4",
     "minimatch": "^3.0.4"
   }
