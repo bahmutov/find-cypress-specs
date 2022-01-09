@@ -8,6 +8,27 @@ $ npx find-cypress-specs
 cypress/e2e/spec.js,cypress/e2e/featureA/user.js
 ```
 
+## Test names
+
+You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
+
+```bash
+$ npx find-cypress-specs --names
+# prints something like
+
+cypress/e2e/spec.js
+└─ parent suite [@main]
+  ├─ works
+  └─ inner suite
+    └─ shows something [@user]
+
+cypress/e2e/featureA/user.js
+├─ works
+└⊙ needs to be written
+```
+
+Where the tags are listed inside `[ ... ]` (see [cypress-grep](https://github.com/cypress-io/cypress-grep)) and the [pending tests](https://glebbahmutov.com/blog/cypress-test-statuses/) are marked with `⊙` character.
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.

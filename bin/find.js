@@ -17,7 +17,8 @@ if (args['--names']) {
   specs.forEach((filename) => {
     const source = fs.readFileSync(filename, 'utf8')
     const result = getTestNames(source, true)
-    console.dir(result.structure, { depth: null })
+    // enable if need to debug the parsed test
+    // console.dir(result.structure, { depth: null })
     console.log(filename)
     console.log(formatTestList(result.structure))
     console.log('')
