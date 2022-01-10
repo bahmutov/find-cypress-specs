@@ -41,6 +41,7 @@
     "debug": "^4.3.3",
     "find-test-names": "^1.9.3",
     "globby": "^11.0.4",
-    "minimatch": "^3.0.4"
+    "minimatch": "^3.0.4",
+    "pluralize": "^8.0.0"
   }
 }

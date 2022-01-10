@@ -3,6 +3,7 @@
 const arg = require('arg')
 const { getSpecs } = require('../src')
 const fs = require('fs')
+const pluralize = require('pluralize')
 const { getTestNames, formatTestList } = require('find-test-names')
 
 const args = arg({
@@ -23,7 +24,10 @@ if (args['--names']) {
       const result = getTestNames(source, true)
       // enable if need to debug the parsed test
       // console.dir(result.structure, { depth: null })
-      console.log(filename)
+
+      const testCount = pluralize('test', result.testNames.length, true)
+
+      console.log('%s (%s)', filename, testCount)
       console.log(formatTestList(result.structure))
       console.log('')
     })
