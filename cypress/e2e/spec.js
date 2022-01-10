@@ -3,7 +3,7 @@
 describe('parent suite', { tags: '@main' }, () => {
   it('works well enough', () => {})
 
-  describe('inner suite', () => {
+  context('inner suite', () => {
     it('shows something', { tags: '@user' }, () => {})
   })
 })
