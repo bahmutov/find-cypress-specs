@@ -39,7 +39,7 @@
   "dependencies": {
     "arg": "^5.0.1",
     "debug": "^4.3.3",
-    "find-test-names": "^1.9.4",
+    "find-test-names": "^1.12.1",
     "globby": "^11.0.4",
     "minimatch": "^3.0.4",
     "pluralize": "^8.0.0"

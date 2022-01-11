@@ -20,25 +20,45 @@ if (args['--names']) {
   } else {
     console.log('')
     let testsN = 0
+    let pendingTestsN = 0
     specs.forEach((filename) => {
       const source = fs.readFileSync(filename, 'utf8')
       const result = getTestNames(source, true)
       // enable if need to debug the parsed test
       // console.dir(result.structure, { depth: null })
 
-      testsN += result.testNames.length
+      testsN += result.testCount
       const testCount = pluralize('test', result.testNames.length, true)
+      pendingTestsN += result.pendingTestCount
 
-      console.log('%s (%s)', filename, testCount)
+      if (result.pendingTestCount) {
+        console.log(
+          '%s (%s, %d pending)',
+          filename,
+          testCount,
+          result.pendingTestCount,
+        )
+      } else {
+        console.log('%s (%s)', filename, testCount)
+      }
       console.log(formatTestList(result.structure))
       console.log('')
     })
 
-    console.log(
-      'found %s and %s',
-      pluralize('spec', specs.length, true),
-      pluralize('test', testsN, true),
-    )
+    if (pendingTestsN) {
+      console.log(
+        'found %s (%s, %d pending)',
+        pluralize('spec', specs.length, true),
+        pluralize('test', testsN, true),
+        pendingTestsN,
+      )
+    } else {
+      console.log(
+        'found %s (%s)',
+        pluralize('spec', specs.length, true),
+        pluralize('test', testsN, true),
+      )
+    }
     console.log('')
   }
 } else {

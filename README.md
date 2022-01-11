@@ -16,15 +16,17 @@ You can print each spec file with the suite and test names inside of it (found u
 $ npx find-cypress-specs --names
 # prints something like
 
-cypress/e2e/spec.js
+cypress/e2e/spec.js (2 tests)
 └─ parent suite [@main]
-  ├─ works
+  ├─ works well enough
   └─ inner suite
     └─ shows something [@user]
 
-cypress/e2e/featureA/user.js
+cypress/e2e/featureA/user.js (2 tests, 1 pending)
 ├─ works
 └⊙ needs to be written
+
+found 2 specs (4 tests, 1 pending)
 ```
 
 Where the tags are listed inside `[ ... ]` (see [cypress-grep](https://github.com/cypress-io/cypress-grep)) and the [pending tests](https://glebbahmutov.com/blog/cypress-test-statuses/) are marked with `⊙` character.
