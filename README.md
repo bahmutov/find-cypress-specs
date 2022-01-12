@@ -31,6 +31,20 @@ found 2 specs (4 tests, 1 pending)
 
 Where the tags are listed inside `[ ... ]` (see [cypress-grep](https://github.com/cypress-io/cypress-grep)) and the [pending tests](https://glebbahmutov.com/blog/cypress-test-statuses/) are marked with `⊙` character.
 
+## Test tags
+
+You can count tags attached to the individual tests using `--names --tags` arguments
+
+```
+$ npx find-cypress-specs --names --tags
+# prints the specs and tests and at the end prints the tags table
+
+Tag    Test count
+-----  ----------
+@user  2
+@sign  1
+```
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
