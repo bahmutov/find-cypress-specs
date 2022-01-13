@@ -82,10 +82,12 @@ if (args['--names']) {
     console.log('')
 
     if (args['--tags']) {
-      const table = consoleTable.getTable(
-        ['Tag', 'Tests'],
-        Object.entries(tagTestCounts),
-      )
+      const tagEntries = Object.entries(tagTestCounts)
+      const sortedTagEntries = tagEntries.sort((a, b) => {
+        // every entry is [tag, count], so compare the tags
+        return a[0].localeCompare(b[0])
+      })
+      const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
       console.log(table)
       console.log('')
     }

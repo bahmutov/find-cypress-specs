@@ -3,4 +3,4 @@
 it('works', { tags: '@user' }, () => {})
 
 // pending test
-it('needs to be written')
+it('needs to be written', { tags: '@alpha' })
