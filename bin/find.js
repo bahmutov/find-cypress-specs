@@ -83,7 +83,7 @@ if (args['--names']) {
 
     if (args['--tags']) {
       const table = consoleTable.getTable(
-        ['Tag', 'Test count'],
+        ['Tag', 'Tests'],
         Object.entries(tagTestCounts),
       )
       console.log(table)

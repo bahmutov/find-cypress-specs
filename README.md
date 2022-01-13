@@ -39,11 +39,13 @@ You can count tags attached to the individual tests using `--names --tags` argum
 $ npx find-cypress-specs --names --tags
 # prints the specs and tests and at the end prints the tags table
 
-Tag    Test count
+Tag    Tests
 -----  ----------
 @user  2
 @sign  1
 ```
+
+Each tag count includes the tests that use the tag directly, and the _effective_ tags applied from the parent suites.
 
 ## Details
 
