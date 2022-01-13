@@ -19,7 +19,7 @@ const args = arg({
 })
 
 const specs = getSpecs()
-if (args['--names']) {
+if (args['--names'] || args['--tags']) {
   if (!specs.length) {
     console.log('no specs found')
   } else {
@@ -40,18 +40,20 @@ if (args['--names']) {
       const testCount = pluralize('test', result.testNames.length, true)
       pendingTestsN += result.pendingTestCount
 
-      if (result.pendingTestCount) {
-        console.log(
-          '%s (%s, %d pending)',
-          filename,
-          testCount,
-          result.pendingTestCount,
-        )
-      } else {
-        console.log('%s (%s)', filename, testCount)
+      if (args['--names']) {
+        if (result.pendingTestCount) {
+          console.log(
+            '%s (%s, %d pending)',
+            filename,
+            testCount,
+            result.pendingTestCount,
+          )
+        } else {
+          console.log('%s (%s)', filename, testCount)
+        }
+        console.log(formatTestList(result.structure))
+        console.log('')
       }
-      console.log(formatTestList(result.structure))
-      console.log('')
 
       if (args['--tags']) {
         const specTagCounts = countTags(result.structure)
@@ -65,21 +67,23 @@ if (args['--names']) {
       }
     })
 
-    if (pendingTestsN) {
-      console.log(
-        'found %s (%s, %d pending)',
-        pluralize('spec', specs.length, true),
-        pluralize('test', testsN, true),
-        pendingTestsN,
-      )
-    } else {
-      console.log(
-        'found %s (%s)',
-        pluralize('spec', specs.length, true),
-        pluralize('test', testsN, true),
-      )
+    if (args['--names']) {
+      if (pendingTestsN) {
+        console.log(
+          'found %s (%s, %d pending)',
+          pluralize('spec', specs.length, true),
+          pluralize('test', testsN, true),
+          pendingTestsN,
+        )
+      } else {
+        console.log(
+          'found %s (%s)',
+          pluralize('spec', specs.length, true),
+          pluralize('test', testsN, true),
+        )
+      }
+      console.log('')
     }
-    console.log('')
 
     if (args['--tags']) {
       const tagEntries = Object.entries(tagTestCounts)
@@ -89,7 +93,6 @@ if (args['--names']) {
       })
       const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
       console.log(table)
-      console.log('')
     }
   }
 } else {

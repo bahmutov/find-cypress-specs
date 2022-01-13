@@ -21,8 +21,11 @@ jobs:
       - name: Demo test names 💻
         run: npm run demo-names
 
-      - name: Demo test names and tags 💻
+      - name: Demo tags 💻
         run: npm run demo-tags
+
+      - name: Demo test names and tags 💻
+        run: npm run demo-names-and-tags
 
       - name: Unit tests 🧪
         run: npm test

@@ -15,7 +15,8 @@
     "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
     "demo": "DEBUG=find-cypress-specs node ./bin/find",
     "demo-names": "node ./bin/find --names",
-    "demo-tags": "node ./bin/find --names --tags",
+    "demo-tags": "node ./bin/find --tags",
+    "demo-names-and-tags": "node ./bin/find --names --tags",
     "semantic-release": "semantic-release"
   },
   "repository": {

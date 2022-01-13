@@ -33,16 +33,16 @@ Where the tags are listed inside `[ ... ]` (see [cypress-grep](https://github.co
 
 ## Test tags
 
-You can count tags attached to the individual tests using `--names --tags` arguments
+You can count tags attached to the individual tests using `--tags` arguments
 
 ```
-$ npx find-cypress-specs --names --tags
-# prints the specs and tests and at the end prints the tags table
+$ npx find-cypress-specs --tags
+# prints the tags table sorted by tag
 
 Tag    Tests
 -----  ----------
-@user  2
 @sign  1
+@user  2
 ```
 
 Each tag count includes the tests that use the tag directly, and the _effective_ tags applied from the parent suites.
