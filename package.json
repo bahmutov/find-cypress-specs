@@ -18,6 +18,7 @@
     "demo-tags": "node ./bin/find --tags",
     "demo-tags-json": "node ./bin/find --tags --json",
     "demo-names-and-tags": "node ./bin/find --names --tags",
+    "demo-names-and-tags-json": "node ./bin/find --names --tags --json",
     "demo-names-json": "node ./bin/find --names --json",
     "semantic-release": "semantic-release"
   },
