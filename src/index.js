@@ -72,9 +72,34 @@ function getSpecs() {
   return specs
 }
 
+function collectResults(structure, results) {
+  structure.forEach((t) => {
+    const info = {
+      name: t.name,
+      type: t.type,
+      tags: t.tags,
+    }
+    results.push(info)
+    if (t.type === 'suite') {
+      if (t.suites && t.suites.length) {
+        // skip empty nested suites
+        info.suites = []
+        collectResults(t.suites, info.suites)
+      }
+
+      if (t.tests && t.tests.length) {
+        // skip empty nested tests
+        info.tests = []
+        collectResults(t.tests, info.tests)
+      }
+    }
+  })
+}
+
 module.exports = {
   getSpecs,
   // individual utilities
   getConfig,
   findCypressSpecs,
+  collectResults,
 }
