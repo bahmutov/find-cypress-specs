@@ -79,6 +79,9 @@ function collectResults(structure, results) {
       type: t.type,
       tags: t.tags,
     }
+    if (t.pending) {
+      info.pending = t.pending
+    }
     results.push(info)
     if (t.type === 'suite') {
       if (t.suites && t.suites.length) {
