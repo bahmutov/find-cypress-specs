@@ -31,6 +31,8 @@ found 2 specs (4 tests, 1 pending)
 
 Where the tags are listed inside `[ ... ]` (see [cypress-grep](https://github.com/cypress-io/cypress-grep)) and the [pending tests](https://glebbahmutov.com/blog/cypress-test-statuses/) are marked with `⊙` character.
 
+You can print the results in JSON format using `--json` or `-j` option.
+
 ## Test tags
 
 You can count tags attached to the individual tests using `--tags` arguments
