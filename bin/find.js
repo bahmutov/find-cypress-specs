@@ -10,12 +10,14 @@ const consoleTable = require('console.table')
 const args = arg({
   '--names': Boolean,
   '--tags': Boolean,
+  '--json': Boolean,
 
   // aliases
   '-n': '--names',
   '--name': '--names',
   '-t': '--tags',
   '--tag': '--tags',
+  '-j': '--json',
 })
 
 const specs = getSpecs()
@@ -30,7 +32,10 @@ if (args['--names'] || args['--tags']) {
     // counts the number of tests for each tag across all specs
     const tagTestCounts = {}
 
+    const jsonResults = {}
+
     specs.forEach((filename) => {
+      jsonResults[filename] = []
       const source = fs.readFileSync(filename, 'utf8')
       const result = getTestNames(source, true)
       // enable if need to debug the parsed test
@@ -41,18 +46,28 @@ if (args['--names'] || args['--tags']) {
       pendingTestsN += result.pendingTestCount
 
       if (args['--names']) {
-        if (result.pendingTestCount) {
-          console.log(
-            '%s (%s, %d pending)',
-            filename,
-            testCount,
-            result.pendingTestCount,
-          )
+        if (args['--json']) {
+          result.structure.forEach((t) => {
+            if (t.type === 'test') {
+              jsonResults[filename].push(t.name)
+            } else if (t.type === 'suite') {
+              jsonResults[filename].push(t.name)
+            }
+          })
         } else {
-          console.log('%s (%s)', filename, testCount)
+          if (result.pendingTestCount) {
+            console.log(
+              '%s (%s, %d pending)',
+              filename,
+              testCount,
+              result.pendingTestCount,
+            )
+          } else {
+            console.log('%s (%s)', filename, testCount)
+          }
+          console.log(formatTestList(result.structure))
+          console.log('')
         }
-        console.log(formatTestList(result.structure))
-        console.log('')
       }
 
       if (args['--tags']) {
@@ -68,19 +83,23 @@ if (args['--names'] || args['--tags']) {
     })
 
     if (args['--names']) {
-      if (pendingTestsN) {
-        console.log(
-          'found %s (%s, %d pending)',
-          pluralize('spec', specs.length, true),
-          pluralize('test', testsN, true),
-          pendingTestsN,
-        )
+      if (args['--json']) {
+        console.log(JSON.stringify(jsonResults, null, 2))
       } else {
-        console.log(
-          'found %s (%s)',
-          pluralize('spec', specs.length, true),
-          pluralize('test', testsN, true),
-        )
+        if (pendingTestsN) {
+          console.log(
+            'found %s (%s, %d pending)',
+            pluralize('spec', specs.length, true),
+            pluralize('test', testsN, true),
+            pendingTestsN,
+          )
+        } else {
+          console.log(
+            'found %s (%s)',
+            pluralize('spec', specs.length, true),
+            pluralize('test', testsN, true),
+          )
+        }
       }
       console.log('')
     }
