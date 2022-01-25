@@ -30,6 +30,9 @@ jobs:
       - name: Demo names in json output 💻
         run: npm run demo-names-json
 
+      - name: Demo tags in json output 💻
+        run: npm run demo-tags-json
+
       - name: Unit tests 🧪
         run: npm test
 

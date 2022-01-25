@@ -49,6 +49,8 @@ Tag    Tests
 
 Each tag count includes the tests that use the tag directly, and the _effective_ tags applied from the parent suites.
 
+You can print the results in JSON format using `--json` or `-j` option.
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
