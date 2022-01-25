@@ -16,3 +16,19 @@ test('prints test names in json using -j', async (t) => {
   })
   t.snapshot(result)
 })
+
+test('prints tags in json', async (t) => {
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--tags', '--json'], {
+    filter: ['code', 'stdout'],
+  })
+  t.snapshot(result)
+})
+
+test('prints tags in json using -j', async (t) => {
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--tags', '-j'], {
+    filter: ['code', 'stdout'],
+  })
+  t.snapshot(result)
+})

@@ -104,8 +104,14 @@ if (args['--names'] || args['--tags']) {
         // every entry is [tag, count], so compare the tags
         return a[0].localeCompare(b[0])
       })
-      const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
-      console.log(table)
+      if (args['--json']) {
+        // assemble a json object with the tag counts
+        const tagResults = Object.fromEntries(sortedTagEntries)
+        console.log(JSON.stringify(tagResults, null, 2))
+      } else {
+        const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
+        console.log(table)
+      }
     }
   }
 } else {
