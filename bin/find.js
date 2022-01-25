@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const arg = require('arg')
-const { getSpecs } = require('../src')
+const { getSpecs, collectResults } = require('../src')
 const fs = require('fs')
 const pluralize = require('pluralize')
 const { getTestNames, formatTestList, countTags } = require('find-test-names')
@@ -47,13 +47,7 @@ if (args['--names'] || args['--tags']) {
 
       if (args['--names']) {
         if (args['--json']) {
-          result.structure.forEach((t) => {
-            if (t.type === 'test') {
-              jsonResults[filename].push(t.name)
-            } else if (t.type === 'suite') {
-              jsonResults[filename].push(t.name)
-            }
-          })
+          collectResults(result.structure, jsonResults[filename])
         } else {
           if (result.pendingTestCount) {
             console.log(

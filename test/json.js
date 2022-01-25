@@ -8,3 +8,11 @@ test('prints test names in json', async (t) => {
   })
   t.snapshot(result)
 })
+
+test('prints test names in json using -j', async (t) => {
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--names', '-j'], {
+    filter: ['code', 'stdout'],
+  })
+  t.snapshot(result)
+})
