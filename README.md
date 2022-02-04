@@ -1,4 +1,4 @@
-# find-cypress-specs ![cypress version](https://img.shields.io/badge/cypress-9.2.0-brightgreen)
+# find-cypress-specs [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-9.2.0-brightgreen)
 
 > Find Cypress spec files using the config settings
 
@@ -105,3 +105,6 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
+
+[renovate-badge]: https://img.shields.io/badge/renovate-app-blue.svg
+[renovate-app]: https://renovateapp.com/
