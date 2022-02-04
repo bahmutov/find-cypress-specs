@@ -1,16 +1,20 @@
 #!/usr/bin/env node
 
 const arg = require('arg')
-const { getSpecs, collectResults } = require('../src')
+const { getSpecs, collectResults, findChangedFiles } = require('../src')
 const fs = require('fs')
 const pluralize = require('pluralize')
 const { getTestNames, formatTestList, countTags } = require('find-test-names')
 const consoleTable = require('console.table')
+const debug = require('debug')('find-cypress-specs')
 
 const args = arg({
   '--names': Boolean,
   '--tags': Boolean,
+  // output in JSON format
   '--json': Boolean,
+  // find the specs that have changed against this Git branch
+  '--branch': String,
 
   // aliases
   '-n': '--names',
@@ -18,7 +22,10 @@ const args = arg({
   '-t': '--tags',
   '--tag': '--tags',
   '-j': '--json',
+  '-b': '--branch',
 })
+
+debug('arguments %o', args)
 
 const specs = getSpecs()
 if (args['--names'] || args['--tags']) {
@@ -114,6 +121,12 @@ if (args['--names'] || args['--tags']) {
       }
     }
   }
+} else if (args['--branch']) {
+  debug('determining specs changed against branch %s', args['--branch'])
+  const changedFiles = findChangedFiles(args['--branch'])
+  debug('changed files %o', changedFiles)
+  const changedSpecs = specs.filter((file) => changedFiles.includes(file))
+  console.log(changedSpecs.join(','))
 } else {
   console.log(specs.join(','))
 }
