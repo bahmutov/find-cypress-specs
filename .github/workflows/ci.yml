@@ -33,6 +33,9 @@ jobs:
       - name: Demo tags in json output 💻
         run: npm run demo-tags-json
 
+      - name: Print specs changed against the main branch 🌳
+        run: npm run print-changed-specs
+
       - name: Unit tests 🧪
         run: npm test
 

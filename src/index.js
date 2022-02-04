@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const globby = require('globby')
 const minimatch = require('minimatch')
+const shell = require('shelljs')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
@@ -99,10 +100,39 @@ function collectResults(structure, results) {
   })
 }
 
+/**
+ * Finds files changed or added in the current branch when compared to the "origin/branch".
+ * Returns a list of filenames. If there are no files, returns an empty list.
+ * @param {string} branch The branch to compare against.
+ */
+function findChangedFiles(branch) {
+  if (!branch) {
+    throw new Error('branch is required')
+  }
+
+  if (!shell.which('git')) {
+    shell.echo('Sorry, this script requires git')
+    return []
+  }
+
+  const result = shell.exec(
+    `git diff --name-only --diff-filter=AMR origin/${branch}`,
+    { silent: true },
+  )
+  if (result.code !== 0) {
+    debug('git diff failed with code %d', result.code)
+    return []
+  }
+
+  const filenames = result.stdout.split('\n').filter(Boolean)
+  return filenames
+}
+
 module.exports = {
   getSpecs,
   // individual utilities
   getConfig,
   findCypressSpecs,
   collectResults,
+  findChangedFiles,
 }

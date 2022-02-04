@@ -8,6 +8,15 @@ $ npx find-cypress-specs
 cypress/e2e/spec.js,cypress/e2e/featureA/user.js
 ```
 
+## against branch
+
+By default, this module simply prints all spec filenames. You can add `--branch` parameter to only print the specs changed against that `origin/branch`.
+
+```bash
+$ npx find-cypress-specs --branch main
+# prints only some specs, the ones that have changed against the "origin/main"
+```
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
