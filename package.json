@@ -41,7 +41,7 @@
     "cypress": "9.4.1",
     "execa-wrap": "^1.4.0",
     "prettier": "^2.5.1",
-    "semantic-release": "18.0.1"
+    "semantic-release": "19.0.2"
   },
   "dependencies": {
     "arg": "^5.0.1",
