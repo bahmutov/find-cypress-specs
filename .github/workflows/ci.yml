@@ -36,6 +36,9 @@ jobs:
       - name: Print specs changed against the main branch 🌳
         run: npm run print-changed-specs
 
+      - name: Count the specs changed against the main branch 🌳
+        run: npm run count-changed-specs
+
       - name: Unit tests 🧪
         run: npm test
 
