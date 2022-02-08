@@ -15,7 +15,7 @@ const args = arg({
   '--json': Boolean,
   // find the specs that have changed against this Git branch
   '--branch': String,
-  '--count': Number,
+  '--count': Boolean,
 
   // aliases
   '-n': '--names',
