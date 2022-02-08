@@ -15,6 +15,7 @@ const args = arg({
   '--json': Boolean,
   // find the specs that have changed against this Git branch
   '--branch': String,
+  '--count': Number,
 
   // aliases
   '-n': '--names',
@@ -126,7 +127,11 @@ if (args['--names'] || args['--tags']) {
   const changedFiles = findChangedFiles(args['--branch'])
   debug('changed files %o', changedFiles)
   const changedSpecs = specs.filter((file) => changedFiles.includes(file))
-  console.log(changedSpecs.join(','))
+  if (args['--count']) {
+    console.log(changedSpecs.length)
+  } else {
+    console.log(changedSpecs.join(','))
+  }
 } else {
   console.log(specs.join(','))
 }

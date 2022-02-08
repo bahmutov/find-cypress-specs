@@ -17,6 +17,16 @@ $ npx find-cypress-specs --branch main
 # prints only some specs, the ones that have changed against the "origin/main"
 ```
 
+### number of changed files
+
+You can print just the number of changed specs
+
+```bash
+$ npx find-cypress-specs --branch main --count
+# prints the number of spec files changed against the branch "origin/main"
+5
+```
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
