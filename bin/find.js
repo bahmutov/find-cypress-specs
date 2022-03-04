@@ -16,6 +16,8 @@ const args = arg({
   // find the specs that have changed against this Git branch
   '--branch': String,
   '--count': Boolean,
+  // filter all tests to those that have the given tag
+  '--tagged': String,
 
   // aliases
   '-n': '--names',
@@ -85,6 +87,11 @@ if (args['--names'] || args['--tags']) {
     })
 
     if (args['--names']) {
+      if (args['--tagged']) {
+        // filter all collected tests to those that have the given tag
+        console.log('filtering all tests by tag "%s"', args['--tagged'])
+      }
+
       if (args['--json']) {
         console.log(JSON.stringify(jsonResults, null, 2))
       } else {

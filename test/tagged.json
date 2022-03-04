@@ -1,0 +1,41 @@
+{
+  "cypress/e2e/spec.js": [
+    {
+      "name": "parent suite",
+      "type": "suite",
+      "tags": ["@main"],
+      "suites": [
+        {
+          "name": "inner suite",
+          "type": "suite",
+          "tests": [
+            {
+              "name": "shows something!",
+              "type": "test",
+              "tags": ["@user"]
+            }
+          ]
+        }
+      ],
+      "tests": [
+        {
+          "name": "works well enough",
+          "type": "test"
+        }
+      ]
+    }
+  ],
+  "cypress/e2e/featureA/user.js": [
+    {
+      "name": "works",
+      "type": "test",
+      "tags": ["@user"]
+    },
+    {
+      "name": "needs to be written",
+      "type": "test",
+      "tags": ["@alpha"],
+      "pending": true
+    }
+  ]
+}
