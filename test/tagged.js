@@ -35,14 +35,17 @@ test('filters tests tagged @alpha', (t) => {
 
   // all tests but one were eliminated
   const expected = {
-    'cypress/e2e/featureA/user.js': [
-      {
-        name: 'needs to be written',
-        type: 'test',
-        tags: ['@alpha'],
-        pending: true,
-      },
-    ],
+    'cypress/e2e/featureA/user.js': {
+      counts: { tests: 0, pending: 0 },
+      tests: [
+        {
+          name: 'needs to be written',
+          type: 'test',
+          tags: ['@alpha'],
+          pending: true,
+        },
+      ],
+    },
   }
   // console.dir(result, { depth: null })
   t.deepEqual(result, expected)
@@ -53,30 +56,34 @@ test('filters deep tests tagged @user', (t) => {
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, '@user')
   const expected = {
-    'cypress/e2e/spec.js': [
-      {
-        name: 'parent suite',
-        type: 'suite',
-        tags: ['@main'],
-        suites: [
-          {
-            name: 'inner suite',
-            type: 'suite',
-            tests: [
-              {
-                name: 'shows something!',
-                type: 'test',
-                tags: ['@user'],
-              },
-            ],
-          },
-        ],
-        tests: [],
-      },
-    ],
-    'cypress/e2e/featureA/user.js': [
-      { name: 'works', type: 'test', tags: ['@user'] },
-    ],
+    'cypress/e2e/spec.js': {
+      counts: { tests: 0, pending: 0 },
+      tests: [
+        {
+          name: 'parent suite',
+          type: 'suite',
+          tags: ['@main'],
+          suites: [
+            {
+              name: 'inner suite',
+              type: 'suite',
+              tests: [
+                {
+                  name: 'shows something!',
+                  type: 'test',
+                  tags: ['@user'],
+                },
+              ],
+            },
+          ],
+          tests: [],
+        },
+      ],
+    },
+    'cypress/e2e/featureA/user.js': {
+      counts: { tests: 0, pending: 0 },
+      tests: [{ name: 'works', type: 'test', tags: ['@user'] }],
+    },
   }
   // console.dir(result, { depth: null })
   t.deepEqual(result, expected)
@@ -87,27 +94,30 @@ test('applies tag from the suite to the tests', (t) => {
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, '@main')
   const expected = {
-    'cypress/e2e/spec.js': [
-      {
-        name: 'parent suite',
-        type: 'suite',
-        tags: ['@main'],
-        suites: [
-          {
-            name: 'inner suite',
-            type: 'suite',
-            tests: [
-              {
-                name: 'shows something!',
-                type: 'test',
-                tags: ['@user'],
-              },
-            ],
-          },
-        ],
-        tests: [{ name: 'works well enough', type: 'test' }],
-      },
-    ],
+    'cypress/e2e/spec.js': {
+      counts: { tests: 0, pending: 0 },
+      tests: [
+        {
+          name: 'parent suite',
+          type: 'suite',
+          tags: ['@main'],
+          suites: [
+            {
+              name: 'inner suite',
+              type: 'suite',
+              tests: [
+                {
+                  name: 'shows something!',
+                  type: 'test',
+                  tags: ['@user'],
+                },
+              ],
+            },
+          ],
+          tests: [{ name: 'works well enough', type: 'test' }],
+        },
+      ],
+    },
   }
   // console.dir(result, { depth: null })
   t.deepEqual(result, expected)

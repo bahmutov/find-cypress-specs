@@ -25,7 +25,7 @@ function pickTaggedTests(tests, tag) {
 
 function removeEmptyNodes(json) {
   Object.keys(json).forEach((filename) => {
-    const fileTests = json[filename]
+    const fileTests = json[filename].tests
     if (!fileTests.length) {
       delete json[filename]
     }
@@ -40,7 +40,7 @@ function removeEmptyNodes(json) {
  */
 function pickTaggedTestsFrom(json, tag) {
   Object.keys(json).forEach((filename) => {
-    const fileTests = json[filename]
+    const fileTests = json[filename].tests
     pickTaggedTests(fileTests, tag)
   })
 
