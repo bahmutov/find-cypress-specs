@@ -3,6 +3,8 @@
 const arg = require('arg')
 const { getSpecs, collectResults, findChangedFiles } = require('../src')
 const { pickTaggedTestsFrom } = require('../src/tagged')
+const { addCounts } = require('../src/count')
+
 const fs = require('fs')
 const pluralize = require('pluralize')
 const { getTestNames, formatTestList, countTags } = require('find-test-names')
@@ -92,6 +94,8 @@ if (args['--names'] || args['--tags']) {
         })
       }
     })
+
+    addCounts(jsonResults)
 
     if (args['--names']) {
       if (args['--tagged']) {
