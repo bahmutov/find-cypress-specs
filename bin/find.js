@@ -100,8 +100,10 @@ if (args['--names'] || args['--tags']) {
     if (args['--names']) {
       if (args['--tagged']) {
         // filter all collected tests to those that have the given tag
-        console.log('filtering all tests by tag "%s"', args['--tagged'])
+        debug('filtering all tests by tag "%s"', args['--tagged'])
         pickTaggedTestsFrom(jsonResults, args['--tagged'])
+        // recompute the number of tests
+        addCounts(jsonResults)
       }
 
       if (args['--json']) {

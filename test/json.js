@@ -32,3 +32,15 @@ test('prints tags in json using -j', async (t) => {
   })
   t.snapshot(result)
 })
+
+test('prints tests tagged with @user in json', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['./bin/find', '--names', '--json', '--tagged', '@user'],
+    {
+      filter: ['code', 'stdout'],
+    },
+  )
+  t.snapshot(result)
+})
