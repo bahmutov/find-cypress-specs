@@ -27,9 +27,12 @@ test('filters a single array of tests', (t) => {
 })
 
 test('filters tests tagged @alpha', (t) => {
-  t.plan(1)
+  t.plan(2)
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, '@alpha')
+  // modifies the object in place
+  t.true(result === json)
+
   // all tests but one were eliminated
   const expected = {
     'cypress/e2e/featureA/user.js': [

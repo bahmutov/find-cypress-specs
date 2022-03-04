@@ -2,6 +2,7 @@
 
 const arg = require('arg')
 const { getSpecs, collectResults, findChangedFiles } = require('../src')
+const { pickTaggedTestsFrom } = require('../src/tagged')
 const fs = require('fs')
 const pluralize = require('pluralize')
 const { getTestNames, formatTestList, countTags } = require('find-test-names')
@@ -90,6 +91,7 @@ if (args['--names'] || args['--tags']) {
       if (args['--tagged']) {
         // filter all collected tests to those that have the given tag
         console.log('filtering all tests by tag "%s"', args['--tagged'])
+        pickTaggedTestsFrom(jsonResults, args['--tagged'])
       }
 
       if (args['--json']) {
