@@ -46,7 +46,13 @@ if (args['--names'] || args['--tags']) {
     const jsonResults = {}
 
     specs.forEach((filename) => {
-      jsonResults[filename] = []
+      jsonResults[filename] = {
+        counts: {
+          tests: 0,
+          pending: 0,
+        },
+        tests: [],
+      }
       const source = fs.readFileSync(filename, 'utf8')
       const result = getTestNames(source, true)
       // enable if need to debug the parsed test
@@ -58,7 +64,7 @@ if (args['--names'] || args['--tags']) {
 
       if (args['--names']) {
         if (args['--json']) {
-          collectResults(result.structure, jsonResults[filename])
+          collectResults(result.structure, jsonResults[filename].tests)
         } else {
           if (result.pendingTestCount) {
             console.log(
