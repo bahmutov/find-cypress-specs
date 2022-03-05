@@ -29,3 +29,29 @@ test('prints test tagged @alpha', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('prints test tagged @user', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['./bin/find', '--names', '--tagged', '@user'],
+    {
+      filter: ['code', 'stdout'],
+    },
+  )
+  // console.log(result)
+  t.snapshot(result)
+})
+
+test('prints test tagged @main', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['./bin/find', '--names', '--tagged', '@main'],
+    {
+      filter: ['code', 'stdout'],
+    },
+  )
+  // console.log(result)
+  t.snapshot(result)
+})
