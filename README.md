@@ -70,6 +70,13 @@ Each tag count includes the tests that use the tag directly, and the _effective_
 
 You can print the results in JSON format using `--json` or `-j` option.
 
+## Test names filtered by a tag
+
+```bash
+$ npx find-cypress-specs --names --tagged <single tag>
+# finds all specs and tests, then filters the output by a single tag
+```
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
