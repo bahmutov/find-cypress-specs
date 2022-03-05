@@ -7,8 +7,7 @@ const { addCounts } = require('../src/count')
 const { stringAllInfo } = require('../src/print')
 
 const fs = require('fs')
-const pluralize = require('pluralize')
-const { getTestNames, formatTestList, countTags } = require('find-test-names')
+const { getTestNames, countTags } = require('find-test-names')
 const consoleTable = require('console.table')
 const debug = require('debug')('find-cypress-specs')
 
@@ -74,9 +73,13 @@ if (args['--names'] || args['--tags']) {
 
     if (args['--names']) {
       if (args['--tagged']) {
-        // filter all collected tests to those that have the given tag
-        debug('filtering all tests by tag "%s"', args['--tagged'])
-        pickTaggedTestsFrom(jsonResults, args['--tagged'])
+        // filter all collected tests to those that have the given tag(s)
+        const splitTags = args['--tagged']
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+        debug('filtering all tests by tag "%o"', splitTags)
+        pickTaggedTestsFrom(jsonResults, splitTags)
         // recompute the number of tests
         addCounts(jsonResults)
       }

@@ -77,6 +77,14 @@ $ npx find-cypress-specs --names --tagged <single tag>
 # finds all specs and tests, then filters the output by a single tag
 ```
 
+## Test names filtered by multiple tags
+
+```bash
+$ npx find-cypress-specs --names --tagged <tag1>,<tag2>,<tag3>,...
+# finds all specs and tests, then filters the output showing all tests
+# tagged with tag1 or tag2 or tag3 or ...
+```
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
