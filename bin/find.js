@@ -2,6 +2,10 @@
 
 const arg = require('arg')
 const { getSpecs, collectResults, findChangedFiles } = require('../src')
+const { pickTaggedTestsFrom } = require('../src/tagged')
+const { addCounts } = require('../src/count')
+const { stringAllInfo } = require('../src/print')
+
 const fs = require('fs')
 const pluralize = require('pluralize')
 const { getTestNames, formatTestList, countTags } = require('find-test-names')
@@ -16,6 +20,8 @@ const args = arg({
   // find the specs that have changed against this Git branch
   '--branch': String,
   '--count': Boolean,
+  // filter all tests to those that have the given tag
+  '--tagged': String,
 
   // aliases
   '-n': '--names',
@@ -34,43 +40,23 @@ if (args['--names'] || args['--tags']) {
     console.log('no specs found')
   } else {
     console.log('')
-    let testsN = 0
-    let pendingTestsN = 0
-
     // counts the number of tests for each tag across all specs
     const tagTestCounts = {}
-
     const jsonResults = {}
 
     specs.forEach((filename) => {
-      jsonResults[filename] = []
+      jsonResults[filename] = {
+        counts: {
+          tests: 0,
+          pending: 0,
+        },
+        tests: [],
+      }
       const source = fs.readFileSync(filename, 'utf8')
       const result = getTestNames(source, true)
       // enable if need to debug the parsed test
       // console.dir(result.structure, { depth: null })
-
-      testsN += result.testCount
-      const testCount = pluralize('test', result.testNames.length, true)
-      pendingTestsN += result.pendingTestCount
-
-      if (args['--names']) {
-        if (args['--json']) {
-          collectResults(result.structure, jsonResults[filename])
-        } else {
-          if (result.pendingTestCount) {
-            console.log(
-              '%s (%s, %d pending)',
-              filename,
-              testCount,
-              result.pendingTestCount,
-            )
-          } else {
-            console.log('%s (%s)', filename, testCount)
-          }
-          console.log(formatTestList(result.structure))
-          console.log('')
-        }
-      }
+      collectResults(result.structure, jsonResults[filename].tests)
 
       if (args['--tags']) {
         const specTagCounts = countTags(result.structure)
@@ -84,24 +70,22 @@ if (args['--names'] || args['--tags']) {
       }
     })
 
+    addCounts(jsonResults)
+
     if (args['--names']) {
+      if (args['--tagged']) {
+        // filter all collected tests to those that have the given tag
+        debug('filtering all tests by tag "%s"', args['--tagged'])
+        pickTaggedTestsFrom(jsonResults, args['--tagged'])
+        // recompute the number of tests
+        addCounts(jsonResults)
+      }
+
       if (args['--json']) {
         console.log(JSON.stringify(jsonResults, null, 2))
       } else {
-        if (pendingTestsN) {
-          console.log(
-            'found %s (%s, %d pending)',
-            pluralize('spec', specs.length, true),
-            pluralize('test', testsN, true),
-            pendingTestsN,
-          )
-        } else {
-          console.log(
-            'found %s (%s)',
-            pluralize('spec', specs.length, true),
-            pluralize('test', testsN, true),
-          )
-        }
+        const str = stringAllInfo(jsonResults)
+        console.log(str)
       }
       console.log('')
     }
