@@ -17,8 +17,8 @@ test('prints test names', async (t) => {
   t.snapshot(result)
 })
 
-test.skip('prints test tagged @alpha', async (t) => {
-  t.plan(0)
+test('prints test tagged @alpha', async (t) => {
+  t.plan(1)
   const result = await execa(
     'node',
     ['./bin/find', '--names', '--tagged', '@alpha'],
@@ -26,6 +26,6 @@ test.skip('prints test tagged @alpha', async (t) => {
       filter: ['code', 'stdout'],
     },
   )
-  console.log(result)
-  // t.snapshot(result)
+  // console.log(result)
+  t.snapshot(result)
 })

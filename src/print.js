@@ -8,7 +8,7 @@ const { formatTestList } = require('find-test-names')
 function stringFileTests(fileName, fileInfo) {
   const testCount = pluralize('test', fileInfo.counts.tests, true)
   const headerLine = fileInfo.counts.pending
-    ? `${fileName} (${testCount} ${fileInfo.counts.pending} pending)`
+    ? `${fileName} (${testCount}, ${fileInfo.counts.pending} pending)`
     : `${fileName} (${testCount})`
 
   const body = formatTestList(fileInfo.tests)
