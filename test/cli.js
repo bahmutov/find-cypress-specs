@@ -55,3 +55,16 @@ test('prints test tagged @main', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('prints test tagged @main and @alpha', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['./bin/find', '--names', '--tagged', '@main,@alpha'],
+    {
+      filter: ['code', 'stdout'],
+    },
+  )
+  // console.log(result)
+  t.snapshot(result)
+})
