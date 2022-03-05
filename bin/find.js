@@ -40,12 +40,8 @@ if (args['--names'] || args['--tags']) {
     console.log('no specs found')
   } else {
     console.log('')
-    let testsN = 0
-    let pendingTestsN = 0
-
     // counts the number of tests for each tag across all specs
     const tagTestCounts = {}
-
     const jsonResults = {}
 
     specs.forEach((filename) => {
@@ -60,29 +56,7 @@ if (args['--names'] || args['--tags']) {
       const result = getTestNames(source, true)
       // enable if need to debug the parsed test
       // console.dir(result.structure, { depth: null })
-
-      // testsN += result.testCount
-      // const testCount = pluralize('test', result.testNames.length, true)
-      // pendingTestsN += result.pendingTestCount
       collectResults(result.structure, jsonResults[filename].tests)
-
-      // if (args['--names']) {
-      //   if (args['--json']) {
-      //   } else {
-      //     // // if (result.pendingTestCount) {
-      //     // //   console.log(
-      //     // //     '%s (%s, %d pending)',
-      //     // //     filename,
-      //     // //     testCount,
-      //     // //     result.pendingTestCount,
-      //     // //   )
-      //     // // } else {
-      //     // //   console.log('%s (%s)', filename, testCount)
-      //     // // }
-      //     // console.log(formatTestList(result.structure))
-      //     // console.log('')
-      //   }
-      // }
 
       if (args['--tags']) {
         const specTagCounts = countTags(result.structure)
@@ -112,20 +86,6 @@ if (args['--names'] || args['--tags']) {
       } else {
         const str = stringAllInfo(jsonResults)
         console.log(str)
-        // if (pendingTestsN) {
-        //   console.log(
-        //     'found %s (%s, %d pending)',
-        //     pluralize('spec', specs.length, true),
-        //     pluralize('test', testsN, true),
-        //     pendingTestsN,
-        //   )
-        // } else {
-        //   console.log(
-        //     'found %s (%s)',
-        //     pluralize('spec', specs.length, true),
-        //     pluralize('test', testsN, true),
-        //   )
-        // }
       }
       console.log('')
     }
