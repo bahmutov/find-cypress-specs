@@ -1,22 +1,35 @@
 const { addCounts } = require('./count')
 
+function arraysOverlap(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    return false
+  }
+
+  if (a.length < b.length) {
+    return a.some((item) => b.includes(item))
+  } else {
+    return b.some((item) => a.includes(item))
+  }
+}
+
 // note: modifies the tests in place
 function pickTaggedTests(tests, tag) {
   if (!Array.isArray(tests)) {
     return false
   }
+  const tags = Array.isArray(tag) ? tag : [tag]
   const filteredTests = tests.filter((test) => {
     if (test.type === 'test') {
-      return test.tags && test.tags.includes(tag)
+      return test.tags && arraysOverlap(test.tags, tags)
     } else if (test.type === 'suite') {
-      if (test.tags && test.tags.includes(tag)) {
+      if (test.tags && arraysOverlap(test.tags, tags)) {
         return true
       }
 
       // maybe there is some test inside this suite
       // with the tag? Filter all other tests
       return (
-        pickTaggedTests(test.tests, tag) || pickTaggedTests(test.suites, tag)
+        pickTaggedTests(test.tests, tags) || pickTaggedTests(test.suites, tags)
       )
     }
   })
@@ -51,4 +64,9 @@ function pickTaggedTestsFrom(json, tag) {
   return result
 }
 
-module.exports = { pickTaggedTestsFrom, removeEmptyNodes, pickTaggedTests }
+module.exports = {
+  arraysOverlap,
+  pickTaggedTestsFrom,
+  removeEmptyNodes,
+  pickTaggedTests,
+}
