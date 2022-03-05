@@ -1,3 +1,5 @@
+const { addCounts } = require('./count')
+
 // note: modifies the tests in place
 function pickTaggedTests(tests, tag) {
   if (!Array.isArray(tests)) {
@@ -44,7 +46,9 @@ function pickTaggedTestsFrom(json, tag) {
     pickTaggedTests(fileTests, tag)
   })
 
-  return removeEmptyNodes(json)
+  const result = removeEmptyNodes(json)
+  addCounts(result)
+  return result
 }
 
 module.exports = { pickTaggedTestsFrom, removeEmptyNodes, pickTaggedTests }

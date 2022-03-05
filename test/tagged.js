@@ -36,7 +36,7 @@ test('filters tests tagged @alpha', (t) => {
   // all tests but one were eliminated
   const expected = {
     'cypress/e2e/featureA/user.js': {
-      counts: { tests: 0, pending: 0 },
+      counts: { tests: 1, pending: 1 },
       tests: [
         {
           name: 'needs to be written',
@@ -57,7 +57,7 @@ test('filters deep tests tagged @user', (t) => {
   const result = pickTaggedTestsFrom(json, '@user')
   const expected = {
     'cypress/e2e/spec.js': {
-      counts: { tests: 0, pending: 0 },
+      counts: { tests: 1, pending: 0 },
       tests: [
         {
           name: 'parent suite',
@@ -81,7 +81,7 @@ test('filters deep tests tagged @user', (t) => {
       ],
     },
     'cypress/e2e/featureA/user.js': {
-      counts: { tests: 0, pending: 0 },
+      counts: { tests: 1, pending: 0 },
       tests: [{ name: 'works', type: 'test', tags: ['@user'] }],
     },
   }
@@ -95,7 +95,7 @@ test('applies tag from the suite to the tests', (t) => {
   const result = pickTaggedTestsFrom(json, '@main')
   const expected = {
     'cypress/e2e/spec.js': {
-      counts: { tests: 0, pending: 0 },
+      counts: { tests: 2, pending: 0 },
       tests: [
         {
           name: 'parent suite',
