@@ -40,7 +40,7 @@
   "homepage": "https://github.com/bahmutov/find-cypress-specs#readme",
   "devDependencies": {
     "ava": "^4.0.0",
-    "cypress": "9.5.2",
+    "cypress": "9.5.3",
     "execa-wrap": "^1.4.0",
     "prettier": "^2.5.1",
     "semantic-release": "19.0.2"
