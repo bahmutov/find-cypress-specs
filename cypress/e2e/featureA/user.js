@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+// empty test
 it('works', { tags: '@user' }, () => {})
 
 // pending test needs to use it.skip
