@@ -17,6 +17,29 @@ $ npx find-cypress-specs --branch main
 # prints only some specs, the ones that have changed against the "origin/main"
 ```
 
+## against the parent commit
+
+When dealing with a long-term branch, you do not want to see the changed files in the main branch. Instead, you want to only consider the specs changed in the _current_ branch all the way to its parent commit. You can pass the flag `--parent` to only pick the modified and added specs.
+
+```bash
+$ npx find-cypress-specs --parent
+# same as
+# git diff --name-only --diff-filter=AMR HEAD^!
+```
+
+Note: in order to trace the commits back to the parent commit of the branch, fetch the entire repo or enough commits to have this information when checking out the repo. For example, in [pr.yml](./.github/workflows/pr.yml) we fetch the entire history
+
+```yml
+- name: Checkout 🛎
+  # https://github.com/actions/checkout
+  uses: actions/checkout@v3
+  # check out all the commits in the repo
+  # to make sure we detect the changed files in this branch
+  # against its parent commit
+  with:
+    fetch-depth: 0
+```
+
 ### number of changed files
 
 You can print just the number of changed specs
