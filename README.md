@@ -27,6 +27,14 @@ $ npx find-cypress-specs --branch main --parent
 # git diff --name-only --diff-filter=AMR $(git merge-base origin/main HEAD)..
 ```
 
+Note: to get the changed files, we need to fetch the repo, see [pr.yml](./.github/workflows/pr.yml)
+
+```
+$ checkout
+$ git fetch
+$ npx find-cypress-specs --branch main --parent
+```
+
 ### number of changed files
 
 You can print just the number of changed specs
