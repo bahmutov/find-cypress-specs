@@ -115,6 +115,7 @@ function findChangedFiles(branch) {
     return []
   }
 
+  // can we find updated and added files?
   const result = shell.exec(
     `git diff --name-only --diff-filter=AMR origin/${branch}`,
     { silent: true },
