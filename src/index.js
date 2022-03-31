@@ -104,8 +104,9 @@ function collectResults(structure, results) {
  * Finds files changed or added in the current branch when compared to the "origin/branch".
  * Returns a list of filenames. If there are no files, returns an empty list.
  * @param {string} branch The branch to compare against.
+ * @param {boolean} useParent Determine the changes only against the parent commit.
  */
-function findChangedFiles(branch) {
+function findChangedFiles(branch, useParent) {
   if (!branch) {
     throw new Error('branch is required')
   }
@@ -117,39 +118,39 @@ function findChangedFiles(branch) {
 
   // can we find updated and added files?
   debug('finding changed files against %s', branch)
-  const command = `git diff --name-only --diff-filter=AMR origin/${branch}`
-  debug('command: %s', command)
+  debug('using parent?', useParent)
 
-  const result = shell.exec(command, { silent: true })
-  if (result.code !== 0) {
-    debug('git diff failed with code %d', result.code)
-    return []
+  if (useParent) {
+    let result = shell.exec(`git merge-base origin/${branch} HEAD`, {
+      silent: true,
+    })
+    if (result.code !== 0) {
+      debug('git faild to find merge base with the branch %s', branch)
+      return []
+    }
+
+    const commit = result.stdout.trim()
+    debug('merge commit with branch "%s" is %s', branch, commit)
+    result = shell.exec(`git diff --name-only --diff-filter=AMR ${commit}..`, {
+      silent: true,
+    })
+    if (result.code !== 0) {
+      debug('git diff failed with code %d', result.code)
+      return []
+    }
+  } else {
+    const command = `git diff --name-only --diff-filter=AMR origin/${branch}`
+    debug('command: %s', command)
+
+    const result = shell.exec(command, { silent: true })
+    if (result.code !== 0) {
+      debug('git diff failed with code %d', result.code)
+      return []
+    }
+
+    const filenames = result.stdout.split('\n').filter(Boolean)
+    return filenames
   }
-
-  const filenames = result.stdout.split('\n').filter(Boolean)
-  return filenames
-}
-
-/**
- * Finds files modified or added against the parent commit of the current branch.
- * Returns a list of filenames. If there are no files, returns an empty list.
- */
-function findChangedFilesAgainstParent() {
-  if (!shell.which('git')) {
-    shell.echo('Sorry, this script requires git')
-    return []
-  }
-
-  const result = shell.exec(`git diff --name-only --diff-filter=AMR HEAD^!`, {
-    silent: true,
-  })
-  if (result.code !== 0) {
-    debug('git diff failed with code %d', result.code)
-    return []
-  }
-
-  const filenames = result.stdout.split('\n').filter(Boolean)
-  return filenames
 }
 
 module.exports = {
@@ -159,5 +160,4 @@ module.exports = {
   findCypressSpecs,
   collectResults,
   findChangedFiles,
-  findChangedFilesAgainstParent,
 }
