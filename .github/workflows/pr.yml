@@ -15,7 +15,9 @@ jobs:
           runTests: false
 
       - name: Print files changed against the parent of this branch 🌳
-        run: git diff --name-only --diff-filter=AMR $(git merge-base main HEAD)..
+        run: |
+          git --version
+          git diff --name-only --diff-filter=AMR $(git merge-base origin/main HEAD)..
 
       - name: Print specs changed against the parent of this branch 🌳
         run: node ./bin/find --branch main --parent
