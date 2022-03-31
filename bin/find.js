@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
 const arg = require('arg')
-const { getSpecs, collectResults, findChangedFiles } = require('../src')
+const {
+  getSpecs,
+  collectResults,
+  findChangedFiles,
+  findChangedFilesAgainstParent,
+} = require('../src')
 const { pickTaggedTestsFrom } = require('../src/tagged')
 const { addCounts } = require('../src/count')
 const { stringAllInfo } = require('../src/print')
@@ -18,6 +23,8 @@ const args = arg({
   '--json': Boolean,
   // find the specs that have changed against this Git branch
   '--branch': String,
+  // find the specs that have changed against the parent of this branch
+  '--parent': Boolean,
   '--count': Boolean,
   // filter all tests to those that have the given tag
   '--tagged': String,
@@ -112,6 +119,16 @@ if (args['--names'] || args['--tags']) {
 } else if (args['--branch']) {
   debug('determining specs changed against branch %s', args['--branch'])
   const changedFiles = findChangedFiles(args['--branch'])
+  debug('changed files %o', changedFiles)
+  const changedSpecs = specs.filter((file) => changedFiles.includes(file))
+  if (args['--count']) {
+    console.log(changedSpecs.length)
+  } else {
+    console.log(changedSpecs.join(','))
+  }
+} else if (args['--parent']) {
+  debug('determining specs changed against the parent of this branch')
+  const changedFiles = findChangedFilesAgainstParent()
   debug('changed files %o', changedFiles)
   const changedSpecs = specs.filter((file) => changedFiles.includes(file))
   if (args['--count']) {

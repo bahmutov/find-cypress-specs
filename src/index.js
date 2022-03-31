@@ -115,10 +115,34 @@ function findChangedFiles(branch) {
     return []
   }
 
-  const result = shell.exec(
-    `git diff --name-only --diff-filter=AMR origin/${branch}`,
-    { silent: true },
-  )
+  // can we find updated and added files?
+  debug('finding changed files against %s', branch)
+  const command = `git diff --name-only --diff-filter=AMR origin/${branch}`
+  debug('command: %s', command)
+
+  const result = shell.exec(command, { silent: true })
+  if (result.code !== 0) {
+    debug('git diff failed with code %d', result.code)
+    return []
+  }
+
+  const filenames = result.stdout.split('\n').filter(Boolean)
+  return filenames
+}
+
+/**
+ * Finds files modified or added against the parent commit of the current branch.
+ * Returns a list of filenames. If there are no files, returns an empty list.
+ */
+function findChangedFilesAgainstParent() {
+  if (!shell.which('git')) {
+    shell.echo('Sorry, this script requires git')
+    return []
+  }
+
+  const result = shell.exec(`git diff --name-only --diff-filter=AMR HEAD^!`, {
+    silent: true,
+  })
   if (result.code !== 0) {
     debug('git diff failed with code %d', result.code)
     return []
@@ -135,4 +159,5 @@ module.exports = {
   findCypressSpecs,
   collectResults,
   findChangedFiles,
+  findChangedFilesAgainstParent,
 }
