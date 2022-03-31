@@ -19,7 +19,8 @@ jobs:
       - name: Print files changed against the parent of this branch 🌳
         run: |
           git --version
-          git pull
+          git status
+          git fetch
           git log --pretty=format:"%h %s" --graph --since=1.month
           git merge-base origin/main HEAD
           git diff --name-only --diff-filter=AMR $(git merge-base origin/main HEAD)..
