@@ -7,11 +7,6 @@ jobs:
       - name: Checkout 🛎
         # https://github.com/actions/checkout
         uses: actions/checkout@v3
-        # check out all the commits in the repo
-        # to make sure we detect the changed files in this branch
-        # against its parent commit
-        with:
-          fetch-depth: 0
 
       - name: Install dependencies 📦
         # https://github.com/cypress-io/github-action
@@ -23,4 +18,4 @@ jobs:
         run: git diff --name-only --diff-filter=AMR $(git merge-base origin/main HEAD)..
 
       - name: Print specs changed against the parent of this branch 🌳
-        run: node ./bin/find --parent
+        run: node ./bin/find --branch main --parent
