@@ -125,7 +125,7 @@ function findChangedFiles(branch, useParent) {
       silent: true,
     })
     if (result.code !== 0) {
-      debug('git faild to find merge base with the branch %s', branch)
+      debug('git failed to find merge base with the branch %s', branch)
       return []
     }
 
@@ -138,6 +138,9 @@ function findChangedFiles(branch, useParent) {
       debug('git diff failed with code %d', result.code)
       return []
     }
+
+    const filenames = result.stdout.split('\n').filter(Boolean)
+    return filenames
   } else {
     const command = `git diff --name-only --diff-filter=AMR origin/${branch}`
     debug('command: %s', command)
