@@ -1,0 +1,20 @@
+name: pr
+on: pull_request
+jobs:
+  changed-files:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install dependencies 📦
+        # https://github.com/cypress-io/github-action
+        uses: cypress-io/github-action@v3
+        with:
+          runTests: false
+
+      - name: Print files changed against the parent of this branch 🌳
+        run: git diff --name-only --diff-filter=AMR HEAD^!
+
+      - name: Print specs changed against the parent of this branch 🌳
+        run: node ./bin/find --parent
