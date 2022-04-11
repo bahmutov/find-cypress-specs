@@ -4,7 +4,7 @@ const { getSpecs, findCypressSpecs } = require('..')
 test('basic', (t) => {
   t.plan(1)
   const specs = getSpecs()
-  t.deepEqual(specs, ['cypress/e2e/spec.js', 'cypress/e2e/featureA/user.js'])
+  t.deepEqual(specs, ['cypress/e2e/spec.js', 'cypress/e2e/featureA/user.ts'])
 })
 
 test('string ignore pattern', (t) => {
@@ -14,5 +14,5 @@ test('string ignore pattern', (t) => {
     testFiles2: '**/*.js',
     ignoreTestFiles: 'utils.js',
   })
-  t.deepEqual(specs, ['cypress/e2e/spec.js', 'cypress/e2e/featureA/user.js'])
+  t.deepEqual(specs, ['cypress/e2e/spec.js', 'cypress/e2e/featureA/user.ts'])
 })
