@@ -25,7 +25,7 @@ function getConfig(filename = 'cypress.json') {
 function findCypressSpecs(opts = {}) {
   const defaults = {
     integrationFolder: 'cypress/integration',
-    testFiles: '**/*.js',
+    testFiles: '**/*.{js,ts}',
     ignoreTestFiles: [],
   }
   const options = {
