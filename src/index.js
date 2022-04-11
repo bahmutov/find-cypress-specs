@@ -140,7 +140,10 @@ function findChangedFiles(branch, useParent) {
       return []
     }
 
-    const filenames = result.stdout.split('\n').filter(Boolean)
+    const filenames = result.stdout
+      .split('\n')
+      .filter(Boolean)
+      .map((s) => s.trim())
     return filenames
   } else {
     const command = `git diff --name-only --diff-filter=AMR origin/${branch}`
