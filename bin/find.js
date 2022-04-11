@@ -115,7 +115,9 @@ if (args['--names'] || args['--tags']) {
   debug('determining specs changed against branch %s', args['--branch'])
   const changedFiles = findChangedFiles(args['--branch'], args['--parent'])
   debug('changed files %o', changedFiles)
+  debug('comparing against the specs %o', specs)
   const changedSpecs = specs.filter((file) => changedFiles.includes(file))
+  debug('changed specs %o', changedSpecs)
   if (args['--count']) {
     console.log(changedSpecs.length)
   } else {
