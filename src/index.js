@@ -4,6 +4,7 @@ const path = require('path')
 const globby = require('globby')
 const minimatch = require('minimatch')
 const shell = require('shelljs')
+const pluralize = require('pluralize')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
@@ -151,7 +152,15 @@ function findChangedFiles(branch, useParent) {
       return []
     }
 
-    const filenames = result.stdout.split('\n').filter(Boolean)
+    const filenames = result.stdout
+      .split('\n')
+      .filter(Boolean)
+      .map((s) => s.trim())
+    debug(
+      'found %d changed %s',
+      filenames.length,
+      pluralize('file', filenames.length),
+    )
     return filenames
   }
 }
