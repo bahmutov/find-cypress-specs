@@ -116,8 +116,28 @@ if (args['--names'] || args['--tags']) {
   const changedFiles = findChangedFiles(args['--branch'], args['--parent'])
   debug('changed files %o', changedFiles)
   debug('comparing against the specs %o', specs)
-  const changedSpecs = specs.filter((file) => changedFiles.includes(file))
+  let changedSpecs = specs.filter((file) => changedFiles.includes(file))
   debug('changed specs %o', changedSpecs)
+
+  if (args['--tagged']) {
+    const splitTags = args['--tagged']
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    debug('filtering changed specs by tags %o', splitTags)
+    changedSpecs = changedSpecs.filter((file) => {
+      const source = fs.readFileSync(file, 'utf8')
+      const result = getTestNames(source, true)
+      const specTagCounts = countTags(result.structure)
+      const specHasTags = Object.keys(specTagCounts).some((tag) =>
+        splitTags.includes(tag),
+      )
+      debug('spec %s has tags? %o', file, specHasTags)
+
+      return specHasTags
+    })
+  }
+
   if (args['--count']) {
     console.log(changedSpecs.length)
   } else {

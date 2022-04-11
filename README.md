@@ -47,6 +47,16 @@ $ npx find-cypress-specs --branch main --count
 5
 ```
 
+### filter by a tag
+
+You can filter all changed specs and only report (and count) the specs that have changed AND include the given tag(s)
+
+```bash
+$ npx find-cypress-specs --branch main --tagged @user,@preview
+# prints only some specs, the ones that have changed against the "origin/main"
+# and that have any tests or suites inside tagged "@user" or "@preview"
+```
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
