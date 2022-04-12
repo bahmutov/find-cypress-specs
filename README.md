@@ -1,4 +1,4 @@
-# find-cypress-specs [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-9.5.3-brightgreen) [![ci](https://github.com/bahmutov/find-cypress-specs/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bahmutov/find-cypress-specs/actions/workflows/ci.yml)
+# find-cypress-specs [![renovate-app badge][renovate-badge]][renovate-app] ![cypress version](https://img.shields.io/badge/cypress-9.5.4-brightgreen) [![ci](https://github.com/bahmutov/find-cypress-specs/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bahmutov/find-cypress-specs/actions/workflows/ci.yml)
 
 > Find Cypress spec files using the config settings
 
