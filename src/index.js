@@ -5,8 +5,6 @@ const globby = require('globby')
 const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
-// https://www.npmjs.com/package/esm
-require = require('esm')(module)
 const requireEveryTime = require('require-and-forget')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
@@ -30,7 +28,7 @@ function getConfigJs(filename) {
   const jsFile = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', jsFile)
   const definedConfig = requireEveryTime(jsFile)
-  return definedConfig.default
+  return definedConfig
 }
 
 function getConfig(filename = './cypress.config.js') {
