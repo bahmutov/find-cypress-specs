@@ -17,5 +17,5 @@ sinon
   .withArgs(command2)
   .returns({
     code: 0,
-    stdout: 'cypress/e2e/spec.js',
+    stdout: 'cypress/e2e/spec.cy.js',
   })

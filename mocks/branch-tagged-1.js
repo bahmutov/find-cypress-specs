@@ -9,7 +9,7 @@ sinon
     code: 0,
     // return both spec files as changed against the branch "tagged-1"
     stdout: `
-      cypress/e2e/featureA/user.ts
-      cypress/e2e/spec.js
+      cypress/e2e/featureA/user.cy.ts
+      cypress/e2e/spec.cy.js
     `,
   })
