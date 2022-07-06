@@ -5,13 +5,14 @@ const globby = require('globby')
 const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
+const requireEveryTime = require('require-and-forget')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
 /**
- * Reads the cypress config file and returns the relevant properties
+ * Reads the Cypress config JSON file (Cypress v9) and returns the relevant properties
  */
-function getConfig(filename = 'cypress.json') {
+function getConfigJson(filename = 'cypress.json') {
   const s = fs.readFileSync(filename, 'utf8')
   const config = JSON.parse(s)
   const options = {
@@ -23,7 +24,21 @@ function getConfig(filename = 'cypress.json') {
   return options
 }
 
-function findCypressSpecs(opts = {}) {
+function getConfigJs(filename) {
+  const jsFile = path.join(process.cwd(), filename)
+  debug('loading Cypress config from %s', jsFile)
+  const definedConfig = requireEveryTime(jsFile)
+  return definedConfig
+}
+
+function getConfig(filename = './cypress.config.js') {
+  if (filename.endsWith('.json')) {
+    return getConfigJson(filename)
+  }
+  return getConfigJs(filename)
+}
+
+function findCypressSpecsV9(opts = {}) {
   const defaults = {
     integrationFolder: 'cypress/integration',
     testFiles: '**/*.{js,ts}',
@@ -68,9 +83,64 @@ function findCypressSpecs(opts = {}) {
   return filtered.map((file) => path.join(options.integrationFolder, file))
 }
 
+function findCypressSpecsV10(opts = {}) {
+  if (!('e2e' in opts)) {
+    throw new Error('Missing e2e in the config object')
+  }
+  const defaults = {
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    excludeSpecPattern: [],
+  }
+  const options = {
+    specPattern: opts.e2e.specPattern || defaults.specPattern,
+    excludeSpecPattern:
+      opts.e2e.excludeSpecPattern || defaults.excludeSpecPattern,
+  }
+  debug('options v10 %o', options)
+
+  const files = globby.sync(options.specPattern, {
+    sort: true,
+    ignore: options.excludeSpecPattern,
+  })
+  debug('found %d file(s) %o', files.length, files)
+
+  // go through the files again and eliminate files that match
+  // the ignore patterns
+  const ignorePatterns = [].concat(options.excludeSpecPattern)
+  debug('ignore patterns %o', ignorePatterns)
+
+  // a function which returns true if the file does NOT match
+  // all of our ignored patterns
+  const doesNotMatchAllIgnoredPatterns = (file) => {
+    // using {dot: true} here so that folders with a '.' in them are matched
+    // as regular characters without needing an '.' in the
+    // using {matchBase: true} here so that patterns without a globstar **
+    // match against the basename of the file
+    const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
+    return ignorePatterns.every((pattern) => {
+      return !minimatch(file, pattern, MINIMATCH_OPTIONS)
+    })
+  }
+
+  const filtered = files.filter(doesNotMatchAllIgnoredPatterns)
+  debug('filtered %d specs', filtered.length)
+  debug(filtered.join('\n'))
+
+  return filtered
+}
+
 function getSpecs() {
   const options = getConfig()
-  const specs = findCypressSpecs(options)
+  return findCypressSpecs(options)
+}
+
+function findCypressSpecs(options) {
+  if (options.e2e) {
+    const specs = findCypressSpecsV10(options)
+    return specs
+  }
+
+  const specs = findCypressSpecsV9(options)
   return specs
 }
 

@@ -19,7 +19,7 @@ sinon
     code: 0,
     // return both spec files
     stdout: `
-      cypress/e2e/spec.js
-      cypress/e2e/featureA/user.ts
+      cypress/e2e/spec.cy.js
+      cypress/e2e/featureA/user.cy.ts
     `,
   })
