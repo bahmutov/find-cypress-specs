@@ -23,6 +23,8 @@ const args = arg({
   '--count': Boolean,
   // filter all tests to those that have the given tag
   '--tagged': String,
+  // the cypress config file
+  '--config-file': String,
 
   // aliases
   '-n': '--names',
@@ -31,11 +33,12 @@ const args = arg({
   '--tag': '--tags',
   '-j': '--json',
   '-b': '--branch',
+  '-C': '--config-file',
 })
 
 debug('arguments %o', args)
 
-const specs = getSpecs()
+const specs = getSpecs(args['--config-file'])
 if (args['--names'] || args['--tags']) {
   if (!specs.length) {
     console.log('no specs found')

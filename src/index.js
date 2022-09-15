@@ -129,8 +129,8 @@ function findCypressSpecsV10(opts = {}) {
   return filtered
 }
 
-function getSpecs() {
-  const options = getConfig()
+function getSpecs(configFile) {
+  const options = getConfig(configFile)
   return findCypressSpecs(options)
 }
 
