@@ -31,11 +31,31 @@ function getConfigJs(filename) {
   return definedConfig
 }
 
-function getConfig(filename = './cypress.config.js') {
-  if (filename.endsWith('.json')) {
-    return getConfigJson(filename)
+function getConfigTs(filename) {
+  require('ts-node/register')
+  const jsFile = path.join(process.cwd(), filename)
+  debug('loading Cypress config from %s', jsFile)
+  const definedConfig = requireEveryTime(jsFile)
+  return definedConfig
+}
+
+function getConfig() {
+  if (fs.existsSync('./cypress.config.js')) {
+    debug('found file cypress.config.js')
+    return getConfigJs('./cypress.config.js')
   }
-  return getConfigJs(filename)
+
+  if (fs.existsSync('./cypress.config.ts')) {
+    debug('found file cypress.config.ts')
+    return getConfigTs('./cypress.config.ts')
+  }
+
+  if (fs.existsSync('./cypress.json')) {
+    debug('found file cypress.json')
+    return getConfigJson('./cypress.config.js')
+  }
+
+  throw new Error('Do not know how to find and load Cypress config file')
 }
 
 function findCypressSpecsV9(opts = {}) {

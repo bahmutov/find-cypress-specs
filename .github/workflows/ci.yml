@@ -39,6 +39,9 @@ jobs:
       - name: Count the specs changed against the main branch 🌳
         run: npm run count-changed-specs
 
+      - name: Load cypress.config.ts 🤘
+        run: npm run demo-tests --prefix test-ts
+
       - name: Unit tests 🧪
         run: npm test
 

@@ -115,6 +115,12 @@ $ npx find-cypress-specs --names --tagged <tag1>,<tag2>,<tag3>,...
 # tagged with tag1 or tag2 or tag3 or ...
 ```
 
+## cypress.config.ts
+
+If the project uses TypeScript and `cypress.config.ts` then this module uses [ts-node/register](https://github.com/TypeStrong/ts-node) to load the config and fetch the spec pattern.
+
+**Tip:** read my blog post [Convert Cypress Specs from JavaScript to TypeScript](https://glebbahmutov.com/blog/cypress-js-to-ts/).
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.

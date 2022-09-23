@@ -5,7 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "cypress run"
+    "test": "cypress run",
+    "demo-tests": "DEBUG=find-cypress-specs node ../bin/find"
   },
   "keywords": [],
   "author": "",
