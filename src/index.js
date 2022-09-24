@@ -32,10 +32,10 @@ function getConfigJs(filename) {
 }
 
 function getConfigTs(filename) {
-  require('ts-node/register')
-  const jsFile = path.join(process.cwd(), filename)
-  debug('loading Cypress config from %s', jsFile)
-  const definedConfig = requireEveryTime(jsFile)
+  require('ts-node/register/transpile-only')
+  const configFilename = path.join(process.cwd(), filename)
+  debug('loading Cypress config from %s', configFilename)
+  const definedConfig = requireEveryTime(configFilename)
   return definedConfig
 }
 

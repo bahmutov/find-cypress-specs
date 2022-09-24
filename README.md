@@ -119,6 +119,29 @@ $ npx find-cypress-specs --names --tagged <tag1>,<tag2>,<tag3>,...
 
 If the project uses TypeScript and `cypress.config.ts` then this module uses [ts-node/register](https://github.com/TypeStrong/ts-node) to load the config and fetch the spec pattern.
 
+If you are using `import` keyword in your `cypress.config.ts` you might get an error like this:
+
+```
+import { defineConfig } from 'cypress';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+```
+
+In that case, add to your `tsconfig.json` file the `ts-node` block:
+
+```json
+{
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}
+```
+
+See example in [bahmutov/test-todomvc-using-app-actions](https://github.com/bahmutov/test-todomvc-using-app-actions).
+
 **Tip:** read my blog post [Convert Cypress Specs from JavaScript to TypeScript](https://glebbahmutov.com/blog/cypress-js-to-ts/).
 
 ## Details
