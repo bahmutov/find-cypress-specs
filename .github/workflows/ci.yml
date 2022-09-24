@@ -41,6 +41,13 @@ jobs:
 
       - name: Load cypress.config.ts 🤘
         run: npm run demo-tests --prefix test-ts
+      - name: Test cypress.config.ts project
+        run: npm test --prefix test-ts
+
+      - name: Load cypress.config.ts with import keyword 🤘
+        run: npm run demo-tests --prefix test-ts-import
+      - name: Test cypress.config.ts project with import keyword
+        run: npm test --prefix test-ts-import
 
       - name: Unit tests 🧪
         run: npm test

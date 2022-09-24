@@ -1,0 +1,18 @@
+{
+  "include": ["cypress.config.ts", "cypress/e2e/*.cy.ts"],
+  "compilerOptions": {
+    "lib": ["DOM", "ES2015"],
+    "module": "es6",
+    "target": "es6",
+    "strict": true,
+    "allowJs": true,
+    "noEmit": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}
