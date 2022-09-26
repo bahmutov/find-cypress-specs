@@ -36,6 +36,12 @@ function getConfigTs(filename) {
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
   const definedConfig = requireEveryTime(configFilename)
+  if (definedConfig && definedConfig.default) {
+    // due to TS / ES6 module transpile we got the default export
+    debug('returning default export as config from %s', filename)
+    return definedConfig.default
+  }
+
   return definedConfig
 }
 
@@ -156,10 +162,12 @@ function getSpecs() {
 
 function findCypressSpecs(options) {
   if (options.e2e) {
+    debug('config has "e2e" property, treating as Cypress v10+')
     const specs = findCypressSpecsV10(options)
     return specs
   }
 
+  debug('reading Cypress config < v10')
   const specs = findCypressSpecsV9(options)
   return specs
 }
