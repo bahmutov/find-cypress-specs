@@ -58,7 +58,7 @@ function getConfig() {
 
   if (fs.existsSync('./cypress.json')) {
     debug('found file cypress.json')
-    return getConfigJson('./cypress.config.js')
+    return getConfigJson('./cypress.json')
   }
 
   throw new Error('Do not know how to find and load Cypress config file')

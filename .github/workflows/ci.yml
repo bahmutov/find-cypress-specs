@@ -49,6 +49,9 @@ jobs:
       - name: Test cypress.config.ts project with import keyword
         run: npm test --prefix test-ts-import
 
+      - name: Test cypress.json project (Cypress v9)
+        run: npm run demo-tests --prefix test-json
+
       - name: Unit tests 🧪
         run: npm test
 

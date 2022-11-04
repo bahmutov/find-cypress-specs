@@ -27,3 +27,6 @@ jobs:
 
       - name: Print specs changed against the parent of this branch 🌳
         run: node ./bin/find --branch main --parent
+
+      - name: Test cypress.json project (Cypress v9)
+        run: npm run demo-tests --prefix test-json
