@@ -2,7 +2,7 @@
 
 const arg = require('arg')
 const { getSpecs, collectResults, findChangedFiles } = require('../src')
-const { pickTaggedTestsFrom } = require('../src/tagged')
+const { pickTaggedTestsFrom, leavePendingTestsOnly } = require('../src/tagged')
 const { addCounts } = require('../src/count')
 const { stringAllInfo } = require('../src/print')
 
@@ -23,6 +23,8 @@ const args = arg({
   '--count': Boolean,
   // filter all tests to those that have the given tag
   '--tagged': String,
+  // print only the "it.only" tests
+  '--skipped': Boolean,
 
   // aliases
   '-n': '--names',
@@ -31,6 +33,10 @@ const args = arg({
   '--tag': '--tags',
   '-j': '--json',
   '-b': '--branch',
+  // Cypress test status (just like Mocha)
+  // calls "it.skip" pending tests
+  // https://glebbahmutov.com/blog/cypress-test-statuses/
+  '--pending': '--skipped',
 })
 
 debug('arguments %o', args)
@@ -82,6 +88,11 @@ if (args['--names'] || args['--tags']) {
           .filter(Boolean)
         debug('filtering all tests by tag "%o"', splitTags)
         pickTaggedTestsFrom(jsonResults, splitTags)
+        // recompute the number of tests
+        addCounts(jsonResults)
+      } else if (args['--skipped']) {
+        debug('leaving only skipped (pending) tests')
+        leavePendingTestsOnly(jsonResults)
         // recompute the number of tests
         addCounts(jsonResults)
       }

@@ -38,6 +38,25 @@ function pickTaggedTests(tests, tag) {
   return filteredTests.length > 0
 }
 
+// note: modifies the tests in place
+function leavePendingTests(tests) {
+  if (!Array.isArray(tests)) {
+    return false
+  }
+  const filteredTests = tests.filter((test) => {
+    if (test.type === 'test') {
+      return test.pending === true
+    } else if (test.type === 'suite') {
+      // maybe there is some test inside this suite
+      // with the tag? Filter all other tests
+      return leavePendingTests(test.tests) || leavePendingTests(test.suites)
+    }
+  })
+  tests.length = 0
+  tests.push(...filteredTests)
+  return filteredTests.length > 0
+}
+
 function removeEmptyNodes(json) {
   Object.keys(json).forEach((filename) => {
     const fileTests = json[filename].tests
@@ -64,9 +83,26 @@ function pickTaggedTestsFrom(json, tag) {
   return result
 }
 
+/**
+ * Takes an object of tests collected from all files,
+ * and leaves only the pending tests.
+ * Modifies the given object in place.
+ */
+function leavePendingTestsOnly(json) {
+  Object.keys(json).forEach((filename) => {
+    const fileTests = json[filename].tests
+    leavePendingTests(fileTests)
+  })
+
+  const result = removeEmptyNodes(json)
+  addCounts(result)
+  return result
+}
+
 module.exports = {
   arraysOverlap,
   pickTaggedTestsFrom,
   removeEmptyNodes,
   pickTaggedTests,
+  leavePendingTestsOnly,
 }
