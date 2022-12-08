@@ -27,6 +27,9 @@ jobs:
       - name: Demo test names and tags 💻
         run: npm run demo-names-and-tags
 
+      - name: Demo pending tests only 💻
+        run: npm run demo-skipped-tests
+
       - name: Demo names in json output 💻
         run: npm run demo-names-json
 
