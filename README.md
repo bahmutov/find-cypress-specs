@@ -115,6 +115,21 @@ $ npx find-cypress-specs --names --tagged <tag1>,<tag2>,<tag3>,...
 # tagged with tag1 or tag2 or tag3 or ...
 ```
 
+## Show only the pending tests
+
+You can show only the tests marked with "it.skip" which are called "pending" according to Mocha / Cypress [terminology](https://glebbahmutov.com/blog/cypress-test-statuses/).
+
+```bash
+$ npx find-cypress-specs --names --pending
+# --skipped is an alias to --pending
+$ npx find-cypress-specs --names --skipped
+# prints and counts only the pending tests
+cypress/e2e/featureA/user.cy.ts (1 test, 1 pending)
+└⊙ needs to be written [@alpha]
+
+found 1 spec (1 test, 1 pending)
+```
+
 ## cypress.config.ts
 
 If the project uses TypeScript and `cypress.config.ts` then this module uses [ts-node/register](https://github.com/TypeStrong/ts-node) to load the config and fetch the spec pattern.

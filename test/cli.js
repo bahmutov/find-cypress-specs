@@ -78,3 +78,13 @@ test('prints only the skipped tests', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('--pending is an alias to --skipped', async (t) => {
+  // prints only the tests that have "it.skip"
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--names', '--pending'], {
+    filter: ['code', 'stdout'],
+  })
+  // console.log(result)
+  t.snapshot(result)
+})
