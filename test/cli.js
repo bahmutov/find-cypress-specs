@@ -68,3 +68,13 @@ test('prints test tagged @main and @alpha', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('prints only the skipped tests', async (t) => {
+  // prints only the tests that have "it.skip"
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--names', '--skipped'], {
+    filter: ['code', 'stdout'],
+  })
+  // console.log(result)
+  t.snapshot(result)
+})
