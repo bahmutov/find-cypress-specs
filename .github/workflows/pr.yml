@@ -31,5 +31,9 @@ jobs:
       - name: Print specs changed against the parent of this branch 🌳
         run: node ./bin/find --branch main --parent
 
+      - name: Print changed specs if you trace imports and requires 🔭
+        # in the folder "cypress"
+        run: node ./bin/find --branch main --parent --trace-imports cypress
+
       - name: Test cypress.json project (Cypress v9)
         run: npm run demo-tests --prefix test-json

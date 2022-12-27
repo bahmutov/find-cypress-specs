@@ -144,12 +144,22 @@ if (args['--names'] || args['--tags']) {
     Object.entries(deps).forEach(([filename, fileDependents]) => {
       const f = path.join(args['--trace-imports'], filename)
       if (changedFiles.includes(f)) {
-        console.log(filename, '->', fileDependents.join(','))
+        debug(
+          'the source file %s has changed, including its dependents %o in the list of changed files',
+          f,
+          fileDependents,
+        )
+        fileDependents.forEach((name) => {
+          const nameInCypressFolder = path.join(args['--trace-imports'], name)
+          if (!changedFiles.includes(nameInCypressFolder)) {
+            changedFiles.push(nameInCypressFolder)
+          }
+        })
       }
     })
   }
   let changedSpecs = specs.filter((file) => changedFiles.includes(file))
-  debug('changed specs %o', changedSpecs)
+  debug('changed %d specs %o', changedSpecs.length, changedSpecs)
 
   if (args['--tagged']) {
     const splitTags = args['--tagged']
