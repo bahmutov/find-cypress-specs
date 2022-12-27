@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import './utils'
+
 describe('parent suite', { tags: '@main' }, () => {
   it('works well enough', () => {})
 

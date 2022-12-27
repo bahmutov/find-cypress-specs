@@ -16,6 +16,9 @@ jobs:
         with:
           runTests: false
 
+      - name: Print dependencies between tests and utils 💻
+        run: npm run deps
+
       - name: Print files changed against the parent of this branch 🌳
         run: |
           git --version
