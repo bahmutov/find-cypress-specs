@@ -29,11 +29,20 @@ jobs:
           git diff --name-only --diff-filter=AMR $(git merge-base origin/main HEAD)..
 
       - name: Print specs changed against the parent of this branch 🌳
-        run: node ./bin/find --branch main --parent
+        # and set GitHub Actions output
+        id: step1
+        run: node ./bin/find --branch main --parent --set-gha-outputs
+
+      - name: Print set outputs
+        run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}
 
       - name: Print changed specs if you trace imports and requires 🔭
         # in the folder "cypress"
-        run: node ./bin/find --branch main --parent --trace-imports cypress
+        id: step2
+        run: node ./bin/find --branch main --parent --trace-imports cypress --set-gha-outputs
+
+      - name: Print set outputs
+        run: echo ${{ steps.step2.outputs.changedSpecsN }} ${{ steps.step2.outputs.changedSpecs }}
 
       - name: Test cypress.json project (Cypress v9)
         run: npm run demo-tests --prefix test-json
