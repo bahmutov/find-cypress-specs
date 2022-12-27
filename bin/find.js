@@ -167,7 +167,7 @@ if (args['--names'] || args['--tags']) {
   if (args['--set-gha-outputs']) {
     debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
     core.setOutput('changedSpecsN', changedSpecs.length)
-    core.setOutput('changedSpecs', changedSpecs)
+    core.setOutput('changedSpecs', changedSpecs.join(','))
   }
 
   if (args['--tagged']) {
