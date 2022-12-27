@@ -12,6 +12,7 @@ const { getTestNames, countTags } = require('find-test-names')
 const consoleTable = require('console.table')
 const debug = require('debug')('find-cypress-specs')
 const { getDependsInFolder } = require('spec-change')
+const core = require('@actions/core')
 
 const args = arg({
   '--names': Boolean,
@@ -32,7 +33,10 @@ const args = arg({
   // and consider specs that import a changes source file changed to
   // The value of this argument is the subfolder with Cypress tests, like "cypress"
   '--trace-imports': String,
-
+  // when enabled, this code uses GitHub Actions Core package
+  // to set two named outputs, one for number of changed specs
+  // another for actual list of files
+  '--set-gha-outputs': Boolean,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -160,6 +164,11 @@ if (args['--names'] || args['--tags']) {
   }
   let changedSpecs = specs.filter((file) => changedFiles.includes(file))
   debug('changed %d specs %o', changedSpecs.length, changedSpecs)
+  if (args['--set-gha-outputs']) {
+    debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
+    core.setOutput('changedSpecsN', changedSpecs.length)
+    core.setOutput('changedSpecs', changedSpecs.join(','))
+  }
 
   if (args['--tagged']) {
     const splitTags = args['--tagged']

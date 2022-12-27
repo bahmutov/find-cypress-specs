@@ -19,6 +19,20 @@ $ npx find-cypress-specs --branch main
 # prints only some specs, the ones that have changed against the "origin/main"
 ```
 
+## set GitHub Actions outputs
+
+If you add `--set-gh-outputs` command line switch, then the number of changed specs and the comma-separated file list will be set as GH Actions outputs `changedSpecsN` and `changedSpecs`. See [pr.yml](./.github/workflows/pr.yml) for example
+
+```yml
+- name: Print specs changed against the parent of this branch 🌳
+  # and set GitHub Actions output
+  id: step1
+  run: node ./bin/find --branch main --parent --set-gha-outputs
+
+- name: Print set outputs
+  run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}
+```
+
 ## against the parent commit
 
 When dealing with a long-term branch, you do not want to see the changed files in the main branch. Instead, you want to only consider the specs changed in the _current_ branch all the way to its parent commit. You can pass the flag `--parent` to only pick the modified and added specs.
