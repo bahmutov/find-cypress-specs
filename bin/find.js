@@ -7,9 +7,11 @@ const { addCounts } = require('../src/count')
 const { stringAllInfo } = require('../src/print')
 
 const fs = require('fs')
+const path = require('path')
 const { getTestNames, countTags } = require('find-test-names')
 const consoleTable = require('console.table')
 const debug = require('debug')('find-cypress-specs')
+const { getDependsInFolder } = require('spec-change')
 
 const args = arg({
   '--names': Boolean,
@@ -25,6 +27,11 @@ const args = arg({
   '--tagged': String,
   // print only the "it.only" tests
   '--skipped': Boolean,
+  // when finding specs changed against a given parent of the branch
+  // also look at the import and require statements to trace dependencies
+  // and consider specs that import a changes source file changed to
+  // The value of this argument is the subfolder with Cypress tests, like "cypress"
+  '--trace-imports': String,
 
   // aliases
   '-n': '--names',
@@ -33,6 +40,7 @@ const args = arg({
   '--tag': '--tags',
   '-j': '--json',
   '-b': '--branch',
+  '--deps': '--trace-imports',
   // Cypress test status (just like Mocha)
   // calls "it.skip" pending tests
   // https://glebbahmutov.com/blog/cypress-test-statuses/
@@ -124,11 +132,34 @@ if (args['--names'] || args['--tags']) {
   }
 } else if (args['--branch']) {
   debug('determining specs changed against branch %s', args['--branch'])
-  const changedFiles = findChangedFiles(args['--branch'], args['--parent'])
+  let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
   debug('changed files %o', changedFiles)
   debug('comparing against the specs %o', specs)
+  if (args['--trace-imports']) {
+    debug('tracing dependent changes in folder %s', args['--trace-imports'])
+    const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
+    const deps = getDependsInFolder(absoluteFolder)
+    debug('traced dependencies via imports and require')
+    debug(deps)
+    Object.entries(deps).forEach(([filename, fileDependents]) => {
+      const f = path.join(args['--trace-imports'], filename)
+      if (changedFiles.includes(f)) {
+        debug(
+          'the source file %s has changed, including its dependents %o in the list of changed files',
+          f,
+          fileDependents,
+        )
+        fileDependents.forEach((name) => {
+          const nameInCypressFolder = path.join(args['--trace-imports'], name)
+          if (!changedFiles.includes(nameInCypressFolder)) {
+            changedFiles.push(nameInCypressFolder)
+          }
+        })
+      }
+    })
+  }
   let changedSpecs = specs.filter((file) => changedFiles.includes(file))
-  debug('changed specs %o', changedSpecs)
+  debug('changed %d specs %o', changedSpecs.length, changedSpecs)
 
   if (args['--tagged']) {
     const splitTags = args['--tagged']

@@ -37,6 +37,16 @@ $ git fetch
 $ npx find-cypress-specs --branch main --parent
 ```
 
+## with traced import and require statements
+
+Imagine you open a pull request and only change something in an `utils.js` file used by other specs. Which specs should you run? By default `--branch main --parent` would not find any changed specs, so no specs would execute, and you will have to run _all_ specs just to be safe. This program has a mode `--trace-imports <subfolder>` which uses [spec-change](https://github.com/bahmutov/spec-change) to inspect JS/TS files and find dependencies between them. Thus it can discover that when `utils.js` changes, the specs that `import './utils'` or `require('./utils')` should also be considered modified.
+
+```
+$ npx find-cypress-specs --branch main --parent --trace-imports cypress
+```
+
+**Note:** the argument is the subfolder name to limit the number of files to inspect when tracing the imports.
+
 ### number of changed files
 
 You can print just the number of changed specs

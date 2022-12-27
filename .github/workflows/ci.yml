@@ -14,8 +14,11 @@ jobs:
           DEBUG: 'cypress:server:specs'
 
       # prints all specs
-      - name: Demo 💻
+      - name: Demo found specs 💻
         run: npm run demo
+
+      - name: Print dependencies between tests and utils 💻
+        run: npm run deps
 
       # prints all specs and tests inside each spec
       - name: Demo test names 💻
