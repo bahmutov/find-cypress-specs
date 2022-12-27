@@ -141,6 +141,12 @@ if (args['--names'] || args['--tags']) {
     const deps = getDependsInFolder(absoluteFolder)
     debug('traced dependencies via imports and require')
     debug(deps)
+    Object.entries(deps).forEach(([filename, fileDependents]) => {
+      const f = path.join(args['--trace-imports'], filename)
+      if (changedFiles.includes(f)) {
+        console.log(filename, '->', fileDependents.join(','))
+      }
+    })
   }
   let changedSpecs = specs.filter((file) => changedFiles.includes(file))
   debug('changed specs %o', changedSpecs)
