@@ -1,3 +1,5 @@
+import './utils'
+
 // empty test
 // @ts-ignore
 it('works', { tags: '@user' }, () => {})
