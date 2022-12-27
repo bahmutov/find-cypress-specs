@@ -137,7 +137,7 @@ if (args['--names'] || args['--tags']) {
   debug('comparing against the specs %o', specs)
   if (args['--trace-imports']) {
     debug('tracing dependent changes in folder %s', args['--trace-imports'])
-    const absoluteFolder = path.resolve(args['--trace-imports'])
+    const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
     const deps = getDependsInFolder(absoluteFolder)
     debug('traced dependencies via imports and require')
     debug(deps)
