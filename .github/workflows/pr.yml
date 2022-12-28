@@ -44,5 +44,11 @@ jobs:
       - name: Print set outputs
         run: echo ${{ steps.step2.outputs.changedSpecsN }} ${{ steps.step2.outputs.changedSpecs }}
 
+      - name: Saving traced dependencies
+        run: node ./bin/find --branch main --parent --trace-imports cypress --cache-trace --time-trace
+
+      - name: Loading cached traced dependencies
+        run: node ./bin/find --branch main --parent --trace-imports cypress --cache-trace
+
       - name: Test cypress.json project (Cypress v9)
         run: npm run demo-tests --prefix test-json
