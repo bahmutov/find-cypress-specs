@@ -1,7 +1,7 @@
 {
   "extends": ["config:base"],
   "automerge": true,
-  "prHourlyLimit": 2,
+  "prHourlyLimit": 4,
   "updateNotScheduled": false,
   "timezone": "America/New_York",
   "schedule": ["after 10pm and before 5am on every weekday", "every weekend"],
@@ -13,7 +13,8 @@
       "excludePackagePatterns": [
         "cypress",
         "find-test-names",
-        "semantic-release"
+        "semantic-release",
+        "spec-change"
       ],
       "enabled": false
     }
