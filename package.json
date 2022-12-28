@@ -26,7 +26,7 @@
     "count-changed-specs": "node ./bin/find --branch main --count",
     "semantic-release": "semantic-release",
     "deps": "spec-change --folder . --mask 'cypress/**/*.{js,ts}'",
-    "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress"
+    "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress --time-trace --cache-trace"
   },
   "repository": {
     "type": "git",
@@ -62,7 +62,7 @@
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.0.0",
     "shelljs": "^0.8.5",
-    "spec-change": "^1.4.0",
+    "spec-change": "^1.6.0",
     "ts-node": "^10.9.1"
   }
 }

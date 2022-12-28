@@ -61,6 +61,17 @@ $ npx find-cypress-specs --branch main --parent --trace-imports cypress
 
 **Note:** the argument is the subfolder name to limit the number of files to inspect when tracing the imports.
 
+You can time how long tracing takes by adding option `--time-trace` to the command line arguments. You can also saved traced dependencies using `--cache-trace` argument. Next time the dependencies will be loaded from the file without recomputing. This is convenient on CI to avoid recomputing them. For example, if you need the number of affected files and their filenames
+
+```
+# get the number of affected specs
+$ npx find-cypress-specs --branch main --parent --trace-imports cypress --cache-trace --count
+# quickly get the affected specs without recomputing the dependencies
+$ npx find-cypress-specs --branch main --parent --trace-imports cypress --cache-trace
+```
+
+The cached trace will be saved in file `deps.json`, you probably want to Git ignore it.
+
 ### number of changed files
 
 You can print just the number of changed specs

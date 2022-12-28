@@ -37,6 +37,9 @@ const args = arg({
   // to set two named outputs, one for number of changed specs
   // another for actual list of files
   '--set-gha-outputs': Boolean,
+  // save a JSON file with traced dependencies to save time
+  '--cache-trace': Boolean,
+  '--time-trace': Boolean,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -141,8 +144,32 @@ if (args['--names'] || args['--tags']) {
   debug('comparing against the specs %o', specs)
   if (args['--trace-imports']) {
     debug('tracing dependent changes in folder %s', args['--trace-imports'])
-    const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
-    const deps = getDependsInFolder(absoluteFolder)
+
+    const saveDependenciesFile = 'deps.json'
+    let deps
+    if (args['--cache-trace']) {
+      if (fs.existsSync(saveDependenciesFile)) {
+        debug(
+          'loading cached traced dependencies from file %s',
+          saveDependenciesFile,
+        )
+        deps = JSON.parse(fs.readFileSync(saveDependenciesFile, 'utf-8')).deps
+      }
+    }
+
+    if (!deps) {
+      const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
+      const depsOptions = { folder: absoluteFolder, time: args['--time-trace'] }
+      if (args['--cache-trace']) {
+        depsOptions.saveDepsFilename = saveDependenciesFile
+        debug(
+          'will save found dependencies into the file %s',
+          saveDependenciesFile,
+        )
+      }
+      debug('tracing options %o', depsOptions)
+      deps = getDependsInFolder(depsOptions)
+    }
     debug('traced dependencies via imports and require')
     debug(deps)
     Object.entries(deps).forEach(([filename, fileDependents]) => {
