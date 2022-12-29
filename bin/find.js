@@ -40,6 +40,8 @@ const args = arg({
   // save a JSON file with traced dependencies to save time
   '--cache-trace': Boolean,
   '--time-trace': Boolean,
+  // do not add more than this number of extra specs after tracing
+  '--max-added-traced-specs': Number,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -172,6 +174,13 @@ if (args['--names'] || args['--tags']) {
     }
     debug('traced dependencies via imports and require')
     debug(deps)
+
+    // add a sensible limit to the number of extra specs to add
+    // when we trace the dependencies in the changed source files
+    const addedTracedFiles = []
+    const maxAddTracedFiles = args['--max-added-traced-specs'] || 1000
+    debug('maximum traced files to add %d', maxAddTracedFiles)
+
     Object.entries(deps).forEach(([filename, fileDependents]) => {
       const f = path.join(args['--trace-imports'], filename)
       if (changedFiles.includes(f)) {
@@ -183,12 +192,17 @@ if (args['--names'] || args['--tags']) {
         fileDependents.forEach((name) => {
           const nameInCypressFolder = path.join(args['--trace-imports'], name)
           if (!changedFiles.includes(nameInCypressFolder)) {
-            changedFiles.push(nameInCypressFolder)
+            if (addedTracedFiles.length < maxAddTracedFiles) {
+              changedFiles.push(nameInCypressFolder)
+              addedTracedFiles.push(nameInCypressFolder)
+            }
           }
         })
       }
     })
+    debug('added %d traced specs %o', addedTracedFiles.length, addedTracedFiles)
   }
+
   let changedSpecs = specs.filter((file) => changedFiles.includes(file))
   debug('changed %d specs %o', changedSpecs.length, changedSpecs)
   if (args['--set-gha-outputs']) {
