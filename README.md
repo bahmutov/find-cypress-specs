@@ -72,6 +72,8 @@ $ npx find-cypress-specs --branch main --parent --trace-imports cypress --cache-
 
 The cached trace will be saved in file `deps.json`, you probably want to Git ignore it.
 
+You can limit the number of added traced files using the `--max-added-traced-specs <N>` parameter. This avoids ALL specs added when you change some common utility that many specs import.
+
 ### number of changed files
 
 You can print just the number of changed specs
