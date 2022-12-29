@@ -212,6 +212,7 @@ Run the utility with environment variable `DEBUG=find-cypress-specs` to see the 
 
 ## Examples
 
+- 📝 blog post [Run Changed Traced Specs On GitHub Actions](https://glebbahmutov.com/blog/trace-changed-specs/)
 - [chat.io](https://github.com/bahmutov/chat.io) as described in the blog post [Get Faster Feedback From Your Cypress Tests Running On CircleCI](https://glebbahmutov.com/blog/faster-ci-feedback-on-circleci/)
 
 ## Small print
