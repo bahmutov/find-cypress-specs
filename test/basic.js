@@ -36,3 +36,14 @@ test('string ignore pattern v10', (t) => {
     'cypress/e2e/featureA/user.cy.ts',
   ])
 })
+
+test('specific files', (t) => {
+  t.plan(1)
+  const specs = findCypressSpecs({
+    e2e: {
+      specPattern: 'cypress/e2e/featureA/user.cy*.ts',
+      excludeSpecPattern: ['utils.js'],
+    },
+  })
+  t.deepEqual(specs, ['cypress/e2e/featureA/user.cy.ts'])
+})
