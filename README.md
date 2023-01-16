@@ -215,6 +215,19 @@ Run the utility with environment variable `DEBUG=find-cypress-specs` to see the 
 - 📝 blog post [Run Changed Traced Specs On GitHub Actions](https://glebbahmutov.com/blog/trace-changed-specs/)
 - [chat.io](https://github.com/bahmutov/chat.io) as described in the blog post [Get Faster Feedback From Your Cypress Tests Running On CircleCI](https://glebbahmutov.com/blog/faster-ci-feedback-on-circleci/)
 
+## NPM module
+
+You can use this module via its NPM module API.
+
+```js
+const { getSpecs } = require('find-cypress-specs')
+// somewhere in the cypress.config.js
+setupNodeEvents(on, config) {
+  const specs = getSpecs(config)
+  // specs is a list of filenames
+}
+```
+
 ## Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2022
