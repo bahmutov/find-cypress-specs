@@ -114,13 +114,22 @@ if (args['--names'] || args['--tags']) {
         addCounts(jsonResults)
       }
 
-      if (args['--json']) {
-        console.log(JSON.stringify(jsonResults, null, 2))
+      if (args['--count']) {
+        let n = 0
+        Object.keys(jsonResults).forEach((filename) => {
+          const skippedCount = jsonResults[filename].counts.pending
+          n += skippedCount
+        })
+        console.log(n)
       } else {
-        const str = stringAllInfo(jsonResults)
-        console.log(str)
+        if (args['--json']) {
+          console.log(JSON.stringify(jsonResults, null, 2))
+        } else {
+          const str = stringAllInfo(jsonResults)
+          console.log(str)
+        }
+        console.log('')
       }
-      console.log('')
     }
 
     if (args['--tags']) {

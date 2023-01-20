@@ -167,6 +167,24 @@ cypress/e2e/featureA/user.cy.ts (1 test, 1 pending)
 found 1 spec (1 test, 1 pending)
 ```
 
+## Print skipped tests
+
+```
+$ npx find-cypress-specs --names --skipped
+```
+
+Prints each spec that has skipped tests.
+
+## Count skipped tests
+
+Prints the single number with the count of skipped tests
+
+```
+$ npx find-cypress-specs --names --skipped --count
+
+5
+```
+
 ## cypress.config.ts
 
 If the project uses TypeScript and `cypress.config.ts` then this module uses [ts-node/register](https://github.com/TypeStrong/ts-node) to load the config and fetch the spec pattern.
