@@ -12,7 +12,7 @@ jobs:
 
       - name: Install dependencies 📦
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           runTests: false
 

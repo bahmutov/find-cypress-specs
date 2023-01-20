@@ -9,7 +9,7 @@ jobs:
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         env:
           DEBUG: 'cypress:server:specs'
 
@@ -32,6 +32,9 @@ jobs:
 
       - name: Demo pending tests only 💻
         run: npm run demo-skipped-tests
+
+      - name: Demo count skipped tests 💻
+        run: npm run demo-count-skipped-tests
 
       - name: Demo names in json output 💻
         run: npm run demo-names-json
