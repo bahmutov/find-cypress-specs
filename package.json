@@ -44,7 +44,7 @@
   "homepage": "https://github.com/bahmutov/find-cypress-specs#readme",
   "devDependencies": {
     "ava": "^4.0.0",
-    "cypress": "12.3.0",
+    "cypress": "12.4.0",
     "execa-wrap": "^1.4.0",
     "prettier": "^2.5.1",
     "really-need": "^1.9.2",
