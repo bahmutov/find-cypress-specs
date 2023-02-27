@@ -1,5 +1,7 @@
 const { addCounts } = require('../src/count')
 const { getTestNames, countTags } = require('find-test-names')
+const { pickTaggedTestsFrom, leavePendingTestsOnly } = require('../src/tagged')
+
 const debug = require('debug')('find-cypress-specs')
 const fs = require('fs')
 const path = require('path')
