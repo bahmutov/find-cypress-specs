@@ -224,6 +224,8 @@ You can see how Cypress finds the specs using `DEBUG=cypress:cli,cypress:server:
 
 Run the utility with environment variable `DEBUG=find-cypress-specs` to see the verbose logs
 
+![Debug output](./images/debug.png)
+
 ## Videos
 
 - [Use Ava Snapshots And Execa-wrap To Write End-to-End Tests For CLI Utilities](https://youtu.be/rsw17RqP0G0)

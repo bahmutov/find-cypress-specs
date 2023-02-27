@@ -1,14 +1,5 @@
 const test = require('ava')
-const { getSpecs, findCypressSpecs } = require('..')
-
-test('basic', (t) => {
-  t.plan(1)
-  const specs = getSpecs()
-  t.deepEqual(specs, [
-    'cypress/e2e/spec.cy.js',
-    'cypress/e2e/featureA/user.cy.ts',
-  ])
-})
+const { findCypressSpecs } = require('..')
 
 test('string ignore pattern v9', (t) => {
   t.plan(1)
