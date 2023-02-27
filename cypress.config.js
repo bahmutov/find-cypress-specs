@@ -1,5 +1,5 @@
 const { defineConfig } = require('cypress')
-const { getSpecs } = require('.')
+const { getSpecs, getTests } = require('.')
 
 module.exports = defineConfig({
   fixturesFolder: false,
@@ -9,6 +9,10 @@ module.exports = defineConfig({
       const specs = getSpecs(config)
       console.log('found specs')
       console.log(specs.join(','))
+
+      const tests = getTests(specs)
+      console.log('found tests')
+      console.log(tests)
     },
     supportFile: false,
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
