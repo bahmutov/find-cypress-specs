@@ -1,14 +1,7 @@
 #!/usr/bin/env node
 
 const arg = require('arg')
-const {
-  getSpecs,
-  collectResults,
-  findChangedFiles,
-  getTests,
-} = require('../src')
-const { pickTaggedTestsFrom, leavePendingTestsOnly } = require('../src/tagged')
-const { addCounts } = require('../src/count')
+const { getSpecs, findChangedFiles, getTests } = require('../src')
 const { stringAllInfo } = require('../src/print')
 
 const fs = require('fs')
@@ -71,64 +64,8 @@ if (args['--names'] || args['--tags']) {
     tagged: args['--tagged'],
     skipped: args['--skipped'],
   })
-  // if (!specs.length) {
-  //   console.log('no specs found')
-  // } else {
-  //   console.log('')
-  // counts the number of tests for each tag across all specs
-  // const tagTestCounts = {}
-  // const jsonResults = {}
-
-  // specs.forEach((filename) => {
-  //   jsonResults[filename] = {
-  //     counts: {
-  //       tests: 0,
-  //       pending: 0,
-  //     },
-  //     tests: [],
-  //   }
-  //   const source = fs.readFileSync(filename, 'utf8')
-  //   const result = getTestNames(source, true)
-  //   // enable if need to debug the parsed test
-  //   // console.dir(result.structure, { depth: null })
-  //   collectResults(result.structure, jsonResults[filename].tests)
-
-  //   if (args['--tags']) {
-  //     const specTagCounts = countTags(result.structure)
-  //     Object.keys(specTagCounts).forEach((tag) => {
-  //       if (!(tag in tagTestCounts)) {
-  //         tagTestCounts[tag] = specTagCounts[tag]
-  //       } else {
-  //         tagTestCounts[tag] += specTagCounts[tag]
-  //       }
-  //     })
-  //   }
-  // })
-
-  // addCounts(jsonResults)
 
   if (args['--names']) {
-    // const jsonResults = getTests({
-    //   tagged: args['--tagged'],
-    //   skipped: args['--skipped'],
-    // })
-    // if (args['--tagged']) {
-    //   // filter all collected tests to those that have the given tag(s)
-    //   const splitTags = args['--tagged']
-    //     .split(',')
-    //     .map((s) => s.trim())
-    //     .filter(Boolean)
-    //   debug('filtering all tests by tag "%o"', splitTags)
-    //   pickTaggedTestsFrom(jsonResults, splitTags)
-    //   // recompute the number of tests
-    //   addCounts(jsonResults)
-    // } else if (args['--skipped']) {
-    //   debug('leaving only skipped (pending) tests')
-    //   leavePendingTestsOnly(jsonResults)
-    //   // recompute the number of tests
-    //   addCounts(jsonResults)
-    // }
-
     if (args['--count']) {
       let n = 0
       Object.keys(jsonResults).forEach((filename) => {
@@ -162,7 +99,6 @@ if (args['--names'] || args['--tags']) {
       console.log(table)
     }
   }
-  // }
 } else if (args['--branch']) {
   debug('determining specs changed against branch %s', args['--branch'])
   let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
