@@ -34,3 +34,18 @@ test('returns a list of component specs', (t) => {
     'test-components/comp2.cy.ts',
   ])
 })
+
+test('finds the specs passing resolved config', (t) => {
+  // imagine we are getting the config in the "e2e setupNodeEvents"
+  const config = {
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    excludeSpecPattern: '*.hot-update.js',
+    testingType: 'e2e',
+  }
+  t.plan(1)
+  const specs = getSpecs(config)
+  t.deepEqual(specs, [
+    'cypress/e2e/spec.cy.js',
+    'cypress/e2e/featureA/user.cy.ts',
+  ])
+})

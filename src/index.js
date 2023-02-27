@@ -183,10 +183,26 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
   return filtered
 }
 
-function getSpecs(options, type = 'e2e') {
+function getSpecs(options, type) {
   if (typeof options === 'undefined') {
     options = getConfig()
+    if (typeof type === 'undefined') {
+      type = 'e2e'
+    }
+  } else {
+    // we might have resolved config object
+    // passed from the "setupNode..." callback
+    if ('testingType' in options) {
+      options = {
+        e2e: {
+          specPattern: options.specPattern,
+          excludeSpecPattern: options.excludeSpecPattern,
+        },
+      }
+      type = options.testingType
+    }
   }
+
   return findCypressSpecs(options, type)
 }
 
