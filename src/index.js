@@ -193,13 +193,13 @@ function getSpecs(options, type) {
     // we might have resolved config object
     // passed from the "setupNode..." callback
     if ('testingType' in options) {
+      type = options.testingType
       options = {
-        e2e: {
+        [type]: {
           specPattern: options.specPattern,
           excludeSpecPattern: options.excludeSpecPattern,
         },
       }
-      type = options.testingType
     }
   }
 
