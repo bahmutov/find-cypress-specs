@@ -1,3 +1,5 @@
+const { addCounts } = require('../src/count')
+const { getTestNames, countTags } = require('find-test-names')
 const debug = require('debug')('find-cypress-specs')
 const fs = require('fs')
 const path = require('path')
@@ -268,6 +270,68 @@ function findChangedFiles(branch, useParent) {
   }
 }
 
+/**
+ * Collects all specs and for each finds all suits and tests with their tags.
+ */
+function getTests(specs, options = {}) {
+  if (!specs) {
+    specs = getSpecs()
+  }
+
+  const { tags, tagged, skipped } = options
+
+  // counts the number of tests for each tag across all specs
+  const tagTestCounts = {}
+  const jsonResults = {}
+
+  specs.forEach((filename) => {
+    jsonResults[filename] = {
+      counts: {
+        tests: 0,
+        pending: 0,
+      },
+      tests: [],
+    }
+    const source = fs.readFileSync(filename, 'utf8')
+    const result = getTestNames(source, true)
+    // enable if need to debug the parsed test
+    // console.dir(result.structure, { depth: null })
+    collectResults(result.structure, jsonResults[filename].tests)
+
+    if (tags) {
+      const specTagCounts = countTags(result.structure)
+      Object.keys(specTagCounts).forEach((tag) => {
+        if (!(tag in tagTestCounts)) {
+          tagTestCounts[tag] = specTagCounts[tag]
+        } else {
+          tagTestCounts[tag] += specTagCounts[tag]
+        }
+      })
+    }
+  })
+
+  addCounts(jsonResults)
+
+  if (tagged) {
+    // filter all collected tests to those that have the given tag(s)
+    const splitTags = tagged
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    debug('filtering all tests by tag "%o"', splitTags)
+    pickTaggedTestsFrom(jsonResults, splitTags)
+    // recompute the number of tests
+    addCounts(jsonResults)
+  } else if (skipped) {
+    debug('leaving only skipped (pending) tests')
+    leavePendingTestsOnly(jsonResults)
+    // recompute the number of tests
+    addCounts(jsonResults)
+  }
+
+  return { jsonResults, tagTestCounts }
+}
+
 module.exports = {
   getSpecs,
   // individual utilities
@@ -275,4 +339,5 @@ module.exports = {
   findCypressSpecs,
   collectResults,
   findChangedFiles,
+  getTests,
 }
