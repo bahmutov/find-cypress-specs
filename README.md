@@ -261,6 +261,19 @@ const specs = getSpecs({
 // ['cypress/e2e/featureA/spec.cy.ts']
 ```
 
+### getTests
+
+Returns an object with individual test information
+
+```js
+const { getTests } = require('find-cypress-specs')
+const { jsonResults, tagTestCounts } = getTests()
+// jsonResults is an object
+// with an entry per spec file
+```
+
+See [get-tests.js](./test/npm/get-tests.js) for details and examples.
+
 ## Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2022
