@@ -224,6 +224,8 @@ You can see how Cypress finds the specs using `DEBUG=cypress:cli,cypress:server:
 
 Run the utility with environment variable `DEBUG=find-cypress-specs` to see the verbose logs
 
+![Debug output](./images/debug.png)
+
 ## Videos
 
 - [Use Ava Snapshots And Execa-wrap To Write End-to-End Tests For CLI Utilities](https://youtu.be/rsw17RqP0G0)
@@ -237,6 +239,8 @@ Run the utility with environment variable `DEBUG=find-cypress-specs` to see the 
 
 You can use this module via its NPM module API.
 
+### getSpecs
+
 ```js
 const { getSpecs } = require('find-cypress-specs')
 // somewhere in the cypress.config.js
@@ -245,6 +249,30 @@ setupNodeEvents(on, config) {
   // specs is a list of filenames
 }
 ```
+
+You can pass the `config` object to the `getSpecs` method. If there is no `config` parameter, it will read the config file automatically.
+
+```js
+const specs = getSpecs({
+  e2e: {
+    specPattern: '*/e2e/featureA/*.cy.ts',
+  },
+})
+// ['cypress/e2e/featureA/spec.cy.ts']
+```
+
+### getTests
+
+Returns an object with individual test information
+
+```js
+const { getTests } = require('find-cypress-specs')
+const { jsonResults, tagTestCounts } = getTests()
+// jsonResults is an object
+// with an entry per spec file
+```
+
+See [get-tests.js](./test/npm/get-tests.js) for details and examples.
 
 ## Small print
 
