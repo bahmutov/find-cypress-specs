@@ -40,6 +40,8 @@ const args = arg({
   '--time-trace': Boolean,
   // do not add more than this number of extra specs after tracing
   '--max-added-traced-specs': Number,
+  // find component specs
+  '--component': Boolean,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -55,8 +57,10 @@ const args = arg({
 })
 
 debug('arguments %o', args)
+const specType = args['--component'] ? 'component' : 'e2e'
 
-const specs = getSpecs()
+const specs = getSpecs(undefined, specType)
+
 if (args['--names'] || args['--tags']) {
   // counts the number of tests for each tag across all specs
   const { jsonResults, tagTestCounts } = getTests(specs, {

@@ -113,19 +113,36 @@ function findCypressSpecsV9(opts = {}) {
   return filtered.map((file) => path.join(options.integrationFolder, file))
 }
 
-function findCypressSpecsV10(opts = {}) {
-  if (!('e2e' in opts)) {
-    throw new Error('Missing e2e in the config object')
+function findCypressSpecsV10(opts = {}, type = 'e2e') {
+  if (type !== 'e2e' && type !== 'component') {
+    throw new Error(`Unknown spec type ${type}`)
   }
-  const defaults = {
+
+  if (!(type in opts)) {
+    throw new Error(`Missing "${type}" object in the Cypress config object`)
+  }
+  const e2eDefaults = {
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     excludeSpecPattern: [],
   }
-  const options = {
-    specPattern: opts.e2e.specPattern || defaults.specPattern,
-    excludeSpecPattern:
-      opts.e2e.excludeSpecPattern || defaults.excludeSpecPattern,
+  const componentDefaults = {
+    specPattern: '**/*.cy.{js,jsx,ts,tsx}',
+    excludeSpecPattern: ['/snapshots/*', '/image_snapshots/*'],
   }
+  // https://on.cypress.io/configuration
+  const options = {}
+
+  if (type === 'e2e') {
+    options.specPattern = opts.e2e.specPattern || e2eDefaults.specPattern
+    options.excludeSpecPattern =
+      opts.e2e.excludeSpecPattern || e2eDefaults.excludeSpecPattern
+  } else if (type === 'component') {
+    options.specPattern =
+      opts.component.specPattern || componentDefaults.specPattern
+    options.excludeSpecPattern =
+      opts.component.excludeSpecPattern || componentDefaults.excludeSpecPattern
+  }
+
   debug('options v10 %o', options)
 
   const files = globby.sync(options.specPattern, {
@@ -137,6 +154,13 @@ function findCypressSpecsV10(opts = {}) {
   // go through the files again and eliminate files that match
   // the ignore patterns
   const ignorePatterns = [].concat(options.excludeSpecPattern)
+
+  // when using component spec pattern, ignore all E2E specs
+  if (type === 'component') {
+    const e2eIgnorePattern = options.e2e?.specPattern || e2eDefaults.specPattern
+    ignorePatterns.push(e2eIgnorePattern)
+  }
+
   debug('ignore patterns %o', ignorePatterns)
 
   // a function which returns true if the file does NOT match
@@ -159,23 +183,35 @@ function findCypressSpecsV10(opts = {}) {
   return filtered
 }
 
-function getSpecs(options) {
+function getSpecs(options, type = 'e2e') {
   if (typeof options === 'undefined') {
     options = getConfig()
   }
-  return findCypressSpecs(options)
+  return findCypressSpecs(options, type)
 }
 
-function findCypressSpecs(options) {
-  if (options.e2e) {
-    debug('config has "e2e" property, treating as Cypress v10+')
-    const specs = findCypressSpecsV10(options)
-    return specs
-  }
+function findCypressSpecs(options, type = 'e2e') {
+  debug('finding specs of type %s', type)
 
-  debug('reading Cypress config < v10')
-  const specs = findCypressSpecsV9(options)
-  return specs
+  if (type === 'e2e') {
+    if (options.e2e) {
+      debug('config has "e2e" property, treating as Cypress v10+')
+      const specs = findCypressSpecsV10(options, type)
+      return specs
+    }
+
+    debug('reading Cypress config < v10')
+    const specs = findCypressSpecsV9(options)
+    return specs
+  } else if (type === 'component') {
+    debug('finding component specs')
+    const specs = findCypressSpecsV10(options, type)
+    return specs
+  } else {
+    console.error('Do not know how to find specs of type "%s"', type)
+    console.error('returning an empty list')
+    return []
+  }
 }
 
 function collectResults(structure, results) {

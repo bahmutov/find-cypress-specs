@@ -24,6 +24,9 @@ jobs:
       - name: Demo test names 💻
         run: npm run demo-names
 
+      - name: Demo component test names 🧩
+        run: npm run demo-component
+
       - name: Demo tags 💻
         run: npm run demo-tags
 
