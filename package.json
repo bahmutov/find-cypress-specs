@@ -27,7 +27,8 @@
     "count-changed-specs": "node ./bin/find --branch main --count",
     "semantic-release": "semantic-release",
     "deps": "spec-change --folder . --mask 'cypress/**/*.{js,ts}'",
-    "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress --time-trace --cache-trace"
+    "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress --time-trace --cache-trace",
+    "demo-component": "DEBUG=find-cypress-specs node ./bin/find --component --names"
   },
   "repository": {
     "type": "git",
