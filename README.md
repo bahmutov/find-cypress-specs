@@ -239,6 +239,8 @@ Run the utility with environment variable `DEBUG=find-cypress-specs` to see the 
 
 You can use this module via its NPM module API.
 
+### getSpecs
+
 ```js
 const { getSpecs } = require('find-cypress-specs')
 // somewhere in the cypress.config.js
@@ -246,6 +248,17 @@ setupNodeEvents(on, config) {
   const specs = getSpecs(config)
   // specs is a list of filenames
 }
+```
+
+You can pass the `config` object to the `getSpecs` method. If there is no `config` parameter, it will read the config file automatically.
+
+```js
+const specs = getSpecs({
+  e2e: {
+    specPattern: '*/e2e/featureA/*.cy.ts',
+  },
+})
+// ['cypress/e2e/featureA/spec.cy.ts']
 ```
 
 ## Small print
