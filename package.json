@@ -16,7 +16,7 @@
     "demo": "DEBUG=find-cypress-specs node ./bin/find",
     "demo-names": "DEBUG=find-cypress-specs node ./bin/find --names",
     "demo-skipped-tests": "DEBUG=find-cypress-specs node ./bin/find --names --skipped",
-    "demo-count-skipped-tests": "node ./bin/find --names --skipped --count",
+    "demo-count-skipped-tests": "DEBUG=find-cypress-specs node ./bin/find --names --skipped --count",
     "demo-tags": "node ./bin/find --tags",
     "demo-tags-json": "node ./bin/find --tags --json",
     "demo-names-and-tags": "node ./bin/find --names --tags",
