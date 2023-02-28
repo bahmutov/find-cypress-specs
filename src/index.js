@@ -159,6 +159,7 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
   if (type === 'component') {
     const e2eIgnorePattern = options.e2e?.specPattern || e2eDefaults.specPattern
     ignorePatterns.push(e2eIgnorePattern)
+    ignorePatterns.push('node_modules/**')
   }
 
   debug('ignore patterns %o', ignorePatterns)
