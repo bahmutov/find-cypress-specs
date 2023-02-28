@@ -1,3 +1,5 @@
-describe('mock component suite', () => {
-  it('works', () => {})
+describe('Counter', () => {
+  it('works', () => {
+    cy.mount(<Counter />)
+  })
 })
