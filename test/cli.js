@@ -102,3 +102,11 @@ test('--pending is an alias to --skipped', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('jsx components', async (t) => {
+  t.plan(1)
+  const result = await execa('npm', ['run', '--silent', 'demo-component'], {
+    filter: ['code', 'stdout'],
+  })
+  t.snapshot(result)
+})
