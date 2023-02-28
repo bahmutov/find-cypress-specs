@@ -340,28 +340,34 @@ function getTests(specs, options = {}) {
   const jsonResults = {}
 
   specs.forEach((filename) => {
-    jsonResults[filename] = {
-      counts: {
-        tests: 0,
-        pending: 0,
-      },
-      tests: [],
-    }
-    const source = fs.readFileSync(filename, 'utf8')
-    const result = getTestNames(source, true)
-    // enable if need to debug the parsed test
-    // console.dir(result.structure, { depth: null })
-    collectResults(result.structure, jsonResults[filename].tests)
+    try {
+      const source = fs.readFileSync(filename, 'utf8')
+      const result = getTestNames(source, true)
 
-    if (tags) {
-      const specTagCounts = countTags(result.structure)
-      Object.keys(specTagCounts).forEach((tag) => {
-        if (!(tag in tagTestCounts)) {
-          tagTestCounts[tag] = specTagCounts[tag]
-        } else {
-          tagTestCounts[tag] += specTagCounts[tag]
-        }
-      })
+      jsonResults[filename] = {
+        counts: {
+          tests: 0,
+          pending: 0,
+        },
+        tests: [],
+      }
+      // enable if need to debug the parsed test
+      // console.dir(result.structure, { depth: null })
+      collectResults(result.structure, jsonResults[filename].tests)
+
+      if (tags) {
+        const specTagCounts = countTags(result.structure)
+        Object.keys(specTagCounts).forEach((tag) => {
+          if (!(tag in tagTestCounts)) {
+            tagTestCounts[tag] = specTagCounts[tag]
+          } else {
+            tagTestCounts[tag] += specTagCounts[tag]
+          }
+        })
+      }
+    } catch (e) {
+      console.error('find-cypress-specs: problem parsing file %s', filename)
+      delete jsonResults[filename]
     }
   })
 
