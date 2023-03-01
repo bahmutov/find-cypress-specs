@@ -11,6 +11,7 @@ function stringFileTests(fileName, fileInfo) {
     ? `${fileName} (${testCount}, ${fileInfo.counts.pending} pending)`
     : `${fileName} (${testCount})`
 
+  // console.log(fileInfo.tests)
   const body = formatTestList(fileInfo.tests)
 
   return headerLine + '\n' + body + '\n'

@@ -241,6 +241,9 @@ function collectResults(structure, results) {
     if (t.pending) {
       info.pending = t.pending
     }
+    if (t.exclusive) {
+      info.exclusive = t.exclusive
+    }
     results.push(info)
     if (t.type === 'suite') {
       if (t.suites && t.suites.length) {
