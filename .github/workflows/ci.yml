@@ -67,6 +67,9 @@ jobs:
       - name: Test parsing broken JS file 🐞
         run: npm run test-names --prefix test-parsing-error
 
+      - name: Test exclusive tests ↗️
+        run: npm run test-names --prefix test-exclusive
+
       - name: Unit tests 🧪
         run: npm test
 

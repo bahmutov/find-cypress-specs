@@ -234,6 +234,12 @@ Run the utility with environment variable `DEBUG=find-cypress-specs` to see the 
 
 ![Debug output](./images/debug.png)
 
+Finding tests in the individual specs uses [find-test-names](https://github.com/bahmutov/find-test-names) so you might want to enable debugging both modules at once:
+
+```
+$ DEBUG=find-cypress-specs,find-test-names npx find-cypress-specs --names
+```
+
 ## Videos
 
 - [Use Ava Snapshots And Execa-wrap To Write End-to-End Tests For CLI Utilities](https://youtu.be/rsw17RqP0G0)
