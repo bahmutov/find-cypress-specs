@@ -110,3 +110,11 @@ test('jsx components', async (t) => {
   })
   t.snapshot(result)
 })
+
+test('exclusive tests', async (t) => {
+  t.plan(1)
+  const result = await execa('npm', ['run', '--silent', 'demo-exclusive'], {
+    filter: ['code', 'stdout'],
+  })
+  t.snapshot(result)
+})

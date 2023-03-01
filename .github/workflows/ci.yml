@@ -68,7 +68,7 @@ jobs:
         run: npm run test-names --prefix test-parsing-error
 
       - name: Test exclusive tests ↗️
-        run: npm run test-names --prefix test-exclusive
+        run: npm run demo-exclusive
 
       - name: Unit tests 🧪
         run: npm test
