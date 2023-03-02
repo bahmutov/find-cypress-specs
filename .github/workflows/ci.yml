@@ -13,6 +13,9 @@ jobs:
         env:
           DEBUG: 'cypress:server:specs'
 
+      - name: Check production dependencies 💎
+        run: npm run prod-deps
+
       # prints all specs
       - name: Demo found specs 💻
         run: npm run demo
