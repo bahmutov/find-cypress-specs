@@ -145,6 +145,7 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
 
   debug('options v10 %o', options)
 
+  /** @type string[] */
   const files = globby.sync(options.specPattern, {
     sort: true,
     ignore: options.excludeSpecPattern,
