@@ -197,6 +197,7 @@ function getSpecs(options, type) {
     if ('testingType' in options) {
       type = options.testingType
       options = {
+        version: options.version,
         [type]: {
           specPattern: options.specPattern,
           excludeSpecPattern: options.excludeSpecPattern,
