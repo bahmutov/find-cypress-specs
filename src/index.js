@@ -209,10 +209,23 @@ function getSpecs(options, type) {
 }
 
 function findCypressSpecs(options, type = 'e2e') {
-  debug('finding specs of type %s', type)
+  debug(
+    'finding specs of type %s for Cypress version %s',
+    type,
+    options.version,
+  )
+
+  if (typeof options.version !== 'string') {
+    if ('integrationFolder' in options) {
+      options.version = '9.0.0'
+    } else {
+      options.version = '10.0.0'
+    }
+  }
+  const [major] = options.version.split('.').map(Number)
 
   if (type === 'e2e') {
-    if (options.e2e) {
+    if (major >= 10) {
       debug('config has "e2e" property, treating as Cypress v10+')
       const specs = findCypressSpecsV10(options, type)
       return specs

@@ -7,6 +7,7 @@ test('string ignore pattern v9', (t) => {
     integrationFolder: 'cypress/e2e',
     testFiles2: '**/*.js',
     ignoreTestFiles: 'utils.js',
+    version: '9.7.0',
   })
   t.deepEqual(specs, [
     'cypress/e2e/spec.cy.js',
@@ -17,6 +18,7 @@ test('string ignore pattern v9', (t) => {
 test('string ignore pattern v10', (t) => {
   t.plan(1)
   const specs = findCypressSpecs({
+    version: '10.0.0',
     e2e: {
       specPattern: 'cypress/e2e/**/*.cy.{js,ts}',
       excludeSpecPattern: ['utils.js'],
@@ -31,6 +33,7 @@ test('string ignore pattern v10', (t) => {
 test('specific files', (t) => {
   t.plan(1)
   const specs = findCypressSpecs({
+    version: '10.0.0',
     e2e: {
       specPattern: 'cypress/e2e/featureA/user.cy*.ts',
       excludeSpecPattern: ['utils.js'],
