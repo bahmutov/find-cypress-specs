@@ -209,20 +209,21 @@ function getSpecs(options, type) {
 }
 
 function findCypressSpecs(options, type = 'e2e') {
-  debug(
-    'finding specs of type %s for Cypress version %s',
-    type,
-    options.version,
-  )
+  debug('finding specs of type %s', type)
+  if (options.version) {
+    debug('Cypress version %s', options.version)
+  }
 
-  if (typeof options.version !== 'string') {
+  let cyVersion = options.version
+  if (typeof cyVersion !== 'string') {
     if ('integrationFolder' in options) {
-      options.version = '9.0.0'
+      cyVersion = '9.0.0'
     } else {
-      options.version = '10.0.0'
+      cyVersion = '10.0.0'
     }
   }
-  const [major] = options.version.split('.').map(Number)
+  const [major] = cyVersion.split('.').map(Number)
+  debug('treating options as Cypress version %d', major)
 
   if (type === 'e2e') {
     if (major >= 10) {
