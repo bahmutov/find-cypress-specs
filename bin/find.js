@@ -60,8 +60,15 @@ debug('arguments %o', args)
 const specType = args['--component'] ? 'component' : 'e2e'
 
 const specs = getSpecs(undefined, specType)
-
-if (args['--names'] || args['--tags']) {
+if (args['--tagged']) {
+  const { jsonResults, tagTestCounts } = getTests(specs, {
+    tags: args['--tags'],
+    tagged: args['--tagged'],
+    skipped: args['--skipped'],
+  })
+  const str = stringAllInfo(jsonResults, true)
+  console.log(str)
+} else if (args['--names'] || args['--tags']) {
   // counts the number of tests for each tag across all specs
   const { jsonResults, tagTestCounts } = getTests(specs, {
     tags: args['--tags'],
