@@ -159,6 +159,23 @@ $ npx find-cypress-specs --names --tagged <tag1>,<tag2>,<tag3>,...
 # finds all specs and tests, then filters the output showing all tests
 # tagged with tag1 or tag2 or tag3 or ...
 ```
+## File names filtered by a tag
+
+```
+$ npx find-cypress-specs --tagged <single tag>
+# finds all specs and tests, then filters the output showing only the file names associated with the tests
+
+
+# cypress/e2e/spec.cy.js,cypress/e2e/featureA/user.cy.ts
+```
+
+## File names filtered by multiple tags
+
+```
+$ npx find-cypress-specs --tagged <tag1>,<tag2>,<tag3>,...
+# finds all specs and tests, then filters the output showing only the file names associated with the tests
+# tagged with tag1 or tag2 or tag3 or ...
+```
 
 ## Show only the pending tests
 
