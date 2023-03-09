@@ -60,15 +60,8 @@ debug('arguments %o', args)
 const specType = args['--component'] ? 'component' : 'e2e'
 
 const specs = getSpecs(undefined, specType)
-if (args['--tagged']) {
-  const { jsonResults, tagTestCounts } = getTests(specs, {
-    tags: args['--tags'],
-    tagged: args['--tagged'],
-    skipped: args['--skipped'],
-  })
-  const str = stringAllInfo(jsonResults, true)
-  console.log(str)
-} else if (args['--names'] || args['--tags']) {
+
+if (args['--names'] || args['--tags'] || args['--tagged']) {
   // counts the number of tests for each tag across all specs
   const { jsonResults, tagTestCounts } = getTests(specs, {
     tags: args['--tags'],
@@ -109,6 +102,12 @@ if (args['--tagged']) {
       const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
       console.log(table)
     }
+  }
+
+  if (!args['--names'] && !args['--tags']) {
+    debug('printing the spec names list only')
+    const specNames = Object.keys(jsonResults).join(',')
+    console.log(specNames)
   }
 } else if (args['--branch']) {
   debug('determining specs changed against branch %s', args['--branch'])
@@ -207,5 +206,6 @@ if (args['--tagged']) {
     console.log(changedSpecs.join(','))
   }
 } else {
+  debug('printing just %d spec names', specs.length)
   console.log(specs.join(','))
 }

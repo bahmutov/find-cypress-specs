@@ -398,7 +398,7 @@ function getTests(specs, options = {}) {
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean)
-    debug('filtering all tests by tag "%o"', splitTags)
+    debug('filtering all tests by tag %o', splitTags)
     pickTaggedTestsFrom(jsonResults, splitTags)
     // recompute the number of tests
     addCounts(jsonResults)

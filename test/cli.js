@@ -121,24 +121,16 @@ test('exclusive tests', async (t) => {
 
 test('prints test file names --tagged @alpha', async (t) => {
   t.plan(1)
-  const result = await execa(
-    'node',
-    ['./bin/find', '--tagged', '@alpha'],
-    {
-      filter: ['code', 'stdout'],
-    },
-  )
+  const result = await execa('node', ['./bin/find', '--tagged', '@alpha'], {
+    filter: ['code', 'stdout'],
+  })
   t.snapshot(result)
 })
 
 test('prints test file names --tagged @alpha,@main,@user', async (t) => {
   t.plan(1)
-  const result = await execa(
-    'node',
-    ['./bin/find', '--tagged', '@alpha'],
-    {
-      filter: ['code', 'stdout'],
-    },
-  )
+  const result = await execa('node', ['./bin/find', '--tagged', '@alpha'], {
+    filter: ['code', 'stdout'],
+  })
   t.snapshot(result)
 })

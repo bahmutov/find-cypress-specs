@@ -42,5 +42,19 @@ test('prints tests tagged with @user in json', async (t) => {
       filter: ['code', 'stdout'],
     },
   )
+  // console.log(result)
+  t.snapshot(result)
+})
+
+test('prints tests tagged with @alpha in json', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['./bin/find', '--names', '--json', '--tagged', '@alpha'],
+    {
+      filter: ['code', 'stdout'],
+    },
+  )
+  // console.log(result)
   t.snapshot(result)
 })
