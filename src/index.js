@@ -295,8 +295,11 @@ function findChangedFiles(branch, useParent) {
   }
 
   // can we find updated and added files?
-  debugGit('finding changed files against %s', branch)
-  debugGit('using parent?', useParent)
+  debug(
+    'finding changed files against %s using parent?',
+    branch,
+    Boolean(useParent),
+  )
 
   if (useParent) {
     let result = shell.exec(`git merge-base origin/${branch} HEAD`, {

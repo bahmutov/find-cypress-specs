@@ -111,6 +111,15 @@ $ npx find-cypress-specs --branch main --tagged @user,@preview
 # and that have any tests or suites inside tagged "@user" or "@preview"
 ```
 
+### count tagged changed specs
+
+Let's say we changed 2 specs that have tests tagged `@user`. We can output the count by adding `--count` option
+
+```bash
+$ npx find-cypress-specs --branch main --tagged @user --count
+2
+```
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))

@@ -61,61 +61,7 @@ const specType = args['--component'] ? 'component' : 'e2e'
 
 const specs = getSpecs(undefined, specType)
 
-if (args['--names'] || args['--tags'] || args['--tagged']) {
-  // counts the number of tests for each tag across all specs
-  const { jsonResults, tagTestCounts } = getTests(specs, {
-    tags: args['--tags'],
-    tagged: args['--tagged'],
-    skipped: args['--skipped'],
-  })
-
-  if (args['--names']) {
-    if (args['--count']) {
-      let n = 0
-      Object.keys(jsonResults).forEach((filename) => {
-        const skippedCount = jsonResults[filename].counts.pending
-        n += skippedCount
-      })
-      console.log(n)
-    } else {
-      if (args['--json']) {
-        console.log(JSON.stringify(jsonResults, null, 2))
-      } else {
-        const str = stringAllInfo(jsonResults)
-        console.log(str)
-      }
-      console.log('')
-    }
-  }
-
-  if (args['--tags']) {
-    const tagEntries = Object.entries(tagTestCounts)
-    const sortedTagEntries = tagEntries.sort((a, b) => {
-      // every entry is [tag, count], so compare the tags
-      return a[0].localeCompare(b[0])
-    })
-    if (args['--json']) {
-      // assemble a json object with the tag counts
-      const tagResults = Object.fromEntries(sortedTagEntries)
-      console.log(JSON.stringify(tagResults, null, 2))
-    } else {
-      const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
-      console.log(table)
-    }
-  }
-
-  if (!args['--names'] && !args['--tags']) {
-    const specs = Object.keys(jsonResults)
-    if (args['--count']) {
-      debug('printing the number of specs %d', specs.length)
-      console.log(specs.length)
-    } else {
-      debug('printing the spec names list only')
-      const specNames = specs.join(',')
-      console.log(specNames)
-    }
-  }
-} else if (args['--branch']) {
+if (args['--branch']) {
   debug('determining specs changed against branch %s', args['--branch'])
   let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
   debug('changed files %o', changedFiles)
@@ -210,6 +156,60 @@ if (args['--names'] || args['--tags'] || args['--tagged']) {
     console.log(changedSpecs.length)
   } else {
     console.log(changedSpecs.join(','))
+  }
+} else if (args['--names'] || args['--tags'] || args['--tagged']) {
+  // counts the number of tests for each tag across all specs
+  const { jsonResults, tagTestCounts } = getTests(specs, {
+    tags: args['--tags'],
+    tagged: args['--tagged'],
+    skipped: args['--skipped'],
+  })
+
+  if (args['--names']) {
+    if (args['--count']) {
+      let n = 0
+      Object.keys(jsonResults).forEach((filename) => {
+        const skippedCount = jsonResults[filename].counts.pending
+        n += skippedCount
+      })
+      console.log(n)
+    } else {
+      if (args['--json']) {
+        console.log(JSON.stringify(jsonResults, null, 2))
+      } else {
+        const str = stringAllInfo(jsonResults)
+        console.log(str)
+      }
+      console.log('')
+    }
+  }
+
+  if (args['--tags']) {
+    const tagEntries = Object.entries(tagTestCounts)
+    const sortedTagEntries = tagEntries.sort((a, b) => {
+      // every entry is [tag, count], so compare the tags
+      return a[0].localeCompare(b[0])
+    })
+    if (args['--json']) {
+      // assemble a json object with the tag counts
+      const tagResults = Object.fromEntries(sortedTagEntries)
+      console.log(JSON.stringify(tagResults, null, 2))
+    } else {
+      const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
+      console.log(table)
+    }
+  }
+
+  if (!args['--names'] && !args['--tags']) {
+    const specs = Object.keys(jsonResults)
+    if (args['--count']) {
+      debug('printing the number of specs %d', specs.length)
+      console.log(specs.length)
+    } else {
+      debug('printing the spec names list only')
+      const specNames = specs.join(',')
+      console.log(specNames)
+    }
   }
 } else {
   if (args['--count']) {
