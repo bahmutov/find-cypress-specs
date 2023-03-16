@@ -179,6 +179,13 @@ $ npx find-cypress-specs --tagged <single tag>
 # cypress/e2e/spec.cy.js,cypress/e2e/featureA/user.cy.ts
 ```
 
+You can print the number of found tagged specs by adding `--count` argument
+
+```
+$ npx find-cypress-specs --tagged <single tag>
+3
+```
+
 ## File names filtered by multiple tags
 
 ```
