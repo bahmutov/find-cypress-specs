@@ -206,6 +206,11 @@ if (args['--names'] || args['--tags'] || args['--tagged']) {
     console.log(changedSpecs.join(','))
   }
 } else {
-  debug('printing just %d spec names', specs.length)
-  console.log(specs.join(','))
+  if (args['--count']) {
+    debug('printing the number of specs %d', specs.length)
+    console.log(specs.length)
+  } else {
+    debug('printing just %d spec names', specs.length)
+    console.log(specs.join(','))
+  }
 }

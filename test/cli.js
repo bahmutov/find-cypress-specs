@@ -134,3 +134,12 @@ test('prints test file names --tagged @alpha,@main,@user', async (t) => {
   })
   t.snapshot(result)
 })
+
+test('prints the count of specs', async (t) => {
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--count'], {
+    filter: ['code', 'stdout'],
+  })
+  // console.log(result)
+  t.snapshot(result)
+})

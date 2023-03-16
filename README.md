@@ -10,6 +10,15 @@ cypress/e2e/spec.js,cypress/e2e/featureA/user.js
 
 Supports JS and TS specs
 
+## Count
+
+You can count the number of specs found
+
+```bash
+$ npx find-cypress-specs --count
+2
+```
+
 ## Component specs
 
 By default, it finds the E2E specs and tests. You can find component specs using `--component` CLI option
