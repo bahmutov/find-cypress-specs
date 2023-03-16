@@ -3,6 +3,7 @@ const { getTestNames, countTags } = require('find-test-names')
 const { pickTaggedTestsFrom, leavePendingTestsOnly } = require('../src/tagged')
 
 const debug = require('debug')('find-cypress-specs')
+const debugGit = require('debug')('find-cypress-specs:git')
 const fs = require('fs')
 const path = require('path')
 const globby = require('globby')
@@ -294,25 +295,25 @@ function findChangedFiles(branch, useParent) {
   }
 
   // can we find updated and added files?
-  debug('finding changed files against %s', branch)
-  debug('using parent?', useParent)
+  debugGit('finding changed files against %s', branch)
+  debugGit('using parent?', useParent)
 
   if (useParent) {
     let result = shell.exec(`git merge-base origin/${branch} HEAD`, {
       silent: true,
     })
     if (result.code !== 0) {
-      debug('git failed to find merge base with the branch %s', branch)
+      debugGit('git failed to find merge base with the branch %s', branch)
       return []
     }
 
     const commit = result.stdout.trim()
-    debug('merge commit with branch "%s" is %s', branch, commit)
+    debugGit('merge commit with branch "%s" is %s', branch, commit)
     result = shell.exec(`git diff --name-only --diff-filter=AMR ${commit}..`, {
       silent: true,
     })
     if (result.code !== 0) {
-      debug('git diff failed with code %d', result.code)
+      debugGit('git diff failed with code %d', result.code)
       return []
     }
 
@@ -320,14 +321,19 @@ function findChangedFiles(branch, useParent) {
       .split('\n')
       .map((s) => s.trim())
       .filter(Boolean)
+    debugGit(
+      'found %d changed files against branch %s',
+      filenames.length,
+      branch,
+    )
     return filenames
   } else {
     const command = `git diff --name-only --diff-filter=AMR origin/${branch}`
-    debug('command: %s', command)
+    debugGit('command: %s', command)
 
     const result = shell.exec(command, { silent: true })
     if (result.code !== 0) {
-      debug('git diff failed with code %d', result.code)
+      debugGit('git diff failed with code %d', result.code)
       return []
     }
 
@@ -335,7 +341,7 @@ function findChangedFiles(branch, useParent) {
       .split('\n')
       .map((s) => s.trim())
       .filter(Boolean)
-    debug(
+    debugGit(
       'found %d changed %s',
       filenames.length,
       pluralize('file', filenames.length),

@@ -159,6 +159,7 @@ $ npx find-cypress-specs --names --tagged <tag1>,<tag2>,<tag3>,...
 # finds all specs and tests, then filters the output showing all tests
 # tagged with tag1 or tag2 or tag3 or ...
 ```
+
 ## File names filtered by a tag
 
 ```
@@ -255,6 +256,12 @@ Finding tests in the individual specs uses [find-test-names](https://github.com/
 
 ```
 $ DEBUG=find-cypress-specs,find-test-names npx find-cypress-specs --names
+```
+
+To debug finding changed specs against a branch, use `find-cypress-specs:git`
+
+```
+$ DEBUG=find-cypress-specs:git npx find-cypress-specs --branch main
 ```
 
 ## Videos
