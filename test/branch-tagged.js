@@ -52,7 +52,7 @@ test('prints number of changed spec files that have the given tag', async (t) =>
   t.snapshot(result)
 })
 
-test.only('no changed specs tagged with the tag', async (t) => {
+test('no changed specs tagged with the tag', async (t) => {
   t.plan(1)
   // note: all paths are with respect to the repo's root folder
   // find all changed specs against the given branch
@@ -72,7 +72,33 @@ test.only('no changed specs tagged with the tag', async (t) => {
       filter: ['code', 'stdout'],
     },
   )
-  // only a single spec should be printed for the given tag
-  console.log(result)
-  // t.snapshot(result)
+  // no changed specs with tag @alpha should be found, empty space
+  // console.log(result)
+  t.snapshot(result)
+})
+
+test('zero changed specs tagged with the tag', async (t) => {
+  t.plan(1)
+  // note: all paths are with respect to the repo's root folder
+  // find all changed specs against the given branch
+  // but only the specs that have the tests with tag "@alpha"
+  const result = await execa(
+    'node',
+    [
+      '-r',
+      './mocks/branch-tagged-1-no-alpha.js',
+      './bin/find',
+      '--branch',
+      'tagged-1',
+      '--tagged',
+      '@alpha',
+      '--count',
+    ],
+    {
+      filter: ['code', 'stdout'],
+    },
+  )
+  // no changed specs with tag @alpha should be found, prints 0
+  // console.log(result)
+  t.snapshot(result)
 })
