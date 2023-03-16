@@ -105,9 +105,15 @@ if (args['--names'] || args['--tags'] || args['--tagged']) {
   }
 
   if (!args['--names'] && !args['--tags']) {
-    debug('printing the spec names list only')
-    const specNames = Object.keys(jsonResults).join(',')
-    console.log(specNames)
+    const specs = Object.keys(jsonResults)
+    if (args['--count']) {
+      debug('printing the number of specs %d', specs.length)
+      console.log(specs.length)
+    } else {
+      debug('printing the spec names list only')
+      const specNames = specs.join(',')
+      console.log(specNames)
+    }
   }
 } else if (args['--branch']) {
   debug('determining specs changed against branch %s', args['--branch'])
@@ -206,6 +212,11 @@ if (args['--names'] || args['--tags'] || args['--tagged']) {
     console.log(changedSpecs.join(','))
   }
 } else {
-  debug('printing just %d spec names', specs.length)
-  console.log(specs.join(','))
+  if (args['--count']) {
+    debug('printing the number of specs %d', specs.length)
+    console.log(specs.length)
+  } else {
+    debug('printing just %d spec names', specs.length)
+    console.log(specs.join(','))
+  }
 }
