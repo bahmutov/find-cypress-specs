@@ -127,11 +127,6 @@ if (args['--branch']) {
 
   let changedSpecs = specs.filter((file) => changedFiles.includes(file))
   debug('changed %d specs %o', changedSpecs.length, changedSpecs)
-  if (args['--set-gha-outputs']) {
-    debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
-    core.setOutput('changedSpecsN', changedSpecs.length)
-    core.setOutput('changedSpecs', changedSpecs.join(','))
-  }
 
   if (args['--tagged']) {
     const splitTags = args['--tagged']
@@ -146,10 +141,17 @@ if (args['--branch']) {
       const specHasTags = Object.keys(specTagCounts).some((tag) =>
         splitTags.includes(tag),
       )
-      debug('spec %s has tags? %o', file, specHasTags)
-
+      debug('spec %s has any of the tags? %o', file, specHasTags)
       return specHasTags
     })
+  }
+
+  if (args['--set-gha-outputs']) {
+    debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
+    debug('changedSpecsN %d', changedSpecs.length)
+    debug('plus changedSpecs')
+    core.setOutput('changedSpecsN', changedSpecs.length)
+    core.setOutput('changedSpecs', changedSpecs.join(','))
   }
 
   if (args['--count']) {
