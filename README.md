@@ -2,6 +2,8 @@
 
 > Find Cypress spec files using the config settings
 
+![Cypress tests](https://img.shields.io/badge/cy%20tests-E2E%204%20%7C%20component%202-blue)
+
 ```bash
 $ npx find-cypress-specs
 # prints all spec files separated by a comma
@@ -234,6 +236,20 @@ You can see the total number of E2E and component tests
 $ npx find-cypress-specs --test-counts
 4 e2e tests, 2 component tests
 ```
+
+### Update README badge
+
+You can set or update a badge in README with test counts by adding the `--update-badge` argument
+
+```
+$ npx find-cypress-specs --test-counts --update-badge
+4 e2e tests, 2 component tests
+⚠️ Could not find test count badge
+Insert new badge on the first line
+saving updated readme with new test counts
+```
+
+See the [badges.yml workflow](./.github/workflows/badges.yml)
 
 ## Count skipped tests
 

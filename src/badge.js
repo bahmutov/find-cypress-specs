@@ -1,5 +1,8 @@
+// @ts-check
+
 const debug = require('debug')('find-cypress-specs')
 const os = require('os')
+const fs = require('fs')
 
 function isNumber(n) {
   return typeof n === 'number' && !isNaN(n)
@@ -74,4 +77,22 @@ function replaceBadge({
   return updatedReadmeText
 }
 
-module.exports = { getBadgeMarkdown, replaceBadge }
+function updateBadge({ nE2E, nComponent }) {
+  debug('reading in README file')
+  // TODO: make the filename a parameter
+  const filename = 'README.md'
+  const readmeText = fs.readFileSync(filename, 'utf8')
+  const maybeChangedText = replaceBadge({
+    markdown: readmeText,
+    nE2E,
+    nComponent,
+  })
+  if (maybeChangedText !== readmeText) {
+    console.log('saving updated readme with new test counts')
+    fs.writeFileSync(filename, maybeChangedText, 'utf8')
+  } else {
+    debug('no updates to test counts')
+  }
+}
+
+module.exports = { getBadgeMarkdown, replaceBadge, updateBadge }

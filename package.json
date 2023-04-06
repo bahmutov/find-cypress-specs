@@ -27,11 +27,13 @@
     "print-changed-specs": "node ./bin/find --branch main",
     "count-changed-specs": "node ./bin/find --branch main --count",
     "demo-test-counts": "node ./bin/find --test-counts",
+    "demo-test-counts-badge": "node ./bin/find --test-counts --update-badge",
     "semantic-release": "semantic-release",
     "deps": "spec-change --folder . --mask 'cypress/**/*.{js,ts}'",
     "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress --time-trace --cache-trace",
     "demo-component": "DEBUG=find-cypress-specs node ./bin/find --component --names",
-    "demo-exclusive": "npm run test-names --prefix test-exclusive --silent"
+    "demo-exclusive": "npm run test-names --prefix test-exclusive --silent",
+    "version-badge": "update-badge cypress"
   },
   "repository": {
     "type": "git",
@@ -49,6 +51,7 @@
   "devDependencies": {
     "ava": "^4.0.0",
     "cypress": "12.9.0",
+    "dependency-version-badge": "^1.11.0",
     "execa-wrap": "^1.4.0",
     "prettier": "^2.5.1",
     "really-need": "^1.9.2",
