@@ -4,6 +4,7 @@ const arg = require('arg')
 const { getSpecs, findChangedFiles, getTests } = require('../src')
 const { getTestCounts } = require('../src/tests-counts')
 const { stringAllInfo } = require('../src/print')
+const { updateBadge } = require('../src/badge')
 
 const fs = require('fs')
 const path = require('path')
@@ -46,6 +47,8 @@ const args = arg({
   '--component': Boolean,
   // count total number of E2E and component tests
   '--test-counts': Boolean,
+  // if we count the tests, we can update the README badge
+  '--update-badge': Boolean,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -73,6 +76,10 @@ if (args['--test-counts']) {
     nComponent,
     pluralize('test', nComponent),
   )
+  if (args['--update-badge']) {
+    debug('updating the README test count badge')
+    updateBadge({ nE2E, nComponent })
+  }
 } else {
   const specType = args['--component'] ? 'component' : 'e2e'
 

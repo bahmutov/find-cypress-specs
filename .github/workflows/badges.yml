@@ -12,10 +12,19 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Install dependencies 📦
+        # https://github.com/cypress-io/github-action
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
 
       - name: Update version badges 🏷
-        run: npx -p dependency-version-badge update-badge cypress
+        run: npm run version-badge
+
+      - name: Update test counts badge 📊
+        run: npm run demo-test-counts-badge
 
       - name: Commit any changed files 💾
         uses: stefanzweifel/git-auto-commit-action@v4
