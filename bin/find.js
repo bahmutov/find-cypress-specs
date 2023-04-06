@@ -2,6 +2,7 @@
 
 const arg = require('arg')
 const { getSpecs, findChangedFiles, getTests } = require('../src')
+const { getTestCounts } = require('../src/tests-counts')
 const { stringAllInfo } = require('../src/print')
 
 const fs = require('fs')
@@ -63,32 +64,8 @@ const args = arg({
 debug('arguments %o', args)
 
 if (args['--test-counts']) {
-  debug('finding all e2e specs')
-  const e2eSpecs = getSpecs(undefined, 'e2e')
-  debug('found %d e2e specs', e2eSpecs.length)
-  debug('finding all component specs')
-  const componentSpecs = getSpecs(undefined, 'component')
-  debug('found %d component specs', componentSpecs.length)
-
-  debug('counting all e2e tests')
-  const { jsonResults: e2eResults } = getTests(e2eSpecs)
-  debug(e2eResults)
-  let nE2E = 0
-  Object.keys(e2eResults).forEach((filename) => {
-    const n = e2eResults[filename].counts.tests
-    nE2E += n
-  })
-  debug('found %d E2E tests', nE2E)
-
-  debug('counting all component tests')
-  const { jsonResults: componentResults } = getTests(componentSpecs)
-  debug(componentResults)
-  let nComponent = 0
-  Object.keys(componentResults).forEach((filename) => {
-    const n = componentResults[filename].counts.tests
-    nComponent += n
-  })
-  debug('found %d component tests', nComponent)
+  debug('finding test counts')
+  const { nE2E, nComponent } = getTestCounts()
   console.log(
     '%d e2e %s, %d component %s',
     nE2E,
