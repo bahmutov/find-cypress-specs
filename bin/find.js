@@ -11,6 +11,7 @@ const consoleTable = require('console.table')
 const debug = require('debug')('find-cypress-specs')
 const { getDependsInFolder } = require('spec-change')
 const core = require('@actions/core')
+const pluralize = require('pluralize')
 
 const args = arg({
   '--names': Boolean,
@@ -42,6 +43,8 @@ const args = arg({
   '--max-added-traced-specs': Number,
   // find component specs
   '--component': Boolean,
+  // count total number of E2E and component tests
+  '--test-counts': Boolean,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -54,171 +57,216 @@ const args = arg({
   // calls "it.skip" pending tests
   // https://glebbahmutov.com/blog/cypress-test-statuses/
   '--pending': '--skipped',
+  '--tc': '--test-counts',
 })
 
 debug('arguments %o', args)
-const specType = args['--component'] ? 'component' : 'e2e'
 
-const specs = getSpecs(undefined, specType)
+if (args['--test-counts']) {
+  debug('finding all e2e specs')
+  const e2eSpecs = getSpecs(undefined, 'e2e')
+  debug('found %d e2e specs', e2eSpecs.length)
+  debug('finding all component specs')
+  const componentSpecs = getSpecs(undefined, 'component')
+  debug('found %d component specs', componentSpecs.length)
 
-if (args['--branch']) {
-  debug('determining specs changed against branch %s', args['--branch'])
-  let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
-  debug('changed files %o', changedFiles)
-  debug('comparing against the specs %o', specs)
-  if (args['--trace-imports']) {
-    debug('tracing dependent changes in folder %s', args['--trace-imports'])
-
-    const saveDependenciesFile = 'deps.json'
-    let deps
-    if (args['--cache-trace']) {
-      if (fs.existsSync(saveDependenciesFile)) {
-        debug(
-          'loading cached traced dependencies from file %s',
-          saveDependenciesFile,
-        )
-        deps = JSON.parse(fs.readFileSync(saveDependenciesFile, 'utf-8')).deps
-      }
-    }
-
-    if (!deps) {
-      const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
-      const depsOptions = { folder: absoluteFolder, time: args['--time-trace'] }
-      if (args['--cache-trace']) {
-        depsOptions.saveDepsFilename = saveDependenciesFile
-        debug(
-          'will save found dependencies into the file %s',
-          saveDependenciesFile,
-        )
-      }
-      debug('tracing options %o', depsOptions)
-      deps = getDependsInFolder(depsOptions)
-    }
-    debug('traced dependencies via imports and require')
-    debug(deps)
-
-    // add a sensible limit to the number of extra specs to add
-    // when we trace the dependencies in the changed source files
-    const addedTracedFiles = []
-    const maxAddTracedFiles = args['--max-added-traced-specs'] || 1000
-    debug('maximum traced files to add %d', maxAddTracedFiles)
-
-    Object.entries(deps).forEach(([filename, fileDependents]) => {
-      const f = path.join(args['--trace-imports'], filename)
-      if (changedFiles.includes(f)) {
-        debug(
-          'the source file %s has changed, including its dependents %o in the list of changed files',
-          f,
-          fileDependents,
-        )
-        fileDependents.forEach((name) => {
-          const nameInCypressFolder = path.join(args['--trace-imports'], name)
-          if (!changedFiles.includes(nameInCypressFolder)) {
-            if (addedTracedFiles.length < maxAddTracedFiles) {
-              changedFiles.push(nameInCypressFolder)
-              addedTracedFiles.push(nameInCypressFolder)
-            }
-          }
-        })
-      }
-    })
-    debug('added %d traced specs %o', addedTracedFiles.length, addedTracedFiles)
-  }
-
-  let changedSpecs = specs.filter((file) => changedFiles.includes(file))
-  debug('changed %d specs %o', changedSpecs.length, changedSpecs)
-
-  if (args['--tagged']) {
-    const splitTags = args['--tagged']
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean)
-    debug('filtering changed specs by tags %o', splitTags)
-    changedSpecs = changedSpecs.filter((file) => {
-      const source = fs.readFileSync(file, 'utf8')
-      const result = getTestNames(source, true)
-      const specTagCounts = countTags(result.structure)
-      const specHasTags = Object.keys(specTagCounts).some((tag) =>
-        splitTags.includes(tag),
-      )
-      debug('spec %s has any of the tags? %o', file, specHasTags)
-      return specHasTags
-    })
-  }
-
-  if (args['--set-gha-outputs']) {
-    debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
-    debug('changedSpecsN %d', changedSpecs.length)
-    debug('plus changedSpecs')
-    core.setOutput('changedSpecsN', changedSpecs.length)
-    core.setOutput('changedSpecs', changedSpecs.join(','))
-  }
-
-  if (args['--count']) {
-    console.log(changedSpecs.length)
-  } else {
-    console.log(changedSpecs.join(','))
-  }
-} else if (args['--names'] || args['--tags'] || args['--tagged']) {
-  // counts the number of tests for each tag across all specs
-  const { jsonResults, tagTestCounts } = getTests(specs, {
-    tags: args['--tags'],
-    tagged: args['--tagged'],
-    skipped: args['--skipped'],
+  debug('counting all e2e tests')
+  const { jsonResults: e2eResults } = getTests(e2eSpecs)
+  debug(e2eResults)
+  let nE2E = 0
+  Object.keys(e2eResults).forEach((filename) => {
+    const n = e2eResults[filename].counts.tests
+    nE2E += n
   })
+  debug('found %d E2E tests', nE2E)
 
-  if (args['--names']) {
-    if (args['--count']) {
-      let n = 0
-      Object.keys(jsonResults).forEach((filename) => {
-        const skippedCount = jsonResults[filename].counts.pending
-        n += skippedCount
-      })
-      console.log(n)
-    } else {
-      if (args['--json']) {
-        console.log(JSON.stringify(jsonResults, null, 2))
-      } else {
-        const str = stringAllInfo(jsonResults)
-        console.log(str)
+  debug('counting all component tests')
+  const { jsonResults: componentResults } = getTests(componentSpecs)
+  debug(componentResults)
+  let nComponent = 0
+  Object.keys(componentResults).forEach((filename) => {
+    const n = componentResults[filename].counts.tests
+    nComponent += n
+  })
+  debug('found %d component tests', nComponent)
+  console.log(
+    '%d e2e %s, %d component %s',
+    nE2E,
+    pluralize('test', nE2E),
+    nComponent,
+    pluralize('test', nComponent),
+  )
+} else {
+  const specType = args['--component'] ? 'component' : 'e2e'
+
+  const specs = getSpecs(undefined, specType)
+
+  if (args['--branch']) {
+    debug('determining specs changed against branch %s', args['--branch'])
+    let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
+    debug('changed files %o', changedFiles)
+    debug('comparing against the specs %o', specs)
+    if (args['--trace-imports']) {
+      debug('tracing dependent changes in folder %s', args['--trace-imports'])
+
+      const saveDependenciesFile = 'deps.json'
+      let deps
+      if (args['--cache-trace']) {
+        if (fs.existsSync(saveDependenciesFile)) {
+          debug(
+            'loading cached traced dependencies from file %s',
+            saveDependenciesFile,
+          )
+          deps = JSON.parse(fs.readFileSync(saveDependenciesFile, 'utf-8')).deps
+        }
       }
-      console.log('')
-    }
-  }
 
-  if (args['--tags']) {
-    const tagEntries = Object.entries(tagTestCounts)
-    const sortedTagEntries = tagEntries.sort((a, b) => {
-      // every entry is [tag, count], so compare the tags
-      return a[0].localeCompare(b[0])
-    })
-    if (args['--json']) {
-      // assemble a json object with the tag counts
-      const tagResults = Object.fromEntries(sortedTagEntries)
-      console.log(JSON.stringify(tagResults, null, 2))
+      if (!deps) {
+        const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
+        const depsOptions = {
+          folder: absoluteFolder,
+          time: args['--time-trace'],
+        }
+        if (args['--cache-trace']) {
+          depsOptions.saveDepsFilename = saveDependenciesFile
+          debug(
+            'will save found dependencies into the file %s',
+            saveDependenciesFile,
+          )
+        }
+        debug('tracing options %o', depsOptions)
+        deps = getDependsInFolder(depsOptions)
+      }
+      debug('traced dependencies via imports and require')
+      debug(deps)
+
+      // add a sensible limit to the number of extra specs to add
+      // when we trace the dependencies in the changed source files
+      const addedTracedFiles = []
+      const maxAddTracedFiles = args['--max-added-traced-specs'] || 1000
+      debug('maximum traced files to add %d', maxAddTracedFiles)
+
+      Object.entries(deps).forEach(([filename, fileDependents]) => {
+        const f = path.join(args['--trace-imports'], filename)
+        if (changedFiles.includes(f)) {
+          debug(
+            'the source file %s has changed, including its dependents %o in the list of changed files',
+            f,
+            fileDependents,
+          )
+          fileDependents.forEach((name) => {
+            const nameInCypressFolder = path.join(args['--trace-imports'], name)
+            if (!changedFiles.includes(nameInCypressFolder)) {
+              if (addedTracedFiles.length < maxAddTracedFiles) {
+                changedFiles.push(nameInCypressFolder)
+                addedTracedFiles.push(nameInCypressFolder)
+              }
+            }
+          })
+        }
+      })
+      debug(
+        'added %d traced specs %o',
+        addedTracedFiles.length,
+        addedTracedFiles,
+      )
+    }
+
+    let changedSpecs = specs.filter((file) => changedFiles.includes(file))
+    debug('changed %d specs %o', changedSpecs.length, changedSpecs)
+
+    if (args['--tagged']) {
+      const splitTags = args['--tagged']
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+      debug('filtering changed specs by tags %o', splitTags)
+      changedSpecs = changedSpecs.filter((file) => {
+        const source = fs.readFileSync(file, 'utf8')
+        const result = getTestNames(source, true)
+        const specTagCounts = countTags(result.structure)
+        const specHasTags = Object.keys(specTagCounts).some((tag) =>
+          splitTags.includes(tag),
+        )
+        debug('spec %s has any of the tags? %o', file, specHasTags)
+        return specHasTags
+      })
+    }
+
+    if (args['--set-gha-outputs']) {
+      debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
+      debug('changedSpecsN %d', changedSpecs.length)
+      debug('plus changedSpecs')
+      core.setOutput('changedSpecsN', changedSpecs.length)
+      core.setOutput('changedSpecs', changedSpecs.join(','))
+    }
+
+    if (args['--count']) {
+      console.log(changedSpecs.length)
     } else {
-      const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
-      console.log(table)
+      console.log(changedSpecs.join(','))
     }
-  }
+  } else if (args['--names'] || args['--tags'] || args['--tagged']) {
+    // counts the number of tests for each tag across all specs
+    const { jsonResults, tagTestCounts } = getTests(specs, {
+      tags: args['--tags'],
+      tagged: args['--tagged'],
+      skipped: args['--skipped'],
+    })
 
-  if (!args['--names'] && !args['--tags']) {
-    const specs = Object.keys(jsonResults)
+    if (args['--names']) {
+      if (args['--count']) {
+        let n = 0
+        Object.keys(jsonResults).forEach((filename) => {
+          const skippedCount = jsonResults[filename].counts.pending
+          n += skippedCount
+        })
+        console.log(n)
+      } else {
+        if (args['--json']) {
+          console.log(JSON.stringify(jsonResults, null, 2))
+        } else {
+          const str = stringAllInfo(jsonResults)
+          console.log(str)
+        }
+        console.log('')
+      }
+    }
+
+    if (args['--tags']) {
+      const tagEntries = Object.entries(tagTestCounts)
+      const sortedTagEntries = tagEntries.sort((a, b) => {
+        // every entry is [tag, count], so compare the tags
+        return a[0].localeCompare(b[0])
+      })
+      if (args['--json']) {
+        // assemble a json object with the tag counts
+        const tagResults = Object.fromEntries(sortedTagEntries)
+        console.log(JSON.stringify(tagResults, null, 2))
+      } else {
+        const table = consoleTable.getTable(['Tag', 'Tests'], sortedTagEntries)
+        console.log(table)
+      }
+    }
+
+    if (!args['--names'] && !args['--tags']) {
+      const specs = Object.keys(jsonResults)
+      if (args['--count']) {
+        debug('printing the number of specs %d', specs.length)
+        console.log(specs.length)
+      } else {
+        debug('printing the spec names list only')
+        const specNames = specs.join(',')
+        console.log(specNames)
+      }
+    }
+  } else {
     if (args['--count']) {
       debug('printing the number of specs %d', specs.length)
       console.log(specs.length)
     } else {
-      debug('printing the spec names list only')
-      const specNames = specs.join(',')
-      console.log(specNames)
+      debug('printing just %d spec names', specs.length)
+      console.log(specs.join(','))
     }
-  }
-} else {
-  if (args['--count']) {
-    debug('printing the number of specs %d', specs.length)
-    console.log(specs.length)
-  } else {
-    debug('printing just %d spec names', specs.length)
-    console.log(specs.join(','))
   }
 }

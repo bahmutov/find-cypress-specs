@@ -26,6 +26,7 @@
     "demo-names-tagged": "node ./bin/find --names --tagged @user",
     "print-changed-specs": "node ./bin/find --branch main",
     "count-changed-specs": "node ./bin/find --branch main --count",
+    "demo-test-counts": "node ./bin/find --test-counts",
     "semantic-release": "semantic-release",
     "deps": "spec-change --folder . --mask 'cypress/**/*.{js,ts}'",
     "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress --time-trace --cache-trace",

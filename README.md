@@ -226,6 +226,15 @@ $ npx find-cypress-specs --names --skipped
 
 Prints each spec that has skipped tests.
 
+## Count tests
+
+You can see the total number of E2E and component tests
+
+```
+$ npx find-cypress-specs --test-counts
+4 e2e tests, 2 component tests
+```
+
 ## Count skipped tests
 
 Prints the single number with the count of skipped tests
