@@ -12,6 +12,18 @@ function arraysOverlap(a, b) {
   }
 }
 
+function combineTags(tags, requiredTags) {
+  if (tags && requiredTags) {
+    return [].concat(tags).concat(requiredTags)
+  }
+  if (tags) {
+    return [...tags]
+  }
+  if (requiredTags) {
+    return [...requiredTags]
+  }
+}
+
 // note: modifies the tests in place
 function pickTaggedTests(tests, tag) {
   if (!Array.isArray(tests)) {
@@ -20,9 +32,11 @@ function pickTaggedTests(tests, tag) {
   const tags = Array.isArray(tag) ? tag : [tag]
   const filteredTests = tests.filter((test) => {
     if (test.type === 'test') {
-      return test.tags && arraysOverlap(test.tags, tags)
+      const allTags = combineTags(test.tags, test.requiredTags)
+      return allTags && arraysOverlap(allTags, tags)
     } else if (test.type === 'suite') {
-      if (test.tags && arraysOverlap(test.tags, tags)) {
+      const allTags = combineTags(test.tags, test.requiredTags)
+      if (allTags && arraysOverlap(test.tags, tags)) {
         return true
       }
 

@@ -254,6 +254,7 @@ function collectResults(structure, results) {
       name: t.name,
       type: t.type,
       tags: t.tags,
+      requiredTags: t.requiredTags,
     }
     if (t.pending) {
       info.pending = t.pending
@@ -261,6 +262,9 @@ function collectResults(structure, results) {
     if (t.exclusive) {
       info.exclusive = t.exclusive
     }
+    debug('structure for %s', t.name)
+    debug(info)
+
     results.push(info)
     if (t.type === 'suite') {
       if (t.suites && t.suites.length) {
@@ -382,9 +386,14 @@ function getTests(specs, options = {}) {
       // enable if need to debug the parsed test
       // console.dir(result.structure, { depth: null })
       collectResults(result.structure, jsonResults[filename].tests)
+      debug('collected results for file %s', filename)
 
       if (tags) {
+        debug('counting tags', tags)
         const specTagCounts = countTags(result.structure)
+        debug('spec tag counts')
+        debug(specTagCounts)
+
         Object.keys(specTagCounts).forEach((tag) => {
           if (!(tag in tagTestCounts)) {
             tagTestCounts[tag] = specTagCounts[tag]
@@ -400,6 +409,8 @@ function getTests(specs, options = {}) {
   })
 
   addCounts(jsonResults)
+  debug('added counts')
+  debug(jsonResults)
 
   if (tagged) {
     // filter all collected tests to those that have the given tag(s)
@@ -409,6 +420,7 @@ function getTests(specs, options = {}) {
       .filter(Boolean)
     debug('filtering all tests by tag %o', splitTags)
     pickTaggedTestsFrom(jsonResults, splitTags)
+    // debug(jsonResults)
     // recompute the number of tests
     addCounts(jsonResults)
   } else if (skipped) {

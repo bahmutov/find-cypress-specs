@@ -169,6 +169,7 @@ if (args['--test-counts']) {
         const source = fs.readFileSync(file, 'utf8')
         const result = getTestNames(source, true)
         const specTagCounts = countTags(result.structure)
+        // debug(specTagCounts)
         const specHasTags = Object.keys(specTagCounts).some((tag) =>
           splitTags.includes(tag),
         )
@@ -197,9 +198,14 @@ if (args['--test-counts']) {
       tagged: args['--tagged'],
       skipped: args['--skipped'],
     })
+    debug('json results from getTests')
+    debug(jsonResults)
+    debug('tag test counts')
+    debug(tagTestCounts)
 
     if (args['--names']) {
       if (args['--count']) {
+        debug('names and count')
         let n = 0
         Object.keys(jsonResults).forEach((filename) => {
           const skippedCount = jsonResults[filename].counts.pending

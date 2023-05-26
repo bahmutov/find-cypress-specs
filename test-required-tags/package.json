@@ -1,0 +1,15 @@
+{
+  "name": "test-required-tags",
+  "version": "1.0.0",
+  "description": "Spec has tests with required tags",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "test-names": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --names",
+    "count-all-tags": "DEBUG=find-cypress-specs,find-test-names DEBUG_DEPTH=10 node ../bin/find --tags"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
