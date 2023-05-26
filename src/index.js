@@ -262,6 +262,9 @@ function collectResults(structure, results) {
     if (t.exclusive) {
       info.exclusive = t.exclusive
     }
+    debug('structure for %s', t.name)
+    debug(info)
+
     results.push(info)
     if (t.type === 'suite') {
       if (t.suites && t.suites.length) {
