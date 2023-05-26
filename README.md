@@ -143,7 +143,9 @@ cypress/e2e/featureA/user.js (2 tests, 1 pending)
 found 2 specs (4 tests, 1 pending)
 ```
 
-Where the tags are listed inside `[ ... ]` (see [cypress-grep](https://github.com/cypress-io/cypress-grep)) and the [pending tests](https://glebbahmutov.com/blog/cypress-test-statuses/) are marked with `⊙` character.
+Where the tags are listed inside `[ ... ]` (see [@bahmutov/cy-grep](https://github.com/bahmutov/cy-grep)) and the [pending tests](https://glebbahmutov.com/blog/cypress-test-statuses/) are marked with `⊙` character.
+
+Required tags are marked with `[[ ... ]]`.
 
 You can print the results in JSON format using `--json` or `-j` option.
 

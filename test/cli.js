@@ -165,3 +165,13 @@ test('prints the number of E2E and component tests', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('prints tags and required tags', async (t) => {
+  t.plan(1)
+  const result = await execa('node', ['../bin/find', '--names'], {
+    cwd: './test-required-tags',
+    filter: ['code', 'stdout'],
+  })
+  // console.log(result)
+  t.snapshot(result)
+})
