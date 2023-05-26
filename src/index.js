@@ -254,6 +254,7 @@ function collectResults(structure, results) {
       name: t.name,
       type: t.type,
       tags: t.tags,
+      requiredTags: t.requiredTags,
     }
     if (t.pending) {
       info.pending = t.pending
