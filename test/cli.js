@@ -175,3 +175,17 @@ test('prints tags and required tags', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('filters by required tag', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['../bin/find', '--names', '--tagged', '@bar'],
+    {
+      cwd: './test-required-tags',
+      filter: ['code', 'stdout'],
+    },
+  )
+  // console.log(result)
+  t.snapshot(result)
+})
