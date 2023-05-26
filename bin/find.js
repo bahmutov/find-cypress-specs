@@ -198,7 +198,10 @@ if (args['--test-counts']) {
       tagged: args['--tagged'],
       skipped: args['--skipped'],
     })
+    debug('json results from getTests')
     debug(jsonResults)
+    debug('tag test counts')
+    debug(tagTestCounts)
 
     if (args['--names']) {
       if (args['--count']) {

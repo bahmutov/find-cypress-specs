@@ -383,9 +383,13 @@ function getTests(specs, options = {}) {
       // enable if need to debug the parsed test
       // console.dir(result.structure, { depth: null })
       collectResults(result.structure, jsonResults[filename].tests)
+      debug('collected results for file %s', filename)
 
       if (tags) {
         const specTagCounts = countTags(result.structure)
+        debug('spec tag counts')
+        debug(specTagCounts)
+
         Object.keys(specTagCounts).forEach((tag) => {
           if (!(tag in tagTestCounts)) {
             tagTestCounts[tag] = specTagCounts[tag]
@@ -401,6 +405,8 @@ function getTests(specs, options = {}) {
   })
 
   addCounts(jsonResults)
+  debug('added counts')
+  debug(jsonResults)
 
   if (tagged) {
     // filter all collected tests to those that have the given tag(s)
