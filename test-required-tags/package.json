@@ -7,7 +7,7 @@
   "scripts": {
     "test": "cypress run",
     "test-names": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --names",
-    "count-all-tags": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --tags --count"
+    "count-all-tags": "DEBUG=find-cypress-specs,find-test-names DEBUG_DEPTH=10 node ../bin/find --tags"
   },
   "keywords": [],
   "author": "",
