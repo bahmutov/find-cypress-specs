@@ -189,3 +189,17 @@ test('filters by required tag', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('counts by required tag', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['../bin/find', '--count', '--tagged', '@bar'],
+    {
+      cwd: './test-required-tags',
+      filter: ['code', 'stdout'],
+    },
+  )
+  // console.log(result)
+  t.snapshot(result)
+})
