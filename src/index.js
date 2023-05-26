@@ -389,6 +389,7 @@ function getTests(specs, options = {}) {
       debug('collected results for file %s', filename)
 
       if (tags) {
+        debug('counting tags', tags)
         const specTagCounts = countTags(result.structure)
         debug('spec tag counts')
         debug(specTagCounts)
