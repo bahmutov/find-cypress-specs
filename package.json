@@ -33,7 +33,8 @@
     "deps-changed": "DEBUG=find-cypress-specs node ./bin/find --branch main --parent --trace-imports cypress --time-trace --cache-trace",
     "demo-component": "DEBUG=find-cypress-specs node ./bin/find --component --names",
     "demo-exclusive": "npm run test-names --prefix test-exclusive --silent",
-    "version-badge": "update-badge cypress"
+    "version-badge": "update-badge cypress",
+    "count-all-tags": "npm run count-all-tags --prefix test-required-tags"
   },
   "repository": {
     "type": "git",

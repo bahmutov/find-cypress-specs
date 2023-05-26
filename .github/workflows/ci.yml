@@ -74,6 +74,9 @@ jobs:
       - name: Test exclusive tests ↗️
         run: npm run demo-exclusive
 
+      - name: Count all tags, including required
+        run: npm run count-all-tags
+
       - name: Unit tests 🧪
         run: npm test
 

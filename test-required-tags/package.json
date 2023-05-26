@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test-names": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --names"
+    "test-names": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --names",
+    "count-all-tags": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --tags --count"
   },
   "keywords": [],
   "author": "",
