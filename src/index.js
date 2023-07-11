@@ -149,7 +149,9 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
   /** @type string[] */
   const files = globby.sync(options.specPattern, {
     sort: true,
-    ignore: options.excludeSpecPattern,
+    ignore: Array.isArray(options.excludeSpecPattern)
+      ? options.excludeSpecPattern
+      : [options.excludeSpecPattern],
   })
   debug('found %d file(s) %o', files.length, files)
 
