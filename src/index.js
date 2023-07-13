@@ -115,6 +115,7 @@ function findCypressSpecsV9(opts = {}) {
 }
 
 function findCypressSpecsV10(opts = {}, type = 'e2e') {
+  debug('findCypressSpecsV10')
   if (type !== 'e2e' && type !== 'component') {
     throw new Error(`Unknown spec type ${type}`)
   }
@@ -146,11 +147,19 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
 
   debug('options v10 %o', options)
 
-  /** @type string[] */
-  const files = globby.sync(options.specPattern, {
+  const ignore = Array.isArray(options.excludeSpecPattern)
+    ? options.excludeSpecPattern
+    : options.excludeSpecPattern
+    ? [options.excludeSpecPattern]
+    : []
+  const globbyOptions = {
     sort: true,
-    ignore: options.excludeSpecPattern,
-  })
+    ignore,
+  }
+  debug('globby options %s %o', options.specPattern, globbyOptions)
+
+  /** @type string[] */
+  const files = globby.sync(options.specPattern, globbyOptions)
   debug('found %d file(s) %o', files.length, files)
 
   // go through the files again and eliminate files that match
