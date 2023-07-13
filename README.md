@@ -292,6 +292,14 @@ See example in [bahmutov/test-todomvc-using-app-actions](https://github.com/bahm
 
 **Tip:** read my blog post [Convert Cypress Specs from JavaScript to TypeScript](https://glebbahmutov.com/blog/cypress-js-to-ts/).
 
+## Custom config filename
+
+If you want to use a custom Cypress config, pass it via the environment variable `CYPRESS_CONFIG_FILE`
+
+```
+$ CYPRESS_CONFIG_FILE=path/to/cypress.config.js npx find-cypres-specs ...
+```
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
