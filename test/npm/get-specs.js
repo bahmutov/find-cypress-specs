@@ -5,6 +5,7 @@ test('finds the specs', (t) => {
   t.plan(1)
   const specs = getSpecs()
   t.deepEqual(specs, [
+    'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
     'cypress/e2e/featureA/user.cy.ts',
   ])
@@ -45,6 +46,7 @@ test('finds the specs passing resolved config (e2e)', (t) => {
   t.plan(1)
   const specs = getSpecs(config)
   t.deepEqual(specs, [
+    'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
     'cypress/e2e/featureA/user.cy.ts',
   ])
@@ -76,4 +78,22 @@ test('supports list of specs in specPattern', (t) => {
   t.plan(1)
   const specs = getSpecs(config)
   t.deepEqual(specs, specPattern)
+})
+
+test('supports wildcards in the list of specs', (t) => {
+  const specPattern = [
+    'cypress/e2e/spec*.cy.js',
+    'cypress/e2e/featureA/user*.cy.ts',
+  ]
+  const config = {
+    specPattern,
+    testingType: 'e2e',
+  }
+  t.plan(1)
+  const specs = getSpecs(config)
+  t.deepEqual(specs, [
+    'cypress/e2e/spec-b.cy.js',
+    'cypress/e2e/spec.cy.js',
+    'cypress/e2e/featureA/user.cy.ts',
+  ])
 })
