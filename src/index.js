@@ -54,16 +54,18 @@ function getConfig() {
   if (typeof process.env.CYPRESS_CONFIG_FILE !== 'undefined') {
     const configFile = process.env.CYPRESS_CONFIG_FILE
     if (configFile.endsWith('.js')) {
-      debug(`found file ${configFile}`);
+      debug(`found file ${configFile}`)
       return getConfigJs(`./${configFile}`)
     } else if (configFile.endsWith('.ts')) {
-      debug(`found file ${configFile}`);
+      debug(`found file ${configFile}`)
       return getConfigTs(`./${configFile}`)
     } else if (configFile.endsWith('.json')) {
-      debug(`found file ${configFile}`);
+      debug(`found file ${configFile}`)
       return getConfigJson(`./${configFile}`)
-    } 
-    throw new Error('Config file should be .ts, .js or .json file even when using CYPRESS_CONFIG_FILE env var')
+    }
+    throw new Error(
+      'Config file should be .ts, .js or .json file even when using CYPRESS_CONFIG_FILE env var',
+    )
   }
 
   if (fs.existsSync('./cypress.config.js')) {
@@ -170,6 +172,7 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
   const globbyOptions = {
     sort: true,
     ignore,
+    absolute: true,
   }
   debug('globby options %s %o', options.specPattern, globbyOptions)
 
@@ -234,6 +237,10 @@ function getSpecs(options, type) {
   return findCypressSpecs(options, type)
 }
 
+/**
+ * Finds Cypress specs.
+ * @returns {string[]} List of absolute filenames
+ */
 function findCypressSpecs(options, type = 'e2e') {
   debug('finding specs of type %s', type)
   if (options.version) {
