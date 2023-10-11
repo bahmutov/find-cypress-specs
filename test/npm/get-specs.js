@@ -1,5 +1,6 @@
 const test = require('ava')
 const { getSpecs } = require('../..')
+const { toRelative } = require('../../src/files')
 
 test('finds the specs', (t) => {
   t.plan(1)
@@ -92,6 +93,28 @@ test('supports wildcards in the list of specs', (t) => {
   t.plan(1)
   const specs = getSpecs(config)
   t.deepEqual(specs, [
+    'cypress/e2e/spec-b.cy.js',
+    'cypress/e2e/spec.cy.js',
+    'cypress/e2e/featureA/user.cy.ts',
+  ])
+})
+
+test('returns absolute filenames', (t) => {
+  const specPattern = [
+    'cypress/e2e/spec*.cy.js',
+    'cypress/e2e/featureA/user*.cy.ts',
+  ]
+  const config = {
+    specPattern,
+    testingType: 'e2e',
+  }
+  t.plan(2)
+  const specs = getSpecs(config, 'e2e', true)
+  const cwd = process.cwd()
+  t.truthy(specs.every((filename) => filename.startsWith(cwd)))
+
+  const relativeSpecs = toRelative(specs)
+  t.deepEqual(relativeSpecs, [
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
     'cypress/e2e/featureA/user.cy.ts',

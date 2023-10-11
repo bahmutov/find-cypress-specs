@@ -131,7 +131,7 @@ function findCypressSpecsV9(opts = {}) {
   return filtered.map((file) => path.join(options.integrationFolder, file))
 }
 
-function findCypressSpecsV10(opts = {}, type = 'e2e') {
+function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
   debug('findCypressSpecsV10')
   if (type !== 'e2e' && type !== 'component') {
     throw new Error(`Unknown spec type ${type}`)
@@ -172,7 +172,7 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
   const globbyOptions = {
     sort: true,
     ignore,
-    absolute: true,
+    absolute: returnAbsolute,
   }
   debug('globby options %s %o', options.specPattern, globbyOptions)
 
@@ -213,7 +213,7 @@ function findCypressSpecsV10(opts = {}, type = 'e2e') {
   return filtered
 }
 
-function getSpecs(options, type) {
+function getSpecs(options, type, returnAbsolute = false) {
   if (typeof options === 'undefined') {
     options = getConfig()
     if (typeof type === 'undefined') {
@@ -234,14 +234,15 @@ function getSpecs(options, type) {
     }
   }
 
-  return findCypressSpecs(options, type)
+  return findCypressSpecs(options, type, returnAbsolute)
 }
 
 /**
  * Finds Cypress specs.
- * @returns {string[]} List of absolute filenames
+ * @param {boolean} returnAbsolute Return the list of absolute spec filenames
+ * @returns {string[]} List of filenames
  */
-function findCypressSpecs(options, type = 'e2e') {
+function findCypressSpecs(options, type = 'e2e', returnAbsolute = false) {
   debug('finding specs of type %s', type)
   if (options.version) {
     debug('Cypress version %s', options.version)
@@ -261,7 +262,7 @@ function findCypressSpecs(options, type = 'e2e') {
   if (type === 'e2e') {
     if (major >= 10) {
       debug('config has "e2e" property, treating as Cypress v10+')
-      const specs = findCypressSpecsV10(options, type)
+      const specs = findCypressSpecsV10(options, type, returnAbsolute)
       return specs
     }
 
@@ -270,7 +271,7 @@ function findCypressSpecs(options, type = 'e2e') {
     return specs
   } else if (type === 'component') {
     debug('finding component specs')
-    const specs = findCypressSpecsV10(options, type)
+    const specs = findCypressSpecsV10(options, type, returnAbsolute)
     return specs
   } else {
     console.error('Do not know how to find specs of type "%s"', type)

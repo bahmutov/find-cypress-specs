@@ -1,5 +1,6 @@
 const test = require('ava')
 const execa = require('execa-wrap')
+const { toRelative } = require('../src/files')
 
 test('prints tags', async (t) => {
   t.plan(1)

@@ -300,6 +300,14 @@ If you want to use a custom Cypress config, pass it via the environment variable
 $ CYPRESS_CONFIG_FILE=path/to/cypress.config.js npx find-cypres-specs ...
 ```
 
+## Absolute spec filenames
+
+You can return absolute filenames to the found specs
+
+```js
+getSpecs(config, 'e2e|component', true)
+```
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
