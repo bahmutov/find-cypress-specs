@@ -63,3 +63,17 @@ test('finds the specs passing resolved config (component)', (t) => {
     'test-components/comp2.cy.ts',
   ])
 })
+
+test('supports list of specs in specPattern', (t) => {
+  const specPattern = [
+    'cypress/e2e/spec.cy.js',
+    'cypress/e2e/featureA/user.cy.ts',
+  ]
+  const config = {
+    specPattern,
+    testingType: 'e2e',
+  }
+  t.plan(1)
+  const specs = getSpecs(config)
+  t.deepEqual(specs, specPattern)
+})
