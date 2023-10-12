@@ -174,6 +174,9 @@ function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
     ignore,
     absolute: returnAbsolute,
   }
+  if (opts.projectRoot) {
+    globbyOptions.cwd = opts.projectRoot
+  }
   debug('globby options %s %o', options.specPattern, globbyOptions)
 
   /** @type string[] */

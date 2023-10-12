@@ -52,3 +52,13 @@ jobs:
 
       - name: Test cypress.json project (Cypress v9)
         run: npm run demo-tests --prefix test-json
+
+      - name: Find tests in subfolder
+        run: npm run demo-subfolder
+
+      - name: Confirm we can run specs in subfolder
+        uses: cypress-io/github-action@v5
+        with:
+          # we have already installed all dependencies above
+          install: false
+          config-file: mocks/my-app/e2e/cypress.config.js

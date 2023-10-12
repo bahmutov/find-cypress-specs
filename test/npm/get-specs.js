@@ -1,6 +1,8 @@
 const test = require('ava')
 const { getSpecs } = require('../..')
 const { toRelative } = require('../../src/files')
+const sinon = require('sinon')
+const path = require('path')
 
 test('finds the specs', (t) => {
   t.plan(1)
@@ -119,4 +121,20 @@ test('returns absolute filenames', (t) => {
     'cypress/e2e/spec.cy.js',
     'cypress/e2e/featureA/user.cy.ts',
   ])
+})
+
+test('uses project root', (t) => {
+  const projectRoot = process.cwd()
+  console.log('project root', projectRoot)
+  sinon.stub(process, 'cwd').returns(path.join(projectRoot, 'mocks/my-app'))
+
+  const config = {
+    projectRoot,
+    e2e: {
+      specPattern: 'mocks/my-app/e2e/e2e-tests/*.cy.js',
+    },
+  }
+  t.plan(1)
+  const specs = getSpecs(config)
+  t.deepEqual(specs, ['mocks/my-app/e2e/e2e-tests/spec-a.cy.js'])
 })
