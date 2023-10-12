@@ -229,6 +229,7 @@ function getSpecs(options, type, returnAbsolute = false) {
       type = options.testingType
       options = {
         version: options.version,
+        projectRoot: options.projectRoot,
         [type]: {
           specPattern: options.specPattern,
           excludeSpecPattern: options.excludeSpecPattern,
