@@ -86,7 +86,7 @@ function getConfig() {
   throw new Error('Config file should be .ts, .js or .json file')
 }
 
-function findCypressSpecsV9(opts = {}) {
+function findCypressSpecsV9(opts = {}, returnAbsolute = false) {
   const defaults = {
     integrationFolder: 'cypress/integration',
     testFiles: '**/*.{js,ts}',
@@ -103,6 +103,7 @@ function findCypressSpecsV9(opts = {}) {
     sort: true,
     cwd: options.integrationFolder,
     ignore: options.ignoreTestFiles,
+    absolute: returnAbsolute,
   })
   debug('found %d file(s) %o', files.length, files)
 
@@ -271,7 +272,7 @@ function findCypressSpecs(options, type = 'e2e', returnAbsolute = false) {
     }
 
     debug('reading Cypress config < v10')
-    const specs = findCypressSpecsV9(options)
+    const specs = findCypressSpecsV9(options, returnAbsolute)
     return specs
   } else if (type === 'component') {
     debug('finding component specs')
