@@ -101,8 +101,8 @@ jobs:
         run: node ./bin/find --tagged @user --set-gha-outputs
       - name: Print the found specs with tags
         run: |
-          echo '${{ steps.find-tagged.outputs.taggedSpecsN }} Specs with tests tagged user' >> "$GITHUB_OUTPUT"
-          echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_OUTPUT"
+          echo '${{ steps.find-tagged.outputs.taggedSpecsN }} Specs with tests tagged user' >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v3
