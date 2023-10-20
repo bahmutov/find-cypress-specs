@@ -251,10 +251,10 @@ if (args['--test-counts']) {
 
         if (args['--set-gha-outputs']) {
           debug('setting GitHub Actions outputs taggedSpecsN and taggedSpecs')
-          debug('taggedSpecsN %d', specNames.length)
+          debug('taggedSpecsN %d', specs.length)
           debug('plus taggedSpecs')
-          core.setOutput('taggedSpecsN', specNames.length)
-          core.setOutput('taggedSpecs', specNames.join(','))
+          core.setOutput('taggedSpecsN', specs.length)
+          core.setOutput('taggedSpecs', specNames)
         }
       }
     }
