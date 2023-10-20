@@ -1,0 +1,34 @@
+name: merge
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        # https://github.com/cypress-io/github-action
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+
+      - name: Show specs with tag alpha
+        id: find-alpha
+        run: node ./bin/find --tagged @alpha --set-gha-outputs
+
+      - name: Show specs with tag user
+        id: find-user
+        run: node ./bin/find --tagged @user --set-gha-outputs
+
+      # https://docs.github.com/en/actions/learn-github-actions/expressions
+      - name: Merge two lists of specs
+        id: merge
+        run: |
+          echo 'specs=${{ steps.find-alpha.outputs.taggedSpecs }},${{ steps.find-user.outputs.taggedSpecs }}' >> "$GITHUB_OUTPUT"
+          echo 'specsN=`expr ${{ steps.find-alpha.outputs.taggedSpecsN }} + ${{ steps.find-user.outputs.taggedSpecsN }}`' >> "$GITHUB_OUTPUT"
+
+      - name: Print all specs
+        run: |
+          echo '${{ steps.merge.outputs.specsN }} Specs with tests tagged user' >> "$GITHUB_STEP_SUMMARY"
+          echo '${{ steps.merge.outputs.specs }}' >> "$GITHUB_STEP_SUMMARY"
