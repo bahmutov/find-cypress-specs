@@ -248,6 +248,14 @@ if (args['--test-counts']) {
         debug('printing the spec names list only')
         const specNames = specs.join(',')
         console.log(specNames)
+
+        if (args['--set-gha-outputs']) {
+          debug('setting GitHub Actions outputs taggedSpecsN and taggedSpecs')
+          debug('taggedSpecsN %d', specs.length)
+          debug('plus taggedSpecs')
+          core.setOutput('taggedSpecsN', specs.length)
+          core.setOutput('taggedSpecs', specNames)
+        }
       }
     }
   } else {

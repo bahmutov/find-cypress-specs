@@ -113,6 +113,14 @@ $ npx find-cypress-specs --branch main --tagged @user,@preview
 # and that have any tests or suites inside tagged "@user" or "@preview"
 ```
 
+You can set the list and number of specs with tags into GHA outputs
+
+```bash
+$ npx find-cypress-specs --branch main --tagged @user,@preview --set-gha-outputs
+```
+
+The number of found specs will be set as `taggedSpecsN` and the list will be set as `taggedSpecs`.
+
 ### count tagged changed specs
 
 Let's say we changed 2 specs that have tests tagged `@user`. We can output the count by adding `--count` option
