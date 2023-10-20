@@ -61,7 +61,7 @@ jobs:
         run: npm run demo-names-tagged -- --set-gha-outputs
       - name: Print the found specs with tags
         run: |
-          echo `${{ steps.find-tagged.outputs.taggedSpecsN }} Specs with tests tagged "@user"` >> "$GITHUB_OUTPUT"
+          echo '${{ steps.find-tagged.outputs.taggedSpecsN }} Specs with tests tagged `@user`' >> "$GITHUB_OUTPUT"
           echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_OUTPUT"
 
       - name: Confirm we can run specs in subfolder
