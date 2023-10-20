@@ -24,6 +24,8 @@ jobs:
       # https://docs.github.com/en/actions/learn-github-actions/expressions
       - name: Merge two lists of specs
         id: merge
+        # the tricky part is adding two numbers and setting the sum as GHA output
+        # note: the specs might have duplicate entries
         run: |
           echo 'specs=${{ steps.find-alpha.outputs.taggedSpecs }},${{ steps.find-user.outputs.taggedSpecs }}' >> "$GITHUB_OUTPUT"
           echo 'specsN='`expr ${{ steps.find-alpha.outputs.taggedSpecsN }} + ${{ steps.find-user.outputs.taggedSpecsN }}` >> "$GITHUB_OUTPUT"
