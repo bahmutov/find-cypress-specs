@@ -1,6 +1,5 @@
 const test = require('ava')
 const execa = require('execa-wrap')
-const { toRelative } = require('../src/files')
 
 test('prints tags', async (t) => {
   t.plan(1)
@@ -133,6 +132,16 @@ test('prints test file names --tagged @alpha,@main,@user', async (t) => {
   const result = await execa('node', ['./bin/find', '--tagged', '@alpha'], {
     filter: ['code', 'stdout'],
   })
+  t.snapshot(result)
+})
+
+test('prints test file names --tagged empty string', async (t) => {
+  t.plan(1)
+  const result = await execa('node', ['./bin/find', '--tagged', ''], {
+    filter: ['code', 'stdout'],
+  })
+  // there should be no specs tagged an empty string ""
+  // console.log(result)
   t.snapshot(result)
 })
 
