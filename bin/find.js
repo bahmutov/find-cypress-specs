@@ -85,6 +85,10 @@ if (args['--test-counts']) {
 
   const specs = getSpecs(undefined, specType)
 
+  // if the user passes "--tagged ''" we want to find the specs
+  // but then filter them all out
+  const isTaggedPresent = args['--tagged'] || args['--tagged'] === ''
+
   if (args['--branch']) {
     debug('determining specs changed against branch %s', args['--branch'])
     let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
@@ -191,8 +195,9 @@ if (args['--test-counts']) {
     } else {
       console.log(changedSpecs.join(','))
     }
-  } else if (args['--names'] || args['--tags'] || args['--tagged']) {
+  } else if (args['--names'] || args['--tags'] || isTaggedPresent) {
     // counts the number of tests for each tag across all specs
+    debug('count number of tests')
     const { jsonResults, tagTestCounts } = getTests(specs, {
       tags: args['--tags'],
       tagged: args['--tagged'],

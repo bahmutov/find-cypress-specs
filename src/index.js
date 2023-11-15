@@ -449,7 +449,7 @@ function getTests(specs, options = {}) {
   debug('added counts')
   debug(jsonResults)
 
-  if (tagged) {
+  if (tagged || tagged === '') {
     // filter all collected tests to those that have the given tag(s)
     const splitTags = tagged
       .split(',')

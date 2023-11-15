@@ -25,6 +25,7 @@
     "demo-names-and-tags-json": "node ./bin/find --names --tags --json",
     "demo-names-json": "node ./bin/find --names --json",
     "demo-names-tagged": "node ./bin/find --names --tagged @user",
+    "demo-tagged-empty-string": "node ./bin/find --tagged ''",
     "demo-subfolder": "DEBUG=find-cypress-specs CYPRESS_CONFIG_FILE=mocks/my-app/e2e/cypress.config.js node ./bin/find --names",
     "print-changed-specs": "node ./bin/find --branch main",
     "count-changed-specs": "node ./bin/find --branch main --count",

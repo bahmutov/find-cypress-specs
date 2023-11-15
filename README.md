@@ -200,6 +200,8 @@ $ npx find-cypress-specs --tagged <single tag>
 # cypress/e2e/spec.cy.js,cypress/e2e/featureA/user.cy.ts
 ```
 
+If you pass an empty string argument like `--tagged ''`, an empty list is returned.
+
 You can print the number of found tagged specs by adding `--count` argument
 
 ```
