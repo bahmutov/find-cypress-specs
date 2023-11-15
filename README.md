@@ -203,7 +203,7 @@ $ npx find-cypress-specs --tagged <single tag>
 You can print the number of found tagged specs by adding `--count` argument
 
 ```
-$ npx find-cypress-specs --tagged <single tag>
+$ npx find-cypress-specs --tagged <single tag> --count
 3
 ```
 
