@@ -226,8 +226,7 @@ if (args['--test-counts']) {
         if (args['--json']) {
           debug('names in json format')
           console.log(JSON.stringify(jsonResults, null, 2))
-        }
-        if (args['--markdown']) {
+        } else if (args['--markdown']) {
           debug('names in Markdown format')
           const str = stringMarkdownTests(jsonResults)
           console.log(str)
