@@ -56,6 +56,9 @@ jobs:
       - name: Find tests in subfolder
         run: npm run demo-subfolder
 
+      - name: Demo test names in Markdown format and put into job summary 💻
+        run: npm run demo-names-markdown >> "$GITHUB_STEP_SUMMARY"
+
       - name: Show specs with tags
         id: find-tagged
         run: node ./bin/find --tagged @user --set-gha-outputs
