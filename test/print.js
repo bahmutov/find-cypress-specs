@@ -1,4 +1,8 @@
-const { stringFileTests, stringAllInfo } = require('../src/print')
+const {
+  stringFileTests,
+  stringAllInfo,
+  stringMarkdownTests,
+} = require('../src/print')
 const test = require('ava')
 const input = require('./tagged.json')
 
@@ -32,6 +36,17 @@ test('prints all tests', (t) => {
   t.plan(2)
   const copy = JSON.parse(JSON.stringify(input))
   const str = stringAllInfo(copy)
+
+  // does not change the input
+  t.deepEqual(input, copy)
+  // console.log(str)
+  t.snapshot(str)
+})
+
+test('prints markdown', (t) => {
+  t.plan(2)
+  const copy = JSON.parse(JSON.stringify(input))
+  const str = stringMarkdownTests(copy)
 
   // does not change the input
   t.deepEqual(input, copy)

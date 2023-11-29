@@ -3,7 +3,7 @@
 const arg = require('arg')
 const { getSpecs, findChangedFiles, getTests } = require('../src')
 const { getTestCounts } = require('../src/tests-counts')
-const { stringAllInfo } = require('../src/print')
+const { stringAllInfo, stringMarkdownTests } = require('../src/print')
 const { updateBadge } = require('../src/badge')
 
 const fs = require('fs')
@@ -49,6 +49,9 @@ const args = arg({
   '--test-counts': Boolean,
   // if we count the tests, we can update the README badge
   '--update-badge': Boolean,
+  // output the list in Markdown format
+  '--markdown': Boolean,
+  //
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -62,6 +65,7 @@ const args = arg({
   // https://glebbahmutov.com/blog/cypress-test-statuses/
   '--pending': '--skipped',
   '--tc': '--test-counts',
+  '--md': '--markdown',
 })
 
 debug('arguments %o', args)
@@ -209,6 +213,7 @@ if (args['--test-counts']) {
     debug(tagTestCounts)
 
     if (args['--names']) {
+      debug('output test names')
       if (args['--count']) {
         debug('names and count')
         let n = 0
@@ -219,8 +224,14 @@ if (args['--test-counts']) {
         console.log(n)
       } else {
         if (args['--json']) {
+          debug('names in json format')
           console.log(JSON.stringify(jsonResults, null, 2))
+        } else if (args['--markdown']) {
+          debug('names in Markdown format')
+          const str = stringMarkdownTests(jsonResults)
+          console.log(str)
         } else {
+          debug('names to standard out')
           const str = stringAllInfo(jsonResults)
           console.log(str)
         }

@@ -157,6 +157,17 @@ Required tags are marked with `[[ ... ]]`.
 
 You can print the results in JSON format using `--json` or `-j` option.
 
+You can print the tests in Markdown format using `--markdown` or `--md` option
+
+| Spec                             |
+| -------------------------------- |
+| **`foo/a/spec.cy.js`** (3 tests) |
+| `suite / test 1`                 |
+| `suite / test 2`                 |
+| `suite / test 3`                 |
+| **`foo/b/spec.cy.js`** (1 test)  |
+| `another / test / test 1`        |
+
 ## Test tags
 
 You can count tags attached to the individual tests using `--tags` arguments

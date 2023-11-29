@@ -28,6 +28,12 @@ jobs:
       - name: Demo test names 💻
         run: npm run demo-names
 
+      - name: Demo test names in Markdown format 💻
+        run: npm run demo-names-markdown
+
+      - name: Demo test names in Markdown format and put into job summary 💻
+        run: npm run demo-names-markdown >> "$GITHUB_STEP_SUMMARY"
+
       - name: Demo component test names 🧩
         run: npm run demo-component
 
