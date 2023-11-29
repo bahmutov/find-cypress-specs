@@ -53,4 +53,23 @@ function countPendingTests(testsOrSuites) {
   }, 0)
 }
 
-module.exports = { addCounts }
+/**
+ * Goes through the object with all specs and adds up
+ * all test counts to find the total number of tests
+ * and the total number of pending tests
+ */
+function sumTestCounts(allInfo) {
+  const counts = {
+    tests: 0,
+    pending: 0,
+  }
+  Object.keys(allInfo).forEach((fileName) => {
+    const fileInfo = allInfo[fileName]
+    counts.tests += fileInfo.counts.tests
+    counts.pending += fileInfo.counts.pending
+  })
+
+  return counts
+}
+
+module.exports = { addCounts, sumTestCounts }
