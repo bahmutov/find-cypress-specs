@@ -1,5 +1,6 @@
 const pluralize = require('pluralize')
 const { formatTestList } = require('find-test-names')
+const { sumTestCounts } = require('./count')
 
 /**
  * Outputs a string representation of the json test results object,
@@ -93,9 +94,15 @@ function getJustTheTestNames(tests, parentName = '', justNames = []) {
  * @returns {string}
  */
 function stringMarkdownTests(allInfo) {
+  const counts = sumTestCounts(allInfo)
+  const specNames = Object.keys(allInfo)
+  const specWord = pluralize('Spec', specNames.length, true)
+  const testWord = pluralize('test', counts.tests, true)
+
+  const title = `| ${specWord} with ${testWord} |\n| --- |\n`
   const allInfoString =
-    '| Spec |\n| --- |\n' +
-    Object.keys(allInfo)
+    title +
+    specNames
       .map((fileName) => {
         const fileInfo = allInfo[fileName]
         const n = fileInfo.counts.tests
