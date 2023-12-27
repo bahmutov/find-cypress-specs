@@ -224,3 +224,95 @@ test('applies multiple tags', (t) => {
   // console.dir(result, { depth: null })
   t.deepEqual(result, expected)
 })
+
+test('includes tests required by the parent required tag', (t) => {
+  const json = {
+    'cypress/integration/spec1.js': {
+      counts: {
+        tests: 2,
+        pending: 0,
+      },
+      tests: [
+        {
+          name: 'works',
+          type: 'test',
+          tags: ['user'],
+          requiredTags: ['@foo'],
+        },
+        {
+          name: 'does not work',
+          type: 'test',
+          requiredTags: ['@foo', '@bar'],
+        },
+      ],
+    },
+    'cypress/integration/spec2.js': {
+      counts: {
+        tests: 1,
+        pending: 0,
+      },
+      tests: [
+        {
+          name: 'spec 2 works',
+          type: 'test',
+          tags: ['user'],
+          requiredTags: ['@foo'],
+        },
+      ],
+    },
+    'cypress/integration/spec3.js': {
+      counts: {
+        tests: 2,
+        pending: 0,
+      },
+      tests: [
+        {
+          name: 'parent1',
+          type: 'suite',
+          requiredTags: ['@parent1'],
+          tests: [
+            {
+              name: 'child1',
+              type: 'test',
+            },
+          ],
+        },
+        {
+          name: 'parent2',
+          type: 'suite',
+          tags: ['@parent2'],
+          tests: [
+            {
+              name: 'child2',
+              type: 'test',
+            },
+          ],
+        },
+      ],
+    },
+  }
+  const picked = pickTaggedTestsFrom(json, '@parent1')
+  // console.log(JSON.stringify(picked, null, 2))
+  // only spec 3 has a test whose parent has the required tag "@parent1"
+  t.deepEqual(picked, {
+    'cypress/integration/spec3.js': {
+      counts: {
+        tests: 1,
+        pending: 0,
+      },
+      tests: [
+        {
+          name: 'parent1',
+          type: 'suite',
+          requiredTags: ['@parent1'],
+          tests: [
+            {
+              name: 'child1',
+              type: 'test',
+            },
+          ],
+        },
+      ],
+    },
+  })
+})

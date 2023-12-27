@@ -457,8 +457,10 @@ function getTests(specs, options = {}) {
       .filter(Boolean)
     debug('filtering all tests by tag %o', splitTags)
     pickTaggedTestsFrom(jsonResults, splitTags)
-    // debug(jsonResults)
+    debug('after picking tagged tests')
+    debug(jsonResults)
     // recompute the number of tests
+    debug('adding counts to json results')
     addCounts(jsonResults)
   } else if (skipped) {
     debug('leaving only skipped (pending) tests')

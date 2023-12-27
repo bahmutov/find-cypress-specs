@@ -1,3 +1,4 @@
+const debug = require('debug')('find-cypress-specs:tagged')
 const { addCounts } = require('./count')
 
 function arraysOverlap(a, b) {
@@ -36,7 +37,8 @@ function pickTaggedTests(tests, tag) {
       return allTags && arraysOverlap(allTags, tags)
     } else if (test.type === 'suite') {
       const allTags = combineTags(test.tags, test.requiredTags)
-      if (allTags && arraysOverlap(test.tags, tags)) {
+      debug('allTags %o', allTags)
+      if (allTags && arraysOverlap(allTags, tags)) {
         return true
       }
 
@@ -87,8 +89,10 @@ function removeEmptyNodes(json) {
  * Modifies the given object in place.
  */
 function pickTaggedTestsFrom(json, tag) {
+  // console.log(JSON.stringify(json, null, 2))
   Object.keys(json).forEach((filename) => {
     const fileTests = json[filename].tests
+    debug('picking tagged tests from %s', filename)
     pickTaggedTests(fileTests, tag)
   })
 
