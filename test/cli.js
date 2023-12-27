@@ -220,6 +220,6 @@ test('counts all tags including required', async (t) => {
     cwd: './test-required-tags',
     filter: ['code', 'stdout'],
   })
-  console.log(result)
+  // console.log(result)
   t.snapshot(result)
 })
