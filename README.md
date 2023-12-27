@@ -182,7 +182,7 @@ Tag    Tests
 @user  2
 ```
 
-Each tag count includes the tests that use the tag directly, and the _effective_ tags applied from the parent suites.
+Each tag count includes the tests that use the tag directly, and the _effective_ tags applied from the parent suites, both `tags` and `requiredTags`.
 
 You can print the results in JSON format using `--json` or `-j` option.
 
