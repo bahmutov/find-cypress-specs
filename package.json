@@ -60,7 +60,7 @@
     "execa-wrap": "^1.4.0",
     "prettier": "^2.5.1",
     "really-need": "^1.9.2",
-    "semantic-release": "22.0.12",
+    "semantic-release": "23.0.0",
     "sinon": "^13.0.1",
     "typescript": "^4.6.3"
   },
