@@ -37,10 +37,19 @@ function getConfigJs(filename) {
 }
 
 function getConfigTs(filename) {
-  require('ts-node/register/transpile-only')
+  // handle ts modules without "type: module"
+  // https://github.com/bahmutov/find-cypress-specs/issues/222
+  const tsNode = require('ts-node')
+  tsNode.register({
+    transpileOnly: true,
+    compilerOptions: {
+      module: 'commonjs',
+    },
+  })
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
   const definedConfig = requireEveryTime(configFilename)
+  debug('loaded config %o', definedConfig)
   if (definedConfig && definedConfig.default) {
     // due to TS / ES6 module transpile we got the default export
     debug('returning default export as config from %s', filename)
