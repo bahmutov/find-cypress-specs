@@ -117,7 +117,7 @@ if (args['--test-counts']) {
         const absoluteFolder = path.join(process.cwd(), args['--trace-imports'])
         const depsOptions = {
           folder: absoluteFolder,
-          time: args['--time-trace'],
+          time: Boolean(args['--time-trace']),
         }
         if (args['--cache-trace']) {
           depsOptions.saveDepsFilename = saveDependenciesFile
