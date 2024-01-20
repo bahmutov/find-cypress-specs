@@ -202,7 +202,7 @@ if (args['--test-counts']) {
         changedSpecs.length,
         true,
       )} changed: ${changedSpecs.join(', ')}`
-      core.summary.addRaw(summary).write
+      core.summary.addRaw(summary).write()
     }
 
     if (args['--count']) {
