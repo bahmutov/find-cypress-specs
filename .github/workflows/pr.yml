@@ -31,7 +31,7 @@ jobs:
       - name: Print specs changed against the parent of this branch 🌳
         # and set GitHub Actions output
         id: step1
-        run: node ./bin/find --branch main --parent --set-gha-outputs
+        run: node ./bin/find --branch main --parent --set-gha-outputs --gha-summary
 
       - name: Print set outputs
         run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}

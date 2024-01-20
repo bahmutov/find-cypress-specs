@@ -15,7 +15,7 @@ jobs:
 
       - name: Show specs with tag alpha
         id: find-alpha
-        run: node ./bin/find --tagged @alpha --set-gha-outputs
+        run: node ./bin/find --tagged @alpha --set-gha-outputs --gha-summary
 
       - name: Show specs with tag user
         id: find-user

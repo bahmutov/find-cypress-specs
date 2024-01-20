@@ -52,6 +52,10 @@ If you add `--set-gha-outputs` command line switch, then the number of changed s
   run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}
 ```
 
+## Write GitHub Actions job summary
+
+You can output changes specs by using the parameter `--gha-summary`
+
 ## against the parent commit
 
 When dealing with a long-term branch, you do not want to see the changed files in the main branch. Instead, you want to only consider the specs changed in the _current_ branch all the way to its parent commit. You can pass the flag `--parent` to only pick the modified and added specs.
