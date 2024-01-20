@@ -202,7 +202,12 @@ if (args['--test-counts']) {
         changedSpecs.length,
         true,
       )} changed: ${changedSpecs.join(', ')}`
-      core.summary.addRaw(summary).write()
+      if (process.env.GITHUB_STEP_SUMMARY) {
+        core.summary.addRaw(summary).write()
+      } else {
+        console.log('GitHub summary')
+        console.log(summary)
+      }
     }
 
     if (args['--count']) {
