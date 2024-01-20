@@ -197,11 +197,13 @@ if (args['--test-counts']) {
     }
     if (args['--gha-summary']) {
       debug('writing GitHub Actions summary')
-      const summary = `Found that ${pluralize(
-        'spec',
-        changedSpecs.length,
-        true,
-      )} changed: ${changedSpecs.join(', ')}`
+      const summary = changedSpecs.length
+        ? `Found that ${pluralize(
+            'spec',
+            changedSpecs.length,
+            true,
+          )} changed: ${changedSpecs.join(', ')}`
+        : 'No specs changed'
       if (process.env.GITHUB_STEP_SUMMARY) {
         core.summary.addRaw(summary).write()
       } else {
