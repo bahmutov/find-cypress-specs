@@ -38,6 +38,8 @@ const args = arg({
   // to set two named outputs, one for number of changed specs
   // another for actual list of files
   '--set-gha-outputs': Boolean,
+  // print a summary to the GitHub Actions job summary
+  '--gha-summary': Boolean,
   // save a JSON file with traced dependencies to save time
   '--cache-trace': Boolean,
   '--time-trace': Boolean,
@@ -192,6 +194,15 @@ if (args['--test-counts']) {
       debug('plus changedSpecs')
       core.setOutput('changedSpecsN', changedSpecs.length)
       core.setOutput('changedSpecs', changedSpecs.join(','))
+    }
+    if (args['--gha-summary']) {
+      debug('writing GitHub Actions summary')
+      const summary = `Found that ${pluralize(
+        'spec',
+        changedSpecs.length,
+        true,
+      )} changed: ${changedSpecs.join(', ')}`
+      core.summary.addRaw(summary).write
     }
 
     if (args['--count']) {

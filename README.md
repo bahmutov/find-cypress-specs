@@ -40,7 +40,7 @@ $ npx find-cypress-specs --branch main
 
 ## set GitHub Actions outputs
 
-If you add `--set-gh-outputs` command line switch, then the number of changed specs and the comma-separated file list will be set as GH Actions outputs `changedSpecsN` and `changedSpecs`. See [pr.yml](./.github/workflows/pr.yml) for example
+If you add `--set-gha-outputs` command line switch, then the number of changed specs and the comma-separated file list will be set as GH Actions outputs `changedSpecsN` and `changedSpecs`. See [pr.yml](./.github/workflows/pr.yml) for example
 
 ```yml
 - name: Print specs changed against the parent of this branch 🌳
@@ -51,6 +51,10 @@ If you add `--set-gh-outputs` command line switch, then the number of changed sp
 - name: Print set outputs
   run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}
 ```
+
+## Write GitHub Actions job summary
+
+You can output changes specs by using the parameter `--gha-summary`
 
 ## against the parent commit
 
