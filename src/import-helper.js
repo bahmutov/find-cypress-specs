@@ -5,6 +5,7 @@ const requireAndForget = require('require-and-forget')
 // @see https://github.com/TypeStrong/ts-node/discussions/1290
 async function importFresh(specifier, module) {
   if (isAbsolute) {
+    console.log("good ol' require")
     return requireAndForget(specifier)
   }
   let resolvedPath
@@ -20,6 +21,7 @@ async function importFresh(specifier, module) {
       `Unable to locate module "${specifier}" relative to "${module?.filename}" using the CommonJS resolver.  Consider passing an absolute path to the target module.`,
     )
   }
+  console.log('trying import')
   return import(`${resolvedPath}?${Date.now()}`)
 }
 
