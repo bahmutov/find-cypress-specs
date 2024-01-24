@@ -11,14 +11,15 @@ const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
 const requireEveryTime = require('require-and-forget')
+const importSync = require('import-sync')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
 function importFresh(modulePath) {
-  const esmRequire = require('@httptoolkit/esm')(module)
   try {
-    return esmRequire(`${modulePath}${Date.now()}`)
+    return importSync(`${modulePath}`)
   } catch (error) {
+    console.error('error', error)
     return requireEveryTime(modulePath)
   }
 }
