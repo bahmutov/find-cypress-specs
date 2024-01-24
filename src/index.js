@@ -14,6 +14,15 @@ const requireEveryTime = require('require-and-forget')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
+function importFresh(modulePath) {
+  const esmRequire = require('@httptoolkit/esm')(module)
+  try {
+    return esmRequire(`${modulePath}${Date.now()}`)
+  } catch (error) {
+    return requireEveryTime(modulePath)
+  }
+}
+
 /**
  * Reads the Cypress config JSON file (Cypress v9) and returns the relevant properties
  */
@@ -32,7 +41,7 @@ function getConfigJson(filename = 'cypress.json') {
 function getConfigJs(filename) {
   const jsFile = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', jsFile)
-  const definedConfig = requireEveryTime(jsFile)
+  const definedConfig = importFresh(jsFile)
   return definedConfig
 }
 
@@ -48,7 +57,7 @@ function getConfigTs(filename) {
   })
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
-  const definedConfig = requireEveryTime(configFilename)
+  const definedConfig = importFresh(configFilename)
   debug('loaded config %o', definedConfig)
   if (definedConfig && definedConfig.default) {
     // due to TS / ES6 module transpile we got the default export
