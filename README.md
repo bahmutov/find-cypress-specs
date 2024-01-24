@@ -376,15 +376,16 @@ You can use this module via its NPM module API.
 const { getSpecs } = require('find-cypress-specs')
 // somewhere in the cypress.config.js
 setupNodeEvents(on, config) {
-  const specs = getSpecs(config)
-  // specs is a list of filenames
+  getSpecs(config).then(specs => {
+    // specs is a list of filenames
+  })
 }
 ```
 
 You can pass the `config` object to the `getSpecs` method. If there is no `config` parameter, it will read the config file automatically.
 
 ```js
-const specs = getSpecs({
+const specs = await getSpecs({
   e2e: {
     specPattern: '*/e2e/featureA/*.cy.ts',
   },
@@ -398,7 +399,7 @@ Returns an object with individual test information
 
 ```js
 const { getTests } = require('find-cypress-specs')
-const { jsonResults, tagTestCounts } = getTests()
+const { jsonResults, tagTestCounts } = await getTests()
 // jsonResults is an object
 // with an entry per spec file
 ```

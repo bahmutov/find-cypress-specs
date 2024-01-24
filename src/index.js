@@ -406,9 +406,9 @@ function findChangedFiles(branch, useParent) {
 /**
  * Collects all specs and for each finds all suits and tests with their tags.
  */
-function getTests(specs, options = {}) {
+async function getTests(specs, options = {}) {
   if (!specs) {
-    specs = getSpecs()
+    specs = await getSpecs()
   }
 
   const { tags, tagged, skipped } = options

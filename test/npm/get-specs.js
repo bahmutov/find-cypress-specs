@@ -14,9 +14,9 @@ test('finds the specs', (t) => {
   ])
 })
 
-test('finds the specs with custom spec pattern', (t) => {
+test('finds the specs with custom spec pattern', async (t) => {
   t.plan(1)
-  const specs = getSpecs({
+  const specs = await getSpecs({
     e2e: {
       specPattern: '*/e2e/featureA/*.cy.ts',
     },
@@ -24,22 +24,22 @@ test('finds the specs with custom spec pattern', (t) => {
   t.deepEqual(specs, ['cypress/e2e/featureA/user.cy.ts'])
 })
 
-test('returns an empty list for unknown spec type', (t) => {
+test('returns an empty list for unknown spec type', async (t) => {
   t.plan(1)
-  const specs = getSpecs({}, 'api')
+  const specs = await getSpecs({}, 'api')
   t.deepEqual(specs, [])
 })
 
-test('returns a list of component specs', (t) => {
+test('returns a list of component specs', async (t) => {
   t.plan(1)
-  const specs = getSpecs(undefined, 'component')
+  const specs = await getSpecs(undefined, 'component')
   t.deepEqual(specs, [
     'test-components/comp1.cy.js',
     'test-components/comp2.cy.ts',
   ])
 })
 
-test('finds the specs passing resolved config (e2e)', (t) => {
+test('finds the specs passing resolved config (e2e)', async (t) => {
   // imagine we are getting the config in the "e2e setupNodeEvents"
   const config = {
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
@@ -47,7 +47,7 @@ test('finds the specs passing resolved config (e2e)', (t) => {
     testingType: 'e2e',
   }
   t.plan(1)
-  const specs = getSpecs(config)
+  const specs = await getSpecs(config)
   t.deepEqual(specs, [
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
