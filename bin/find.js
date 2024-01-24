@@ -72,24 +72,10 @@ const args = arg({
 
 debug('arguments %o', args)
 
-if (args['--test-counts']) {
-  debug('finding test counts')
-  const { nE2E, nComponent } = getTestCounts()
-  console.log(
-    '%d e2e %s, %d component %s',
-    nE2E,
-    pluralize('test', nE2E),
-    nComponent,
-    pluralize('test', nComponent),
-  )
-  if (args['--update-badge']) {
-    debug('updating the README test count badge')
-    updateBadge({ nE2E, nComponent })
-  }
-} else {
+async function run() {
   const specType = args['--component'] ? 'component' : 'e2e'
 
-  const specs = getSpecs(undefined, specType)
+  const specs = await getSpecs(undefined, specType)
 
   // if the user passes "--tagged ''" we want to find the specs
   // but then filter them all out
@@ -301,4 +287,22 @@ if (args['--test-counts']) {
       console.log(specs.join(','))
     }
   }
+}
+
+if (args['--test-counts']) {
+  debug('finding test counts')
+  const { nE2E, nComponent } = getTestCounts()
+  console.log(
+    '%d e2e %s, %d component %s',
+    nE2E,
+    pluralize('test', nE2E),
+    nComponent,
+    pluralize('test', nComponent),
+  )
+  if (args['--update-badge']) {
+    debug('updating the README test count badge')
+    updateBadge({ nE2E, nComponent })
+  }
+} else {
+  run().catch((e) => console.error(e))
 }

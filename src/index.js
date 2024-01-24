@@ -10,7 +10,7 @@ const globby = require('globby')
 const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
-const requireEveryTime = require('require-and-forget')
+const importFresh = require('./import-helper')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
@@ -29,14 +29,14 @@ function getConfigJson(filename = 'cypress.json') {
   return options
 }
 
-function getConfigJs(filename) {
+async function getConfigJs(filename) {
   const jsFile = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', jsFile)
-  const definedConfig = requireEveryTime(jsFile)
+  const definedConfig = await importFresh(jsFile)
   return definedConfig
 }
 
-function getConfigTs(filename) {
+async function getConfigTs(filename) {
   // handle ts modules without "type: module"
   // https://github.com/bahmutov/find-cypress-specs/issues/222
   const tsNode = require('ts-node')
@@ -48,7 +48,7 @@ function getConfigTs(filename) {
   })
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
-  const definedConfig = requireEveryTime(configFilename)
+  const definedConfig = await importFresh(configFilename)
   debug('loaded config %o', definedConfig)
   if (definedConfig && definedConfig.default) {
     // due to TS / ES6 module transpile we got the default export
@@ -59,15 +59,15 @@ function getConfigTs(filename) {
   return definedConfig
 }
 
-function getConfig() {
+async function getConfig() {
   if (typeof process.env.CYPRESS_CONFIG_FILE !== 'undefined') {
     const configFile = process.env.CYPRESS_CONFIG_FILE
     if (configFile.endsWith('.js')) {
       debug(`found file ${configFile}`)
-      return getConfigJs(`./${configFile}`)
+      return await getConfigJs(`./${configFile}`)
     } else if (configFile.endsWith('.ts')) {
       debug(`found file ${configFile}`)
-      return getConfigTs(`./${configFile}`)
+      return await getConfigTs(`./${configFile}`)
     } else if (configFile.endsWith('.json')) {
       debug(`found file ${configFile}`)
       return getConfigJson(`./${configFile}`)
@@ -79,7 +79,7 @@ function getConfig() {
 
   if (fs.existsSync('./cypress.config.js')) {
     debug('found file cypress.config.js')
-    return getConfigJs('./cypress.config.js')
+    return await getConfigJs('./cypress.config.js')
   }
 
   if (fs.existsSync('./cypress.config.ts')) {
@@ -226,9 +226,9 @@ function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
   return filtered
 }
 
-function getSpecs(options, type, returnAbsolute = false) {
+async function getSpecs(options, type, returnAbsolute = false) {
   if (typeof options === 'undefined') {
-    options = getConfig()
+    options = await getConfig()
     if (typeof type === 'undefined') {
       type = 'e2e'
     }
