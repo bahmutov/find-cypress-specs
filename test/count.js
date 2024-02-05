@@ -2,7 +2,7 @@ const test = require('ava')
 const input = require('./tagged.json')
 const { addCounts } = require('../src/count')
 
-test('counts all tests', (t) => {
+test('counts all tests', async (t) => {
   t.plan(2)
   const json = JSON.parse(JSON.stringify(input))
   addCounts(json)

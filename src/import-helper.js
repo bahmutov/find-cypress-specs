@@ -1,28 +1,29 @@
 const Module = require('module')
 const { isAbsolute } = require('path')
 const requireAndForget = require('require-and-forget')
+const { register } = require('node:module')
+const { pathToFileURL } = require('node:url')
+
+register('tsx/esm', {
+  parentURL: pathToFileURL(__filename),
+  data: true,
+})
+// const tsNode = require('ts-node')
+// tsNode.register({
+//   transpileOnly: true,
+//   compilerOptions: {
+//     module: 'esnext',
+//   },
+//   esm: true,
+// })
 
 // @see https://github.com/TypeStrong/ts-node/discussions/1290
 async function importFresh(specifier, module) {
-  if (isAbsolute) {
-    console.log("good ol' require")
-    return requireAndForget(specifier)
-  }
-  let resolvedPath
   try {
-    const req = Module.createRequire(module.filename)
-    try {
-      resolvedPath = req.resolve(Path.posix.join(specifier, 'package.json'))
-    } catch {
-      resolvedPath = req.resolve(specifier)
-    }
+    return requireAndForget(specifier)
   } catch {
-    throw new Error(
-      `Unable to locate module "${specifier}" relative to "${module?.filename}" using the CommonJS resolver.  Consider passing an absolute path to the target module.`,
-    )
+    return import(`${specifier}?${Date.now()}`)
   }
-  console.log('trying import')
-  return import(`${resolvedPath}?${Date.now()}`)
 }
 
 module.exports = importFresh

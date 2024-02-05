@@ -39,6 +39,7 @@ async function getConfigJs(filename) {
 async function getConfigTs(filename) {
   // handle ts modules without "type: module"
   // https://github.com/bahmutov/find-cypress-specs/issues/222
+  /*
   const tsNode = require('ts-node')
   tsNode.register({
     transpileOnly: true,
@@ -46,6 +47,7 @@ async function getConfigTs(filename) {
       module: 'commonjs',
     },
   })
+  */
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
   const definedConfig = await importFresh(configFilename)

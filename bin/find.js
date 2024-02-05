@@ -206,7 +206,7 @@ async function run() {
   } else if (args['--names'] || args['--tags'] || isTaggedPresent) {
     // counts the number of tests for each tag across all specs
     debug('count number of tests')
-    const { jsonResults, tagTestCounts } = getTests(specs, {
+    const { jsonResults, tagTestCounts } = await getTests(specs, {
       tags: args['--tags'],
       tagged: args['--tagged'],
       skipped: args['--skipped'],
@@ -290,19 +290,22 @@ async function run() {
 }
 
 if (args['--test-counts']) {
-  debug('finding test counts')
-  const { nE2E, nComponent } = getTestCounts()
-  console.log(
-    '%d e2e %s, %d component %s',
-    nE2E,
-    pluralize('test', nE2E),
-    nComponent,
-    pluralize('test', nComponent),
-  )
-  if (args['--update-badge']) {
-    debug('updating the README test count badge')
-    updateBadge({ nE2E, nComponent })
+  async function testCounts() {
+    debug('finding test counts')
+    const { nE2E, nComponent } = await getTestCounts()
+    console.log(
+      '%d e2e %s, %d component %s',
+      nE2E,
+      pluralize('test', nE2E),
+      nComponent,
+      pluralize('test', nComponent),
+    )
+    if (args['--update-badge']) {
+      debug('updating the README test count badge')
+      updateBadge({ nE2E, nComponent })
+    }
   }
+  testCounts().catch((e) => console.error(e))
 } else {
   run().catch((e) => console.error(e))
 }

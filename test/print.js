@@ -6,7 +6,7 @@ const {
 const test = require('ava')
 const input = require('./tagged.json')
 
-test('prints tests from one file', (t) => {
+test('prints tests from one file', async (t) => {
   t.plan(2)
   const filename = 'cypress/e2e/featureA/user.js'
   const fileInfo = input[filename]
@@ -19,7 +19,7 @@ test('prints tests from one file', (t) => {
   t.snapshot(str)
 })
 
-test('prints tests with inner suites', (t) => {
+test('prints tests with inner suites', async (t) => {
   t.plan(2)
   const filename = 'cypress/e2e/spec.js'
   const fileInfo = input[filename]
@@ -32,7 +32,7 @@ test('prints tests with inner suites', (t) => {
   t.snapshot(str)
 })
 
-test('prints all tests', (t) => {
+test('prints all tests', async (t) => {
   t.plan(2)
   const copy = JSON.parse(JSON.stringify(input))
   const str = stringAllInfo(copy)
@@ -43,7 +43,7 @@ test('prints all tests', (t) => {
   t.snapshot(str)
 })
 
-test('prints markdown', (t) => {
+test('prints markdown', async (t) => {
   t.plan(2)
   const copy = JSON.parse(JSON.stringify(input))
   const str = stringMarkdownTests(copy)

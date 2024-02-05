@@ -2,7 +2,7 @@ const test = require('ava')
 const input = require('./tagged.json')
 const { pickTaggedTests, pickTaggedTestsFrom } = require('../src/tagged')
 
-test('filters a single array of tests', (t) => {
+test('filters a single array of tests', async (t) => {
   const tests = [
     {
       name: 'works',
@@ -26,7 +26,7 @@ test('filters a single array of tests', (t) => {
   ])
 })
 
-test('filters a single array of tests using multiple tags', (t) => {
+test('filters a single array of tests using multiple tags', async (t) => {
   const tests = [
     {
       name: 'works',
@@ -46,7 +46,7 @@ test('filters a single array of tests using multiple tags', (t) => {
   t.deepEqual(tests, copy)
 })
 
-test('filters a single array of tests using some tags', (t) => {
+test('filters a single array of tests using some tags', async (t) => {
   const tests = [
     {
       name: 'works',
@@ -72,7 +72,7 @@ test('filters a single array of tests using some tags', (t) => {
   ])
 })
 
-test('filters tests tagged @alpha', (t) => {
+test('filters tests tagged @alpha', async (t) => {
   t.plan(2)
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, '@alpha')
@@ -97,7 +97,7 @@ test('filters tests tagged @alpha', (t) => {
   t.deepEqual(result, expected)
 })
 
-test('filters deep tests tagged @user', (t) => {
+test('filters deep tests tagged @user', async (t) => {
   t.plan(1)
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, '@user')
@@ -135,7 +135,7 @@ test('filters deep tests tagged @user', (t) => {
   t.deepEqual(result, expected)
 })
 
-test('applies tag from the suite to the tests', (t) => {
+test('applies tag from the suite to the tests', async (t) => {
   t.plan(1)
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, '@main')
@@ -169,7 +169,7 @@ test('applies tag from the suite to the tests', (t) => {
   t.deepEqual(result, expected)
 })
 
-test('applies multiple tags', (t) => {
+test('applies multiple tags', async (t) => {
   t.plan(1)
   const json = JSON.parse(JSON.stringify(input))
   const result = pickTaggedTestsFrom(json, ['@main', '@user'])
@@ -225,7 +225,7 @@ test('applies multiple tags', (t) => {
   t.deepEqual(result, expected)
 })
 
-test('includes tests required by the parent required tag', (t) => {
+test('includes tests required by the parent required tag', async (t) => {
   const json = {
     'cypress/integration/spec1.js': {
       counts: {

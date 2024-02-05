@@ -4,9 +4,9 @@ const { toRelative } = require('../../src/files')
 const sinon = require('sinon')
 const path = require('path')
 
-test('finds the specs', (t) => {
+test('finds the specs', async (t) => {
   t.plan(1)
-  const specs = getSpecs()
+  const specs = await getSpecs()
   t.deepEqual(specs, [
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
@@ -55,21 +55,21 @@ test('finds the specs passing resolved config (e2e)', async (t) => {
   ])
 })
 
-test('finds the specs passing resolved config (component)', (t) => {
+test('finds the specs passing resolved config (component)', async (t) => {
   // imagine we are getting the config in the "component setupNodeEvents"
   const config = {
     specPattern: 'test-components/*.cy.{js,jsx,ts,tsx}',
     testingType: 'component',
   }
   t.plan(1)
-  const specs = getSpecs(config)
+  const specs = await getSpecs(config)
   t.deepEqual(specs, [
     'test-components/comp1.cy.js',
     'test-components/comp2.cy.ts',
   ])
 })
 
-test('supports list of specs in specPattern', (t) => {
+test('supports list of specs in specPattern', async (t) => {
   const specPattern = [
     'cypress/e2e/spec.cy.js',
     'cypress/e2e/featureA/user.cy.ts',
@@ -79,11 +79,11 @@ test('supports list of specs in specPattern', (t) => {
     testingType: 'e2e',
   }
   t.plan(1)
-  const specs = getSpecs(config)
+  const specs = await getSpecs(config)
   t.deepEqual(specs, specPattern)
 })
 
-test('supports wildcards in the list of specs', (t) => {
+test('supports wildcards in the list of specs', async (t) => {
   const specPattern = [
     'cypress/e2e/spec*.cy.js',
     'cypress/e2e/featureA/user*.cy.ts',
@@ -93,7 +93,7 @@ test('supports wildcards in the list of specs', (t) => {
     testingType: 'e2e',
   }
   t.plan(1)
-  const specs = getSpecs(config)
+  const specs = await getSpecs(config)
   t.deepEqual(specs, [
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
@@ -101,7 +101,7 @@ test('supports wildcards in the list of specs', (t) => {
   ])
 })
 
-test('returns absolute filenames', (t) => {
+test('returns absolute filenames', async (t) => {
   const specPattern = [
     'cypress/e2e/spec*.cy.js',
     'cypress/e2e/featureA/user*.cy.ts',
@@ -111,8 +111,9 @@ test('returns absolute filenames', (t) => {
     testingType: 'e2e',
   }
   t.plan(2)
-  const specs = getSpecs(config, 'e2e', true)
+  const specs = await getSpecs(config, 'e2e', true)
   const cwd = process.cwd()
+  console.log('specs', specs, cwd)
   t.truthy(specs.every((filename) => filename.startsWith(cwd)))
 
   const relativeSpecs = toRelative(specs)
@@ -123,7 +124,7 @@ test('returns absolute filenames', (t) => {
   ])
 })
 
-test('uses project root', (t) => {
+test('uses project root', async (t) => {
   const projectRoot = process.cwd()
   console.log('project root', projectRoot)
   sinon.stub(process, 'cwd').returns(path.join(projectRoot, 'mocks/my-app'))
@@ -135,6 +136,6 @@ test('uses project root', (t) => {
     },
   }
   t.plan(1)
-  const specs = getSpecs(config)
+  const specs = await getSpecs(config)
   t.deepEqual(specs, ['mocks/my-app/e2e/e2e-tests/spec-a.cy.js'])
 })

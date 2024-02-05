@@ -2,7 +2,7 @@ const test = require('ava')
 const { findCypressSpecs } = require('..')
 const { toRelative } = require('../src/files')
 
-test('string ignore pattern v9', (t) => {
+test('string ignore pattern v9', async (t) => {
   t.plan(1)
   const specs = findCypressSpecs({
     integrationFolder: 'cypress/e2e',
@@ -17,7 +17,7 @@ test('string ignore pattern v9', (t) => {
   ])
 })
 
-test('array string ignore pattern v10', (t) => {
+test('array string ignore pattern v10', async (t) => {
   t.plan(1)
 
   const specs = findCypressSpecs({
@@ -35,7 +35,7 @@ test('array string ignore pattern v10', (t) => {
   ])
 })
 
-test('string ignore pattern v10', (t) => {
+test('string ignore pattern v10', async (t) => {
   t.plan(1)
   const specs = findCypressSpecs({
     version: '10.0.0',
@@ -51,7 +51,7 @@ test('string ignore pattern v10', (t) => {
   ])
 })
 
-test('specific files', (t) => {
+test('specific files', async (t) => {
   t.plan(1)
   const specs = findCypressSpecs({
     version: '10.0.0',
@@ -64,7 +64,7 @@ test('specific files', (t) => {
   t.deepEqual(specs, ['cypress/e2e/featureA/user.cy.ts'])
 })
 
-test('list of specific files', (t) => {
+test('list of specific files', async (t) => {
   t.plan(1)
   const specs = findCypressSpecs({
     version: '10.0.0',
@@ -82,7 +82,7 @@ test('list of specific files', (t) => {
   ])
 })
 
-test('returns absolute filenames', (t) => {
+test('returns absolute filenames', async (t) => {
   t.plan(1)
   const specs = toRelative(
     findCypressSpecs(
