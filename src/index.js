@@ -12,15 +12,21 @@ const shell = require('shelljs')
 const pluralize = require('pluralize')
 const requireEveryTime = require('require-and-forget')
 const importSync = require('import-sync')
+const { register } = require('node:module')
+const { pathToFileURL } = require('node:url')
+const tsImport = require('ts-import')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
 function importFresh(modulePath) {
   try {
-    return importSync(`${modulePath}`)
+    return tsImport.loadSync(modulePath)
+    // return importSync(`${modulePath}`)
+    // return require(modulePath)
   } catch (error) {
     console.error('error', error)
-    return requireEveryTime(modulePath)
+    console.warn('defer to require every time')
+    // return requireEveryTime(modulePath)
   }
 }
 
@@ -47,15 +53,25 @@ function getConfigJs(filename) {
 }
 
 function getConfigTs(filename) {
+  console.log('Found TS File')
+  register('tsx/esm', {
+    parentURL: pathToFileURL(__filename),
+    data: true,
+  })
+
   // handle ts modules without "type: module"
   // https://github.com/bahmutov/find-cypress-specs/issues/222
+  /*
   const tsNode = require('ts-node')
   tsNode.register({
     transpileOnly: true,
     compilerOptions: {
       module: 'commonjs',
+      // module: 'ESNext',
+      // moduleResolution: 'Bundler',
     },
   })
+  */
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
   const definedConfig = importFresh(configFilename)
