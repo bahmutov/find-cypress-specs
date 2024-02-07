@@ -11,24 +11,10 @@ const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
 const requireEveryTime = require('require-and-forget')
-const importSync = require('import-sync')
-const { register } = require('node:module')
-const { pathToFileURL } = require('node:url')
-const tsImport = require('ts-import')
+const requireAndForget = require('require-and-forget')
+require('@esbuild-kit/cjs-loader')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
-
-function importFresh(modulePath) {
-  try {
-    return tsImport.loadSync(modulePath)
-    // return importSync(`${modulePath}`)
-    // return require(modulePath)
-  } catch (error) {
-    console.error('error', error)
-    console.warn('defer to require every time')
-    // return requireEveryTime(modulePath)
-  }
-}
 
 /**
  * Reads the Cypress config JSON file (Cypress v9) and returns the relevant properties
@@ -48,33 +34,22 @@ function getConfigJson(filename = 'cypress.json') {
 function getConfigJs(filename) {
   const jsFile = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', jsFile)
-  const definedConfig = importFresh(jsFile)
+  const definedConfig = requireAndForget(jsFile)
   return definedConfig
 }
 
 function getConfigTs(filename) {
-  console.log('Found TS File')
-  register('tsx/esm', {
-    parentURL: pathToFileURL(__filename),
-    data: true,
-  })
-
-  // handle ts modules without "type: module"
   // https://github.com/bahmutov/find-cypress-specs/issues/222
-  /*
   const tsNode = require('ts-node')
   tsNode.register({
     transpileOnly: true,
     compilerOptions: {
       module: 'commonjs',
-      // module: 'ESNext',
-      // moduleResolution: 'Bundler',
     },
   })
-  */
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
-  const definedConfig = importFresh(configFilename)
+  const definedConfig = requireAndForget(configFilename)
   debug('loaded config %o', definedConfig)
   if (definedConfig && definedConfig.default) {
     // due to TS / ES6 module transpile we got the default export
