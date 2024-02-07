@@ -330,7 +330,7 @@ $ CYPRESS_CONFIG_FILE=path/to/cypress.config.js npx find-cypres-specs ...
 You can return absolute filenames to the found specs
 
 ```js
-getSpecs(config, 'e2e|component', true)
+await getSpecs(config, 'e2e|component', true)
 ```
 
 ## Details
