@@ -11,7 +11,10 @@ const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
 const requireEveryTime = require('require-and-forget')
-const requireAndForget = require('require-and-forget')
+
+// Require CJS loader to resolve:
+// https://github.com/bahmutov/find-cypress-specs/issues/228
+// https://github.com/bahmutov/find-cypress-specs/issues/222
 require('@esbuild-kit/cjs-loader')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
@@ -34,22 +37,14 @@ function getConfigJson(filename = 'cypress.json') {
 function getConfigJs(filename) {
   const jsFile = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', jsFile)
-  const definedConfig = requireAndForget(jsFile)
+  const definedConfig = requireEveryTime(jsFile)
   return definedConfig
 }
 
 function getConfigTs(filename) {
-  // https://github.com/bahmutov/find-cypress-specs/issues/222
-  const tsNode = require('ts-node')
-  tsNode.register({
-    transpileOnly: true,
-    compilerOptions: {
-      module: 'commonjs',
-    },
-  })
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
-  const definedConfig = requireAndForget(configFilename)
+  const definedConfig = requireEveryTime(configFilename)
   debug('loaded config %o', definedConfig)
   if (definedConfig && definedConfig.default) {
     // due to TS / ES6 module transpile we got the default export
