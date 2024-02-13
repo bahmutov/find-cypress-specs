@@ -1,0 +1,16 @@
+{
+  "name": "test-modules",
+  "version": "1.0.0",
+  "description": "Test finding Cypress specs in module projects",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "cypress run",
+    "demo-tests": "DEBUG=find-cypress-specs node ../bin/find",
+    "deps": "../node_modules/.bin/spec-change --folder cypress"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

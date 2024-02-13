@@ -50,6 +50,11 @@ jobs:
       - name: Loading cached traced dependencies
         run: node ./bin/find --branch main --parent --trace-imports cypress --cache-trace
 
+      # module and import support
+      - name: Test module support
+        run: npm run demo-tests
+        working-directory: test-modules
+
       - name: Test cypress.json project (Cypress v9)
         run: npm run demo-tests --prefix test-json
 
