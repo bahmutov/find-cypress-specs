@@ -5,11 +5,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         env:
           DEBUG: 'cypress:server:specs'
 
@@ -23,6 +23,11 @@ jobs:
 
       - name: Print dependencies between tests and utils 💻
         run: npm run deps
+
+      # module and import support
+      - name: Test module support
+        run: npm run demo-tests
+        working-directory: test-modules
 
       # prints all specs and tests inside each spec
       - name: Demo test names 💻

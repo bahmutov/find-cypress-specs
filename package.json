@@ -76,6 +76,6 @@
     "require-and-forget": "^1.0.1",
     "shelljs": "^0.8.5",
     "spec-change": "^1.10.0",
-    "ts-node": "^10.9.1"
+    "tsx": "^4.7.1"
   }
 }
