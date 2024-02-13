@@ -290,7 +290,7 @@ $ npx find-cypress-specs --names --skipped --count
 
 ## cypress.config.ts
 
-If the project uses TypeScript and `cypress.config.ts` then this module uses [@esbuild-kit/cjs-loader](https://github.com/esbuild-kit/cjs-loader) to load the config and fetch the spec pattern.
+If the project uses TypeScript and `cypress.config.ts` then this module uses [tsx](https://github.com/privatenumber/tsx) to load the config and fetch the spec pattern.
 
 If you are using `import` keyword in your `cypress.config.ts` you might get an error like this:
 
