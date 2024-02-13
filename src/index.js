@@ -15,7 +15,8 @@ const requireEveryTime = require('require-and-forget')
 // Require CJS loader to resolve:
 // https://github.com/bahmutov/find-cypress-specs/issues/228
 // https://github.com/bahmutov/find-cypress-specs/issues/222
-require('@esbuild-kit/cjs-loader')
+// https://github.com/privatenumber/tsx
+require('tsx/cjs')
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
