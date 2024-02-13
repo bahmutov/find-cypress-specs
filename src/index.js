@@ -142,8 +142,13 @@ function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
   if (type !== 'e2e' && type !== 'component') {
     throw new Error(`Unknown spec type ${type}`)
   }
+  // handle the interoperability loading of default export
+  if (Object.keys(opts).length === 1 && Object.keys(opts)[0] === 'default') {
+    opts = opts.default
+  }
 
   if (!(type in opts)) {
+    debug('options %o', opts)
     throw new Error(`Missing "${type}" object in the Cypress config object`)
   }
   const e2eDefaults = {
