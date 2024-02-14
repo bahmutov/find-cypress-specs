@@ -195,7 +195,7 @@ if (args['--test-counts']) {
     if (args['--specs-per-machine'] > 0 && args['--max-machines'] > 0) {
       const specsPerMachine = args['--specs-per-machine']
       const maxMachines = args['--max-machines']
-      machinesNeeded = Math.max(
+      machinesNeeded = Math.min(
         Math.ceil(changedSpecs.length / specsPerMachine),
         maxMachines,
       )
