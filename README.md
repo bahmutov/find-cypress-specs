@@ -38,6 +38,16 @@ $ npx find-cypress-specs --branch main
 # prints only some specs, the ones that have changed against the "origin/main"
 ```
 
+## find number of machines
+
+If we find all the changed specs to run, we might need to decide how many machines we need. We can do a rough job by specifying the number of specs per machine plus the max number.
+
+```
+$ npx find-cypress-specs --branch main --specs-per-machine 4 --max-machines 5
+```
+
+For now, it is only useful when setting the GHA outputs.
+
 ## set GitHub Actions outputs
 
 If you add `--set-gha-outputs` command line switch, then the number of changed specs and the comma-separated file list will be set as GH Actions outputs `changedSpecsN` and `changedSpecs`. See [pr.yml](./.github/workflows/pr.yml) for example
@@ -51,6 +61,8 @@ If you add `--set-gha-outputs` command line switch, then the number of changed s
 - name: Print set outputs
   run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}
 ```
+
+If you set the number of machines, it will set the output `machinesNeeded`
 
 ## Write GitHub Actions job summary
 

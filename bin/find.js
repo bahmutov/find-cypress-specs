@@ -53,6 +53,9 @@ const args = arg({
   '--update-badge': Boolean,
   // output the list in Markdown format
   '--markdown': Boolean,
+  // optional: output the number of machines needed to run the tests
+  '--specs-per-machine': Number,
+  '--max-machines': Number,
   //
   // aliases
   '-n': '--names',
@@ -188,13 +191,35 @@ if (args['--test-counts']) {
       })
     }
 
+    let machinesNeeded
+    if (args['--specs-per-machine'] > 0 && args['--max-machines'] > 0) {
+      const specsPerMachine = args['--specs-per-machine']
+      const maxMachines = args['--max-machines']
+      machinesNeeded = Math.max(
+        Math.ceil(changedSpecs.length / specsPerMachine),
+        maxMachines,
+      )
+      debug(
+        'specs per machine %d with max %d machines',
+        specsPerMachine,
+        maxMachines,
+      )
+      debug(
+        'from %d specs, set %d output machinesNeeded',
+        changedSpecs.length,
+        machinesNeeded,
+      )
+    }
+
     if (args['--set-gha-outputs']) {
       debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
       debug('changedSpecsN %d', changedSpecs.length)
       debug('plus changedSpecs')
       core.setOutput('changedSpecsN', changedSpecs.length)
       core.setOutput('changedSpecs', changedSpecs.join(','))
+      core.setOutput('machinesNeeded', machinesNeeded)
     }
+
     if (args['--gha-summary']) {
       debug('writing GitHub Actions summary')
       const summary = changedSpecs.length
