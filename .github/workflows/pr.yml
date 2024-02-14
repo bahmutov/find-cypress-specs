@@ -31,10 +31,10 @@ jobs:
       - name: Print specs changed against the parent of this branch 🌳
         # and set GitHub Actions output
         id: step1
-        run: node ./bin/find --branch main --parent --set-gha-outputs --gha-summary
+        run: node ./bin/find --branch main --parent --set-gha-outputs --gha-summary --specs-per-machine 4 --max-machines 2
 
       - name: Print set outputs
-        run: echo ${{ steps.step1.outputs.changedSpecsN }} ${{ steps.step1.outputs.changedSpecs }}
+        run: echo ${{ steps.step1.outputs.changedSpecsN }} specs ${{ steps.step1.outputs.changedSpecs }} machines ${{ steps.step1.outputs.machinesNeeded }}
 
       - name: Print changed specs if you trace imports and requires 🔭
         # in the folder "cypress"
