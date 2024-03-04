@@ -10,6 +10,9 @@
   "bin": {
     "find-cypress-specs": "bin/find.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "test": "ava",
     "prod-deps": "npm audit --report --omit dev",
