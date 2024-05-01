@@ -1,0 +1,9 @@
+{
+  "include": ["cypress.config.ts", "cypress/e2e/*.cy.ts"],
+  "compilerOptions": {
+    "baseUrl": "cypress",
+    "paths": {
+      "@support/*": ["support/*"]
+    }
+  }
+}

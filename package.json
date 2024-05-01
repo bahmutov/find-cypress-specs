@@ -78,7 +78,7 @@
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.0.1",
     "shelljs": "^0.8.5",
-    "spec-change": "^1.10.0",
+    "spec-change": "^1.11.0",
     "tsx": "^4.7.1"
   }
 }
