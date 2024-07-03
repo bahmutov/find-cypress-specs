@@ -38,6 +38,16 @@ $ npx find-cypress-specs --branch main
 # prints only some specs, the ones that have changed against the "origin/main"
 ```
 
+## find specs by part of the test title
+
+You can grep all test titles (only the test titles, not the suite names) and find the list of specs
+
+```bash
+$ npx find-cypress-specs --grep "works, needs"
+```
+
+This will find all specs with tests that have "works" in the title or "needs" in the title and output the list of specs. If you use `--set-gha-outputs` and GitHub Actions, it sets the outputs `grepSpecs` and `grepSpecsN`.
+
 ## find number of machines
 
 If we find all the changed specs to run, we might need to decide how many machines we need. We can do a rough job by specifying the number of specs per machine plus the max number.
