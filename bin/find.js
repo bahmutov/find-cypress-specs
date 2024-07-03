@@ -337,16 +337,14 @@ if (args['--test-counts']) {
     debug('finding tests with title containing "%s"', grep)
     const { jsonResults } = getTests(specs)
     const filtered = filterByGrep(jsonResults, grep)
-    debug(filtered)
-    console.log(filtered.join(','))
-    if (args['--set-gha-outputs']) {
-      debug('printing the spec names list only')
-      const specNames = filtered.join(',')
-      console.log(specNames)
+    debug('printing the spec names list only')
+    const specNames = filtered.join(',')
+    console.log(specNames)
 
+    if (args['--set-gha-outputs']) {
       debug(
         'setting GitHub Actions outputs grepSpecsN to %d and grepSpecs',
-        specNames.length,
+        filtered.length,
       )
       core.setOutput('grepSpecsN', filtered.length)
       core.setOutput('grepSpecs', specNames)

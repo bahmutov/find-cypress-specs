@@ -85,6 +85,9 @@ jobs:
       - name: Test cypress.json project (Cypress v9)
         run: npm run demo-tests --prefix test-json
 
+      - name: Show finding specs by part of the test title
+        run: node ./bin/find.js --grep "something" --set-gha-outputs
+
       - name: Test parsing broken JS file 🐞
         run: npm run test-names --prefix test-parsing-error
 
