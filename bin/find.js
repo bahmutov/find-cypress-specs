@@ -5,6 +5,7 @@ const { getSpecs, findChangedFiles, getTests } = require('../src')
 const { getTestCounts } = require('../src/tests-counts')
 const { stringAllInfo, stringMarkdownTests } = require('../src/print')
 const { updateBadge } = require('../src/badge')
+const { filterByGrep } = require('../src/grep')
 
 const fs = require('fs')
 const path = require('path')
@@ -56,6 +57,8 @@ const args = arg({
   // optional: output the number of machines needed to run the tests
   '--specs-per-machine': Number,
   '--max-machines': Number,
+  // find all specs and tests with part of the title
+  '--grep': String,
   //
   // aliases
   '-n': '--names',
@@ -327,6 +330,26 @@ if (args['--test-counts']) {
           core.setOutput('taggedSpecs', specNames)
         }
       }
+    }
+  } else if (args['--grep']) {
+    const grep = args['--grep']
+    // grep is a comma-separated string with parts of titles to find
+    debug('finding tests with title containing "%s"', grep)
+    const { jsonResults } = getTests(specs)
+    const filtered = filterByGrep(jsonResults, grep)
+    debug(filtered)
+    console.log(filtered.join(','))
+    if (args['--set-gha-outputs']) {
+      debug('printing the spec names list only')
+      const specNames = filtered.join(',')
+      console.log(specNames)
+
+      debug(
+        'setting GitHub Actions outputs grepSpecsN to %d and grepSpecs',
+        specNames.length,
+      )
+      core.setOutput('grepSpecsN', filtered.length)
+      core.setOutput('grepSpecs', specNames)
     }
   } else {
     if (args['--count']) {
