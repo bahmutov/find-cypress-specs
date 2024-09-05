@@ -65,6 +65,10 @@ function getJustTheTestNames(tests, parentName = '', justNames = []) {
   // console.log(justNames)
   // console.log('parent name "%s"', parentName)
 
+  if (!tests) {
+    return
+  }
+
   if (tests.type === 'test') {
     justNames.push(parentName + tests.name)
     return
