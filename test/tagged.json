@@ -28,6 +28,22 @@
             "type": "test"
           }
         ]
+      },
+      {
+        "name": "empty parent suite",
+        "type": "suite",
+        "suites": [
+          {
+            "name": "inner suite",
+            "type": "suite",
+            "tests": [
+              {
+                "name": "shows something!",
+                "type": "test"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
