@@ -10,3 +10,9 @@ describe('parent suite', { tags: '@main' }, () => {
     it('shows something!', { tags: '@user' }, () => {})
   })
 })
+
+describe('empty parent suite', () => {
+  context('inner suite', () => {
+    it('shows something!', () => {})
+  })
+})

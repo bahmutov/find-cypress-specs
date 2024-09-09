@@ -8,7 +8,7 @@ test('counts all tests', (t) => {
   addCounts(json)
   // console.dir(json, { depth: null })
   t.deepEqual(json['cypress/e2e/spec.js'].counts, {
-    tests: 2,
+    tests: 3,
     pending: 0,
   })
   t.deepEqual(json['cypress/e2e/featureA/user.js'].counts, {
