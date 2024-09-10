@@ -2,7 +2,7 @@
 
 > Find Cypress spec files using the config settings
 
-![Cypress tests](https://img.shields.io/badge/cy%20tests-E2E%205%20%7C%20component%202-blue)
+![Cypress tests](https://img.shields.io/badge/cy%20tests-E2E%206%20%7C%20component%202-blue)
 
 ```bash
 $ npx find-cypress-specs
