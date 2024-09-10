@@ -60,36 +60,37 @@ function stringAllInfo(allInfo, tagged) {
   }
 }
 
-function getJustTheTestNames(tests, parentName = '', justNames = []) {
-  // console.log(tests)
-  // console.log(justNames)
-  // console.log('parent name "%s"', parentName)
-
+function getJustTheTestMarkdown(tests, parentName = '', markdown = []) {
   if (!tests) {
     return
   }
 
+  const name = parentName + tests.name
+
   if (tests.type === 'test') {
-    justNames.push(parentName + tests.name)
+    const tags = tests?.tags?.join(', ') ?? ''
+
+    markdown.push(`| \`${name}\` | ${tags} |`)
+
     return
   } else if (tests.type === 'suite') {
-    const prefix = parentName
-      ? parentName + tests.name + ' / '
-      : tests.name + ' / '
-    getJustTheTestNames(tests.tests, prefix, justNames)
-    if (tests.suites) {
-      tests.suites.forEach((suite) => {
-        getJustTheTestNames(suite, prefix, justNames)
-      })
-    }
+    const prefix = `${name} / `
+
+    getJustTheTestMarkdown(tests.tests, prefix, markdown)
+
+    tests.suites?.forEach((suite) => {
+      getJustTheTestMarkdown(suite, prefix, markdown)
+    })
+
     return
   }
 
   // tests can include regular tests plus suites nodes
-  tests.forEach((testOrSuite) => {
-    getJustTheTestNames(testOrSuite, parentName, justNames)
-  })
-  return justNames
+  tests.forEach((testOrSuite) =>
+    getJustTheTestMarkdown(testOrSuite, parentName, markdown),
+  )
+
+  return markdown
 }
 
 /**
@@ -98,31 +99,25 @@ function getJustTheTestNames(tests, parentName = '', justNames = []) {
  * @returns {string}
  */
 function stringMarkdownTests(allInfo) {
+  const testWord = (counts) => pluralize('test', counts.tests, true)
+
   const counts = sumTestCounts(allInfo)
   const specNames = Object.keys(allInfo)
   const specWord = pluralize('Spec', specNames.length, true)
-  const testWord = pluralize('test', counts.tests, true)
 
-  const title = `| ${specWord} with ${testWord} |\n| --- |\n`
-  const allInfoString =
-    title +
-    specNames
-      .map((fileName) => {
-        const fileInfo = allInfo[fileName]
-        const n = fileInfo.counts.tests
-        // console.log(fileInfo)
+  const markdown = [
+    `| ${specWord} with ${testWord(counts)} | Tags |`,
+    '| --- | --- |',
+  ]
 
-        let specTest =
-          '| **`' + fileName + '`**' + ` (${n} ${pluralize('test', n)}) |\n`
-        const testNames = getJustTheTestNames(fileInfo.tests)
-        testNames.forEach((name) => {
-          specTest += '| `' + name + '` |\n'
-        })
-        return specTest
-      })
-      .join('')
+  specNames.forEach((fileName) => {
+    const { counts, tests } = allInfo[fileName]
 
-  return allInfoString
+    markdown.push(`| **\`${fileName}\`** (${testWord(counts)}) ||`)
+    markdown.push(...getJustTheTestMarkdown(tests))
+  })
+
+  return markdown.join('\n')
 }
 
 module.exports = {
