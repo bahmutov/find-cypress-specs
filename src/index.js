@@ -182,10 +182,11 @@ function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
     ? [options.excludeSpecPattern]
     : []
 
+  debug('ignore patterns %o', ignore)
   const userIgnoresNodeModules = ignore.some((pattern) =>
     pattern.includes('node_modules'),
   )
-  if (!userIgnoresNodeModules) {
+  if (userIgnoresNodeModules) {
     debug('user ignored node_modules')
   } else {
     debug('user did not ignore node_modules, adding it')
