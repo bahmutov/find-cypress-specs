@@ -1,0 +1,15 @@
+{
+  "name": "test-skip-node-modules",
+  "version": "1.0.0",
+  "description": "Test ignoring node_modules folder",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "demo-tests": "DEBUG=find-cypress-specs node ../bin/find",
+    "deps": "../node_modules/.bin/spec-change --folder cypress"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

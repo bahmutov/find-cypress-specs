@@ -223,3 +223,14 @@ test('counts all tags including required', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('skips specs in the node_modules automatically', async (t) => {
+  t.plan(2)
+  const result = await execa('node', ['../bin/find'], {
+    cwd: './test-skip-node-modules',
+    filter: ['code', 'stdout'],
+  })
+  // console.log(result)
+  t.false(result.includes('node_modules'))
+  t.snapshot(result)
+})
