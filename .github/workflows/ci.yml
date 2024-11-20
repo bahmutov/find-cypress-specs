@@ -122,7 +122,7 @@ jobs:
           echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Semantic Release 🚀
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@v4
         if: github.ref == 'refs/heads/main'
         with:
           branch: main
