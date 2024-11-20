@@ -70,13 +70,17 @@ function getConfig() {
       return getConfigJson(`./${configFile}`)
     }
     throw new Error(
-      'Config file should be .ts, .js or .json file even when using CYPRESS_CONFIG_FILE env var',
+      'Config file should be .ts, .js, cjs, or .json file even when using CYPRESS_CONFIG_FILE env var',
     )
   }
 
   if (fs.existsSync('./cypress.config.js')) {
     debug('found file cypress.config.js')
     return getConfigJs('./cypress.config.js')
+  }
+  if (fs.existsSync('./cypress.config.cjs')) {
+    debug('found file cypress.config.cjs')
+    return getConfigJs('./cypress.config.cjs')
   }
 
   if (fs.existsSync('./cypress.config.ts')) {
