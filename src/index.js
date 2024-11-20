@@ -59,7 +59,11 @@ function getConfigTs(filename) {
 function getConfig() {
   if (typeof process.env.CYPRESS_CONFIG_FILE !== 'undefined') {
     const configFile = process.env.CYPRESS_CONFIG_FILE
-    if (configFile.endsWith('.js') || configFile.endsWith('.cjs')) {
+    if (
+      configFile.endsWith('.js') ||
+      configFile.endsWith('.cjs') ||
+      configFile.endsWith('.mjs')
+    ) {
       debug(`found file ${configFile}`)
       return getConfigJs(`./${configFile}`)
     } else if (configFile.endsWith('.ts')) {
@@ -70,7 +74,7 @@ function getConfig() {
       return getConfigJson(`./${configFile}`)
     }
     throw new Error(
-      'Config file should be .ts, .js, cjs, or .json file even when using CYPRESS_CONFIG_FILE env var',
+      'Config file should be .ts, .js, cjs, mjs, or .json file even when using CYPRESS_CONFIG_FILE env var',
     )
   }
 
@@ -81,6 +85,10 @@ function getConfig() {
   if (fs.existsSync('./cypress.config.cjs')) {
     debug('found file cypress.config.cjs')
     return getConfigJs('./cypress.config.cjs')
+  }
+  if (fs.existsSync('./cypress.config.mjs')) {
+    debug('found file cypress.config.mjs')
+    return getConfigJs('./cypress.config.mjs')
   }
 
   if (fs.existsSync('./cypress.config.ts')) {
