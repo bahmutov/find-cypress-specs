@@ -59,7 +59,7 @@ function getConfigTs(filename) {
 function getConfig() {
   if (typeof process.env.CYPRESS_CONFIG_FILE !== 'undefined') {
     const configFile = process.env.CYPRESS_CONFIG_FILE
-    if (configFile.endsWith('.js')) {
+    if (configFile.endsWith('.js') || configFile.endsWith('.cjs')) {
       debug(`found file ${configFile}`)
       return getConfigJs(`./${configFile}`)
     } else if (configFile.endsWith('.ts')) {
