@@ -101,7 +101,7 @@ function getConfig() {
     return getConfigJson('./cypress.json')
   }
 
-  throw new Error('Config file should be .ts, .js or .json file')
+  throw new Error('Config file should be .ts, .js, .cjs, mjs, or .json file')
 }
 
 function findCypressSpecsV9(opts = {}, returnAbsolute = false) {
