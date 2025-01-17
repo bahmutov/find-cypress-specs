@@ -1,6 +1,11 @@
 const test = require('ava')
 const input = require('./tagged.json')
-const { pickTaggedTests, pickTaggedTestsFrom } = require('../src/tagged')
+const {
+  pickTaggedTests,
+  pickTaggedTestsFrom,
+  preprocessAndTags,
+  doTagsMatch,
+} = require('../src/tagged')
 
 test('filters a single array of tests', (t) => {
   const tests = [
@@ -46,6 +51,24 @@ test('filters a single array of tests using multiple tags', (t) => {
   t.deepEqual(tests, copy)
 })
 
+test('finds no tests with the given tag', (t) => {
+  const tests = [
+    {
+      name: 'works',
+      type: 'test',
+      tags: ['@user'],
+    },
+    {
+      name: 'needs to be written',
+      type: 'test',
+      tags: ['@alpha'],
+      pending: true,
+    },
+  ]
+  pickTaggedTests(tests, '@foo')
+  t.deepEqual(tests, [])
+})
+
 test('filters a single array of tests using some tags', (t) => {
   const tests = [
     {
@@ -60,7 +83,6 @@ test('filters a single array of tests using some tags', (t) => {
       pending: true,
     },
   ]
-  const copy = JSON.parse(JSON.stringify(tests))
   pickTaggedTests(tests, ['@not-found', '@alpha'])
   t.deepEqual(tests, [
     {
@@ -315,4 +337,76 @@ test('includes tests required by the parent required tag', (t) => {
       ],
     },
   })
+})
+
+test('preprocessAndTags', (t) => {
+  const and = preprocessAndTags(['@user+@sanity', '@foo+@bar', '@user'])
+  t.deepEqual(and, [['@user', '@sanity'], ['@foo', '@bar'], '@user'])
+})
+
+test('filters tests using AND tags', (t) => {
+  const tests = [
+    {
+      name: 'works',
+      type: 'test',
+      tags: ['@user', '@sanity'],
+    },
+    {
+      name: 'needs to be written',
+      type: 'test',
+      tags: ['@user'],
+      pending: true,
+    },
+  ]
+  pickTaggedTests(tests, '@user+@sanity')
+  // only the first test has BOTH tags
+  t.deepEqual(tests, [
+    {
+      name: 'works',
+      type: 'test',
+      tags: ['@user', '@sanity'],
+    },
+  ])
+})
+
+test('tags match with OR and AND', (t) => {
+  const tags = ['@user', '@sanity', '@foo']
+  t.true(
+    doTagsMatch(tags, ['@user+@sanity', '@bar']),
+    'one AND tag OR one other tag',
+  )
+  t.true(doTagsMatch(tags, ['@user+@sanity']), 'one AND tag')
+  t.false(
+    doTagsMatch(tags, ['@user+@smoke']),
+    'second tag in AND does not apply',
+  )
+  t.true(doTagsMatch(tags, ['@foo+@sanity']), 'AND tag order')
+})
+
+test('filters tests using OR combination with AND tags', (t) => {
+  const allTests = [
+    {
+      name: 'test 1',
+      type: 'test',
+      tags: ['@user'],
+    },
+    {
+      name: 'test 2',
+      type: 'test',
+      tags: ['@user', '@sanity'],
+    },
+    {
+      name: 'test 3',
+      type: 'test',
+      tags: ['@sanity'],
+    },
+    {
+      name: 'test 4',
+      type: 'test',
+      tags: ['@regression'],
+    },
+  ]
+  const tests = structuredClone(allTests)
+  pickTaggedTests(tests, ['@user+@sanity', '@regression'])
+  t.deepEqual(tests, [allTests[1], allTests[3]])
 })
