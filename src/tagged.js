@@ -60,15 +60,17 @@ function doTagsMatch(effectiveTestTags, tagExpressions) {
  * Finds all tests tagged with specific tag(s)
  * @param {object[]} tests List of tests
  * @param {string|string[]} tag Tag or array of tags to filter by
+ * @param {string[]} effectiveTags List of effective test tags from the parents
  * @warning modifies the tests in place
  */
-function pickTaggedTests(tests, tag) {
+function pickTaggedTests(tests, tag, effectiveTags = []) {
   if (!Array.isArray(tests)) {
     return false
   }
   const tags = Array.isArray(tag) ? tag : [tag]
   const filteredTests = tests.filter((test) => {
     if (test.type === 'test') {
+      // TODO: combine all tags plus effective tags
       const allTags = combineTags(test.tags, test.requiredTags)
       if (allTags) {
         if (doTagsMatch(allTags, tags)) {
@@ -85,8 +87,11 @@ function pickTaggedTests(tests, tag) {
 
       // maybe there is some test inside this suite
       // with the tag? Filter all other tests
+      // make sure the copy is non-destructive to the current array
+      const suiteTags = [...effectiveTags, ...(allTags || [])]
       return (
-        pickTaggedTests(test.tests, tags) || pickTaggedTests(test.suites, tags)
+        pickTaggedTests(test.tests, tags, suiteTags) ||
+        pickTaggedTests(test.suites, tags, suiteTags)
       )
     }
   })
