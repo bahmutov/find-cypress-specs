@@ -147,6 +147,12 @@ $ npx find-cypress-specs --branch main --tagged @user,@preview --set-gha-outputs
 
 The number of found specs will be set as `taggedSpecsN` and the list will be set as `taggedSpecs`.
 
+You can find tests / suites tagged with several tags together using AND syntax `tag1+tag2`. For example, to find all `@user` tests also tagged `@smoke`
+
+```bash
+$ npx find-cypress-specs --names --tagged @user+@smoke
+```
+
 ### count tagged changed specs
 
 Let's say we changed 2 specs that have tests tagged `@user`. We can output the count by adding `--count` option
