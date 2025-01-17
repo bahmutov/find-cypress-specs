@@ -5,7 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "cypress run"
+    "test": "cypress run",
+    "effective": "DEBUG=find-cypress-specs,find-test-names node ../bin/find --names --tagged @user+@sanity"
   },
   "keywords": [],
   "author": "",
