@@ -234,3 +234,18 @@ test('skips specs in the node_modules automatically', async (t) => {
   t.false(result.includes('node_modules'))
   t.snapshot(result)
 })
+
+test('finds tests with BOTH tags using AND syntax', async (t) => {
+  t.plan(1)
+  const result = await execa(
+    'node',
+    ['../bin/find', '--names', '--tagged', '@foo+@bar'],
+    {
+      cwd: './test-required-tags',
+      filter: ['code', 'stdout'],
+    },
+  )
+  // should find ONLY the test tagged with both @foo and @bar
+  // console.log(result)
+  t.snapshot(result)
+})

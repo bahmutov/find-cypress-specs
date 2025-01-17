@@ -25,7 +25,43 @@ function combineTags(tags, requiredTags) {
   }
 }
 
-// note: modifies the tests in place
+/**
+ * @param {string[]} tagExpressions
+ */
+function preprocessAndTags(tagExpressions) {
+  return tagExpressions.map((tagExpression) => {
+    if (tagExpression.includes('+')) {
+      return tagExpression.split('+')
+    }
+    return tagExpression
+  })
+}
+
+/**
+ * Tag expressions can be a single tag, like `@user`
+ * or a combination of tags, like `@user+@smoke` to match using AND
+ * @param {string[]} effectiveTestTags
+ * @param {string[]} tagExpressions
+ */
+function doTagsMatch(effectiveTestTags, tagExpressions) {
+  const orTags = preprocessAndTags(tagExpressions)
+
+  debug('doTagsMatch', { effectiveTestTags, orTags })
+
+  return orTags.some((orTag) => {
+    if (Array.isArray(orTag)) {
+      return orTag.every((tag) => effectiveTestTags.includes(tag))
+    }
+    return effectiveTestTags.includes(orTag)
+  })
+}
+
+/**
+ * Finds all tests tagged with specific tag(s)
+ * @param {object[]} tests List of tests
+ * @param {string|string[]} tag Tag or array of tags to filter by
+ * @warning modifies the tests in place
+ */
 function pickTaggedTests(tests, tag) {
   if (!Array.isArray(tests)) {
     return false
@@ -34,12 +70,17 @@ function pickTaggedTests(tests, tag) {
   const filteredTests = tests.filter((test) => {
     if (test.type === 'test') {
       const allTags = combineTags(test.tags, test.requiredTags)
-      return allTags && arraysOverlap(allTags, tags)
+      if (allTags) {
+        if (doTagsMatch(allTags, tags)) {
+          return true
+        }
+      }
     } else if (test.type === 'suite') {
       const allTags = combineTags(test.tags, test.requiredTags)
-      debug('allTags %o', allTags)
-      if (allTags && arraysOverlap(allTags, tags)) {
-        return true
+      if (allTags) {
+        if (doTagsMatch(allTags, tags)) {
+          return true
+        }
       }
 
       // maybe there is some test inside this suite
@@ -87,6 +128,8 @@ function removeEmptyNodes(json) {
  * Takes an object of tests collected from all files,
  * and removes all tests that do not have the given tag applied.
  * Modifies the given object in place.
+ * @param {object} json Processed tests as a json tree
+ * @param {string|string[]} tag Tag or array of tags to filter by
  */
 function pickTaggedTestsFrom(json, tag) {
   // console.log(JSON.stringify(json, null, 2))
@@ -123,4 +166,6 @@ module.exports = {
   removeEmptyNodes,
   pickTaggedTests,
   leavePendingTestsOnly,
+  preprocessAndTags,
+  doTagsMatch,
 }
