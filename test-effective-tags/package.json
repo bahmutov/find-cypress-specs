@@ -1,0 +1,13 @@
+{
+  "name": "test-effective-tags",
+  "version": "1.0.0",
+  "description": "Spec has tests with effective tags",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
