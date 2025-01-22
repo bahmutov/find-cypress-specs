@@ -249,3 +249,26 @@ test('finds tests with BOTH tags using AND syntax', async (t) => {
   // console.log(result)
   t.snapshot(result)
 })
+
+test('applies AND syntax to the effective tags', async (t) => {
+  t.plan(3)
+  const result = await execa(
+    'node',
+    ['../bin/find', '--names', '--tagged', '@user+@sanity'],
+    {
+      cwd: './test-effective-tags',
+      filter: ['code', 'stdout'],
+    },
+  )
+  // should find ONLY the test tagged with both @foo and @bar
+  console.log(result)
+  t.true(
+    result.includes('cypress/integration/spec2.js'),
+    'finds the second spec',
+  )
+  t.true(
+    result.includes('cypress/integration/spec1.js'),
+    'finds the first spec',
+  )
+  t.snapshot(result)
+})

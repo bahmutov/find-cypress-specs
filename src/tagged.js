@@ -60,33 +60,40 @@ function doTagsMatch(effectiveTestTags, tagExpressions) {
  * Finds all tests tagged with specific tag(s)
  * @param {object[]} tests List of tests
  * @param {string|string[]} tag Tag or array of tags to filter by
+ * @param {string[]} effectiveTags List of effective test tags from the parents
  * @warning modifies the tests in place
  */
-function pickTaggedTests(tests, tag) {
+function pickTaggedTests(tests, tag, effectiveTags = []) {
   if (!Array.isArray(tests)) {
     return false
   }
   const tags = Array.isArray(tag) ? tag : [tag]
   const filteredTests = tests.filter((test) => {
     if (test.type === 'test') {
-      const allTags = combineTags(test.tags, test.requiredTags)
-      if (allTags) {
-        if (doTagsMatch(allTags, tags)) {
+      // TODO: combine all tags plus effective tags
+      const combinedTestTags = combineTags(test.tags, test.requiredTags)
+      const effectiveTestTags = combineTags(combinedTestTags, effectiveTags)
+      if (effectiveTestTags) {
+        if (doTagsMatch(effectiveTestTags, tags)) {
           return true
         }
       }
     } else if (test.type === 'suite') {
-      const allTags = combineTags(test.tags, test.requiredTags)
-      if (allTags) {
-        if (doTagsMatch(allTags, tags)) {
+      const combinedTestTags = combineTags(test.tags, test.requiredTags)
+      const effectiveTestTags = combineTags(combinedTestTags, effectiveTags)
+      if (effectiveTestTags) {
+        if (doTagsMatch(effectiveTestTags, tags)) {
           return true
         }
       }
 
       // maybe there is some test inside this suite
       // with the tag? Filter all other tests
+      // make sure the copy is non-destructive to the current array
+      const suiteTags = [...effectiveTestTags]
       return (
-        pickTaggedTests(test.tests, tags) || pickTaggedTests(test.suites, tags)
+        pickTaggedTests(test.tests, tags, suiteTags) ||
+        pickTaggedTests(test.suites, tags, suiteTags)
       )
     }
   })
