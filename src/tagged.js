@@ -71,16 +71,18 @@ function pickTaggedTests(tests, tag, effectiveTags = []) {
   const filteredTests = tests.filter((test) => {
     if (test.type === 'test') {
       // TODO: combine all tags plus effective tags
-      const allTags = combineTags(test.tags, test.requiredTags)
-      if (allTags) {
-        if (doTagsMatch(allTags, tags)) {
+      const combinedTestTags = combineTags(test.tags, test.requiredTags)
+      const effectiveTestTags = combineTags(combinedTestTags, effectiveTags)
+      if (effectiveTestTags) {
+        if (doTagsMatch(effectiveTestTags, tags)) {
           return true
         }
       }
     } else if (test.type === 'suite') {
-      const allTags = combineTags(test.tags, test.requiredTags)
-      if (allTags) {
-        if (doTagsMatch(allTags, tags)) {
+      const combinedTestTags = combineTags(test.tags, test.requiredTags)
+      const effectiveTestTags = combineTags(combinedTestTags, effectiveTags)
+      if (effectiveTestTags) {
+        if (doTagsMatch(effectiveTestTags, tags)) {
           return true
         }
       }
@@ -88,7 +90,7 @@ function pickTaggedTests(tests, tag, effectiveTags = []) {
       // maybe there is some test inside this suite
       // with the tag? Filter all other tests
       // make sure the copy is non-destructive to the current array
-      const suiteTags = [...effectiveTags, ...(allTags || [])]
+      const suiteTags = [...effectiveTestTags]
       return (
         pickTaggedTests(test.tests, tags, suiteTags) ||
         pickTaggedTests(test.suites, tags, suiteTags)

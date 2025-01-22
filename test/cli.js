@@ -251,7 +251,7 @@ test('finds tests with BOTH tags using AND syntax', async (t) => {
 })
 
 // TODO: fix this test by implementing effective test tags in "src/tagged.js"
-test.skip('applies AND syntax to the effective tags', async (t) => {
+test('applies AND syntax to the effective tags', async (t) => {
   t.plan(2)
   const result = await execa(
     'node',
