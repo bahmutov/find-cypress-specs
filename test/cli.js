@@ -251,7 +251,7 @@ test('finds tests with BOTH tags using AND syntax', async (t) => {
 })
 
 test('applies AND syntax to the effective tags', async (t) => {
-  t.plan(2)
+  t.plan(3)
   const result = await execa(
     'node',
     ['../bin/find', '--names', '--tagged', '@user+@sanity'],
@@ -270,5 +270,5 @@ test('applies AND syntax to the effective tags', async (t) => {
     result.includes('cypress/integration/spec1.js'),
     'finds the first spec',
   )
-  // t.snapshot(result)
+  t.snapshot(result)
 })
