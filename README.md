@@ -177,6 +177,18 @@ You can set the spec filenames as GHA outputs
 $ npx find-cypress-specs --sort-by-modified --set-gha-outputs
 ```
 
+**Important:** to get the right commit dates, Git needs the full repository history. For example, when using the GHA to check out the repo, fetch the entire history:
+
+```yml
+- name: Checkout 🛎
+  uses: actions/checkout@v4
+  with:
+    # fetch all history to get the full commit history
+    # this is needed to get the correct order of specs
+    # by modified Git timestamp
+    fetch-depth: 0
+```
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
