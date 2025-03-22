@@ -20,7 +20,7 @@
     "demo": "DEBUG=find-cypress-specs node ./bin/find",
     "demo-names": "DEBUG=find-cypress-specs node ./bin/find --names",
     "demo-sorted-by-modified": "DEBUG=find-cypress-specs node ./bin/find --sort-by-modified --set-gha-outputs",
-    "demo-names-modifiedarkdown": "node ./bin/find --names --markdown",
+    "demo-names-markdown": "node ./bin/find --names --markdown",
     "demo-skipped-tests": "DEBUG=find-cypress-specs node ./bin/find --names --skipped",
     "demo-count-skipped-tests": "DEBUG=find-cypress-specs node ./bin/find --names --skipped --count",
     "demo-custom-cypress-config": "DEBUG=find-cypress-specs CYPRESS_CONFIG_FILE=test-ts/cypress.config.custom.ts node ./bin/find",
