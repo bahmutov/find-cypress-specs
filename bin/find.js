@@ -102,18 +102,23 @@ if (args['--test-counts']) {
   if (args['--sort-by-modified']) {
     // get the git source code last modified date for each spec filename
     const specsWithDates = specs.map((spec) => {
-      const output = shell.exec(`git log -1 --pretty=format:"%at" -- ${spec}`, {
+      // https://git-scm.com/docs/pretty-formats
+      const output = shell.exec(`git log -1 --pretty=format:"%ct" -- ${spec}`, {
         silent: true,
       })
       const lastModifiedTimestamp = output.toString().trim()
       return {
         filename: spec,
         lastModifiedTimestamp,
+        human: new Date(lastModifiedTimestamp * 1000).toLocaleString(),
       }
     })
     const sortedSpecs = specsWithDates.sort(
-      (a, b) => a.lastModifiedTimestamp - b.lastModifiedTimestamp,
+      (a, b) => b.lastModifiedTimestamp - a.lastModifiedTimestamp,
     )
+    debug('specs sorted by the last modified Git date')
+    debug(sortedSpecs)
+
     const sortedSpecNames = sortedSpecs.map((spec) => spec.filename)
     console.log(sortedSpecNames.join(','))
 
