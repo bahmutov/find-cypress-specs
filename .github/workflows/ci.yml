@@ -21,6 +21,9 @@ jobs:
       - name: Demo found specs 💻
         run: npm run demo
 
+      - name: Print specs sorted by last modified date
+        run: npm run demo-sorted-by-modified
+
       - name: Print dependencies between tests and utils 💻
         run: npm run deps
 

@@ -50,6 +50,9 @@ jobs:
       - name: Loading cached traced dependencies
         run: node ./bin/find --branch main --parent --trace-imports cypress --cache-trace
 
+      - name: Print specs sorted by last modified date
+        run: node ./bin/find --branch main --parent --sort-by-modified --set-gha-outputs
+
       # module and import support
       - name: Test module support
         run: npm run demo-tests

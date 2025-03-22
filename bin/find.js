@@ -15,6 +15,7 @@ const debug = require('debug')('find-cypress-specs')
 const { getDependsInFolder } = require('spec-change')
 const core = require('@actions/core')
 const pluralize = require('pluralize')
+const shell = require('shelljs')
 
 const args = arg({
   '--names': Boolean,
@@ -59,7 +60,8 @@ const args = arg({
   '--max-machines': Number,
   // find all specs and tests with part of the title
   '--grep': String,
-  //
+  // output all files sorted by the last modified date
+  '--sort-by-modified': Boolean,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -96,6 +98,34 @@ if (args['--test-counts']) {
   const specType = args['--component'] ? 'component' : 'e2e'
 
   const specs = getSpecs(undefined, specType)
+
+  if (args['--sort-by-modified']) {
+    // get the git source code last modified date for each spec filename
+    const specsWithDates = specs.map((spec) => {
+      const output = shell.exec(`git log -1 --pretty=format:"%at" -- ${spec}`, {
+        silent: true,
+      })
+      const lastModifiedTimestamp = output.toString().trim()
+      return {
+        filename: spec,
+        lastModifiedTimestamp,
+      }
+    })
+    const sortedSpecs = specsWithDates.sort(
+      (a, b) => a.lastModifiedTimestamp - b.lastModifiedTimestamp,
+    )
+    const sortedSpecNames = sortedSpecs.map((spec) => spec.filename)
+    console.log(sortedSpecNames.join(','))
+
+    if (args['--set-gha-outputs']) {
+      debug('setting GitHub Actions outputs changedSpecsN and changedSpecs')
+      debug('changedSpecsN %d', sortedSpecNames.length)
+      debug('plus changedSpecs')
+      core.setOutput('changedSpecsN', sortedSpecNames.length)
+      core.setOutput('changedSpecs', sortedSpecNames.join(','))
+    }
+    process.exit(0)
+  }
 
   // if the user passes "--tagged ''" we want to find the specs
   // but then filter them all out

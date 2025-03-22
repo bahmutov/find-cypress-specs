@@ -162,6 +162,21 @@ $ npx find-cypress-specs --branch main --tagged @user --count
 2
 ```
 
+## Specs sorted by the Git modified timestamp
+
+You can find all specs and output their list sorted by the last modified Git timestamp. The latest modified specs will be listed first. This feature can help you run the latest specs first.
+
+```bash
+$ npx find-cypress-specs --sort-by-modified
+```
+
+You can set the spec filenames as GHA outputs
+
+```bash
+# sets GitHub Actions outputs "changedSpecsN" and "changedSpecs"
+$ npx find-cypress-specs --sort-by-modified --set-gha-outputs
+```
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
