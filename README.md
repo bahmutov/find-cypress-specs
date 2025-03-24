@@ -189,6 +189,8 @@ $ npx find-cypress-specs --sort-by-modified --set-gha-outputs
     fetch-depth: 0
 ```
 
+📝 Read the blog post [Run Changed Cypress Specs On CI First](https://glebbahmutov.com/blog/run-changed-specs-first/).
+
 ## Test names
 
 You can print each spec file with the suite and test names inside of it (found using [find-test-names](https://github.com/bahmutov/find-test-names))
