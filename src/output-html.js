@@ -16,7 +16,15 @@ function testsToHtml(tests) {
             const classNames = test.pending ? 'test pending' : 'test'
             return `<li class="${classNames}"><span class="name">${test.name}</span> ${tagList}</li>`
           } else if (test.type === 'suite') {
-            return `<li class="suite"><span class="name">${test.name}</span> ${tagList}</li>`
+            const suitesHtml = testsToHtml(test.suites)
+            const testsHtml = testsToHtml(test.tests)
+            return `<li class="suite">
+                      <span class="name">${test.name}</span> ${tagList}
+                      ${suitesHtml}
+                      ${testsHtml}
+                    </li>`
+          } else {
+            throw new Error(`Unknown test type: ${test.type}`)
           }
         })
         .join('\n')}
@@ -47,11 +55,14 @@ function toHtml(testsJson) {
           }
           .tag {
             background-color: #f0f0f0;
-            padding: 0.2em 0.5em;
+            padding: 0.1em 0.2em;
             border-radius: 0.2em;
           }
           .suite {
             list-style-type: square;
+          }
+          .test {
+            list-style-type: circle;
           }
           .pending {
             opacity: 0.5;
@@ -71,7 +82,7 @@ function toHtml(testsJson) {
               .map((filename) => {
                 return `
                 <li class="spec">
-                  <h2>${filename}</h2>
+                  <h2 class="filename">${filename}</h2>
                   ${testsToHtml(testsJson[filename].tests)}
                 </li>
               `
