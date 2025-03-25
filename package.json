@@ -48,7 +48,8 @@
     "demo-exclusive": "npm run test-names --prefix test-exclusive --silent",
     "version-badge": "update-badge cypress",
     "count-all-tags": "npm run count-all-tags --prefix test-required-tags",
-    "html-e2e": "cypress open --config specPattern=cypress/html-e2e/**/*.cy.js"
+    "html-e2e": "cypress open --config specPattern=cypress/html-e2e/**/*.cy.js",
+    "test-report": "node ./bin/find --write-html-filename report/index.html"
   },
   "repository": {
     "type": "git",

@@ -296,11 +296,17 @@ if (args['--test-counts']) {
     } else {
       console.log(changedSpecs.join(','))
     }
-  } else if (args['--names'] || args['--tags'] || isTaggedPresent) {
+  } else if (
+    args['--names'] ||
+    args['--tags'] ||
+    isTaggedPresent ||
+    args['--write-html-filename']
+  ) {
     // counts the number of tests for each tag across all specs
     debug('count number of tests')
+    const needAllTags = args['--tags'] || args['--write-html-filename']
     const { jsonResults, tagTestCounts } = getTests(specs, {
-      tags: args['--tags'],
+      tags: needAllTags,
       tagged: args['--tagged'],
       skipped: args['--skipped'],
     })
@@ -320,18 +326,7 @@ if (args['--test-counts']) {
         })
         console.log(n)
       } else {
-        if (args['--write-html-filename']) {
-          const outputFile = args['--write-html-filename']
-          debug('writing HTML file %s', outputFile)
-          const html = toHtml(jsonResults, tagTestCounts)
-          // create the directory if it does not exist
-          const dir = path.dirname(outputFile)
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true })
-          }
-          fs.writeFileSync(outputFile, html)
-          console.log('wrote HTML file %s', outputFile)
-        } else if (args['--json']) {
+        if (args['--json']) {
           debug('names in json format')
           console.log(JSON.stringify(jsonResults, null, 2))
         } else if (args['--markdown']) {
@@ -345,6 +340,19 @@ if (args['--test-counts']) {
         }
         console.log('')
       }
+    }
+
+    if (args['--write-html-filename']) {
+      const outputFile = args['--write-html-filename']
+      debug('writing HTML file %s', outputFile)
+      const html = toHtml(jsonResults, tagTestCounts)
+      // create the directory if it does not exist
+      const dir = path.dirname(outputFile)
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+      }
+      fs.writeFileSync(outputFile, html)
+      console.log('wrote HTML file %s', outputFile)
     }
 
     if (args['--tags']) {
@@ -363,7 +371,7 @@ if (args['--test-counts']) {
       }
     }
 
-    if (!args['--names'] && !args['--tags']) {
+    if (!args['--names'] && !args['--tags'] && !args['--write-html-filename']) {
       const specs = Object.keys(jsonResults)
       if (args['--count']) {
         debug('printing the number of specs %d', specs.length)

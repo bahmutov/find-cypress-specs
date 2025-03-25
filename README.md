@@ -390,6 +390,16 @@ You can return absolute filenames to the found specs
 getSpecs(config, 'e2e|component', true)
 ```
 
+## HTML Test Report
+
+You can generate a static self-contained HTML report with all specs, tests, and test tags
+
+```bash
+$ npx find-cypress-specs --write-html-filename report/index.html
+```
+
+Open the HTML report in your browser.
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
