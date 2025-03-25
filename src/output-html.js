@@ -90,7 +90,8 @@ function testsToHtml(tests) {
 function toHtml(testsJson, tagTestCounts = {}) {
   const { specsN, testsN } = countTheseTests(testsJson)
 
-  const allTags = Object.keys(tagTestCounts)
+  // show tags in alphabetical order
+  const allTags = Object.keys(tagTestCounts).sort()
 
   const html = `
     <html>
