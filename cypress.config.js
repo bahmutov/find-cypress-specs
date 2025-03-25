@@ -3,6 +3,7 @@ const { getSpecs, getTests } = require('.')
 
 module.exports = defineConfig({
   fixturesFolder: false,
+  defaultBrowser: 'electron',
   e2e: {
     setupNodeEvents(on, config) {
       console.log('e2e setupNodeEvents')

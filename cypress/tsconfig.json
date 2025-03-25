@@ -1,3 +1,3 @@
 {
-  "files": ["e2e/featureA/user.ts"]
+  "files": ["e2e/featureA/user.cy.ts"]
 }

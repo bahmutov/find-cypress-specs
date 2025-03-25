@@ -13,6 +13,11 @@
   "engines": {
     "node": ">=18"
   },
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ]
+  },
   "scripts": {
     "test": "ava",
     "prod-deps": "npm audit --report --omit dev",
@@ -42,7 +47,8 @@
     "demo-component": "DEBUG=find-cypress-specs node ./bin/find --component --names",
     "demo-exclusive": "npm run test-names --prefix test-exclusive --silent",
     "version-badge": "update-badge cypress",
-    "count-all-tags": "npm run count-all-tags --prefix test-required-tags"
+    "count-all-tags": "npm run count-all-tags --prefix test-required-tags",
+    "html-e2e": "cypress open --config specPattern=cypress/html-e2e/**/*.cy.js"
   },
   "repository": {
     "type": "git",
@@ -60,6 +66,7 @@
   "devDependencies": {
     "ava": "^6.2.0",
     "cypress": "14.2.0",
+    "cypress-map": "^1.46.0",
     "dependency-version-badge": "^1.11.0",
     "execa-wrap": "^1.4.0",
     "prettier": "^2.5.1",

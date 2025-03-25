@@ -6,7 +6,7 @@ const { getTestCounts } = require('../src/tests-counts')
 const { stringAllInfo, stringMarkdownTests } = require('../src/print')
 const { updateBadge } = require('../src/badge')
 const { filterByGrep } = require('../src/grep')
-
+const { toHtml } = require('../src/output-html')
 const fs = require('fs')
 const path = require('path')
 const { getTestNames, countTags } = require('find-test-names')
@@ -62,6 +62,8 @@ const args = arg({
   '--grep': String,
   // output all files sorted by the last modified date
   '--sort-by-modified': Boolean,
+  // output the HTML file with all tests
+  '--write-html-filename': String,
   // aliases
   '-n': '--names',
   '--name': '--names',
@@ -86,9 +88,9 @@ if (args['--test-counts']) {
   console.log(
     '%d e2e %s, %d component %s',
     nE2E,
-    pluralize('test', nE2E),
+    pluralize('test', nE2E, false),
     nComponent,
-    pluralize('test', nComponent),
+    pluralize('test', nComponent, false),
   )
   if (args['--update-badge']) {
     debug('updating the README test count badge')
@@ -138,7 +140,10 @@ if (args['--test-counts']) {
 
   if (args['--branch']) {
     debug('determining specs changed against branch %s', args['--branch'])
-    let changedFiles = findChangedFiles(args['--branch'], args['--parent'])
+    let changedFiles = findChangedFiles(
+      args['--branch'],
+      Boolean(args['--parent']),
+    )
     debug('changed files %o', changedFiles)
     debug('comparing against the specs %o', specs)
     if (args['--trace-imports']) {
@@ -315,7 +320,12 @@ if (args['--test-counts']) {
         })
         console.log(n)
       } else {
-        if (args['--json']) {
+        if (args['--write-html-filename']) {
+          debug('writing HTML file %s', args['--write-html-filename'])
+          const html = toHtml(jsonResults)
+          fs.writeFileSync(args['--write-html-filename'], html)
+          console.log('wrote HTML file %s', args['--write-html-filename'])
+        } else if (args['--json']) {
           debug('names in json format')
           console.log(JSON.stringify(jsonResults, null, 2))
         } else if (args['--markdown']) {
