@@ -87,12 +87,12 @@ jobs:
           config-file: mocks/my-app/e2e/cypress.config.js
 
       - name: Produce HTML report
-        run: node ./bin/find --names --write-html-filename report.html
+        run: node ./bin/find --names --write-html-filename report/report.html
       - name: Save HTML report
         uses: actions/upload-artifact@v4
         with:
           name: report.html
-          path: report.html
+          path: report/report.html
 
       - name: Test HTML output
         uses: cypress-io/github-action@v6

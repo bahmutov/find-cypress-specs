@@ -321,10 +321,16 @@ if (args['--test-counts']) {
         console.log(n)
       } else {
         if (args['--write-html-filename']) {
-          debug('writing HTML file %s', args['--write-html-filename'])
+          const outputFile = args['--write-html-filename']
+          debug('writing HTML file %s', outputFile)
           const html = toHtml(jsonResults)
-          fs.writeFileSync(args['--write-html-filename'], html)
-          console.log('wrote HTML file %s', args['--write-html-filename'])
+          // create the directory if it does not exist
+          const dir = path.dirname(outputFile)
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true })
+          }
+          fs.writeFileSync(outputFile, html)
+          console.log('wrote HTML file %s', outputFile)
         } else if (args['--json']) {
           debug('names in json format')
           console.log(JSON.stringify(jsonResults, null, 2))
