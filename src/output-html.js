@@ -127,17 +127,22 @@ function toHtml(testsJson, tagTestCounts = {}) {
             const selectedTags = Array.from(document.querySelectorAll('input.filter-tag:checked'))
               .map((checkbox) => checkbox.value)
             // filter the tests based on the selected tags
-            if (selectedTags.length === 0) {
-              const { specsN, testsN } = countTheseTests(window.findCypressSpecs.tests)
-              document.querySelector('#specs-count').textContent = specsN
-              document.querySelector('#tests-count').textContent = testsN
-            } else {
+
+            let filtered = window.findCypressSpecs.tests
+            if (selectedTags.length) {
               const testCopy = structuredClone(window.findCypressSpecs.tests)
-              const filtered = pickTaggedTestsFrom(testCopy, selectedTags.length ? selectedTags : allTags)
-              const { specsN, testsN } = countTheseTests(filtered)
-              document.querySelector('#specs-count').textContent = specsN
-              document.querySelector('#tests-count').textContent = testsN
+              filtered = pickTaggedTestsFrom(testCopy, selectedTags)
             }
+            const { specsN, testsN } = countTheseTests(filtered)
+            document.querySelector('#specs-count').textContent = specsN
+            document.querySelector('#tests-count').textContent = testsN
+
+            const specsElement = document.querySelector('.specs')
+            specsElement.innerHTML = ''
+            Object.keys(filtered).forEach(function (filename) {
+              const tests = filtered[filename].tests
+              specsElement.innerHTML += '<li class="spec"><h2 class="filename">' + filename + '</h2></li>\\n'
+            })
           }
         </script>
       </head>

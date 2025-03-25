@@ -168,12 +168,14 @@ describe('HTML output', () => {
     cy.get('#specs-count').should('have.text', '2')
     cy.get('#tests-count').should('have.text', '2')
 
-    // TODO: finish the spec
-    // cy.get('ul.specs')
-    //   .find('li.spec')
-    //   .should('have.length', 2)
-    //   .find('.name')
-    //   .should('read', [])
+    cy.get('ul.specs')
+      .find('li.spec')
+      .should('have.length', 2)
+      .find('.filename')
+      .should('read', [
+        'cypress/e2e/spec.cy.js',
+        'cypress/e2e/featureA/user.cy.ts',
+      ])
   })
 
   it('shows all tests if no tag is selected', () => {
