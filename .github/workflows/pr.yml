@@ -6,13 +6,13 @@ jobs:
     steps:
       - name: Checkout 🛎
         # https://github.com/actions/checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 20
 
       - name: Install dependencies 📦
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           runTests: false
 
@@ -80,8 +80,22 @@ jobs:
           echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Confirm we can run specs in subfolder
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           # we have already installed all dependencies above
           install: false
           config-file: mocks/my-app/e2e/cypress.config.js
+
+      - name: Produce HTML report
+        run: node ./bin/find --names --write-html-filename report.html
+      - name: Save HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report.html
+          path: report.html
+
+      - name: Test HTML output
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          config: specPattern=cypress/html-e2e/**/*.cy.js

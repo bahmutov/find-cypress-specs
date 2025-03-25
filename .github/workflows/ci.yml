@@ -107,7 +107,7 @@ jobs:
         run: npm run demo-subfolder
 
       - name: Confirm we can run specs in subfolder
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           # we have already installed all dependencies above
           install: false
