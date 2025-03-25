@@ -16,8 +16,13 @@ function testsToHtml(tests) {
             const classNames = test.pending ? 'test pending' : 'test'
             return `<li class="${classNames}"><span class="name">${test.name}</span> ${tagList}</li>`
           } else if (test.type === 'suite') {
+            const suitesHtml = testsToHtml(test.suites)
             const testsHtml = testsToHtml(test.tests)
-            return `<li class="suite"><span class="name">${test.name}</span> ${tagList} ${testsHtml}</li>`
+            return `<li class="suite">
+                      <span class="name">${test.name}</span> ${tagList}
+                      ${suitesHtml}
+                      ${testsHtml}
+                    </li>`
           } else {
             throw new Error(`Unknown test type: ${test.type}`)
           }
@@ -77,7 +82,7 @@ function toHtml(testsJson) {
               .map((filename) => {
                 return `
                 <li class="spec">
-                  <h2>${filename}</h2>
+                  <h2 class="filename">${filename}</h2>
                   ${testsToHtml(testsJson[filename].tests)}
                 </li>
               `

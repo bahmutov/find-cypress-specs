@@ -28,7 +28,7 @@ describe('HTML output', () => {
           tags: ['@main'],
           suites: [
             {
-              name: 'inner suite',
+              name: 'inner suite A',
               type: 'suite',
               tests: [
                 {
@@ -47,15 +47,15 @@ describe('HTML output', () => {
           ],
         },
         {
-          name: 'empty parent suite',
+          name: 'Another suite',
           type: 'suite',
           suites: [
             {
-              name: 'inner suite',
+              name: 'inner suite B',
               type: 'suite',
               tests: [
                 {
-                  name: 'shows something!',
+                  name: 'deep test',
                   type: 'test',
                 },
               ],
@@ -88,6 +88,8 @@ describe('HTML output', () => {
   it('should output HTML', () => {
     const html = toHtml(json)
     cy.document({ log: false }).invoke('write', html)
+
+    cy.step('Title and header')
     cy.title().should('eq', 'Cypress Tests')
     cy.get('header').within(() => {
       cy.contains('h1', 'Cypress Tests')
@@ -95,8 +97,14 @@ describe('HTML output', () => {
     })
     cy.get('main').within(() => {
       cy.get('ul.specs').find('li.spec').should('have.length', 3)
+      cy.get('.filename').should('read', [
+        'cypress/e2e/spec-b.cy.js',
+        'cypress/e2e/spec.cy.js',
+        'cypress/e2e/featureA/user.cy.ts',
+      ])
     })
 
+    cy.step('List of specs')
     cy.contains('.spec', 'cypress/e2e/featureA/user.cy.ts').within(() => {
       cy.get('.tests .test').should('have.length', 2)
       cy.get('.tests .test')
@@ -114,10 +122,19 @@ describe('HTML output', () => {
         })
     })
 
-    cy.step('Inner suite')
+    cy.step('Nested suite checks')
     cy.contains('.suite', 'parent suite').within(() => {
       // a suite has a test inside
       cy.contains('.test', 'works well enough')
+      // a suite has a nested suite inside
+      cy.contains('.suite', 'inner suite A').within(() => {
+        cy.contains('.test', 'shows something!')
+      })
+    })
+
+    cy.step('Another suite')
+    cy.contains('.suite', 'Another suite').within(() => {
+      cy.contains('.test', 'deep test')
     })
   })
 })
