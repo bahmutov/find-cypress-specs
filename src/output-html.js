@@ -18,11 +18,13 @@ function testsToHtml(tests) {
           } else if (test.type === 'suite') {
             const suitesHtml = testsToHtml(test.suites)
             const testsHtml = testsToHtml(test.tests)
-            return `<li class="suite">
-                      <span class="name">${test.name}</span> ${tagList}
-                      ${suitesHtml}
-                      ${testsHtml}
-                    </li>`
+            return `
+              <li class="suite">
+                <span class="name">${test.name}</span> ${tagList}
+                ${suitesHtml}
+                ${testsHtml}
+              </li>
+            `
           } else {
             throw new Error(`Unknown test type: ${test.type}`)
           }
@@ -40,7 +42,7 @@ function testsToHtml(tests) {
  * @param {Object} tagTestCounts - The tag test counts
  * @returns {string} - The HTML string
  */
-function toHtml(testsJson, tagTestCounts) {
+function toHtml(testsJson, tagTestCounts = {}) {
   const specsN = Object.keys(testsJson).length
   let testsN = 0
   Object.keys(testsJson).forEach((filename) => {
@@ -73,6 +75,20 @@ function toHtml(testsJson, tagTestCounts) {
             opacity: 0.5;
           }
         </style>
+        <script>
+          window.findCypressSpecs = ${JSON.stringify({
+            tests: testsJson,
+            tags: tagTestCounts,
+            selectedTags: [],
+          })}
+          window.findCypressSpecs.render = () => {
+            // get the selected tags from the checkboxes
+            const selectedTags = Array.from(document.querySelectorAll('input.filter-tag:checked'))
+              .map((checkbox) => checkbox.value)
+            console.log('selectedTags', selectedTags)
+            // filter the tests based on the selected tags
+          }
+        </script>
       </head>
       <body>
         <header>
@@ -84,7 +100,8 @@ function toHtml(testsJson, tagTestCounts) {
             ${allTags
               .map(
                 (tag) =>
-                  `<input type="checkbox" class="filter-tag" value="${tag}" /> <span class="filter-tag-name">${tag}</span>`,
+                  `<input type="checkbox" class="filter-tag" value="${tag}" onchange="window.findCypressSpecs.render()"/>
+                     <span class="filter-tag-name">${tag}</span>`,
               )
               .join(' ')}
           </p>

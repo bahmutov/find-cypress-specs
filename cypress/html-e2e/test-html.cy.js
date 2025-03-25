@@ -86,10 +86,12 @@ describe('HTML output', () => {
   }
   const tagTestCounts = { '@main': 2, '@user': 2, '@alpha': 1 }
 
-  it('should output HTML', () => {
+  beforeEach(() => {
     const html = toHtml(json, tagTestCounts)
     cy.document({ log: false }).invoke('write', html)
+  })
 
+  it('should output HTML', () => {
     cy.step('Title and header')
     cy.title().should('eq', 'Cypress Tests')
     cy.get('header').within(() => {
@@ -142,5 +144,19 @@ describe('HTML output', () => {
     cy.get('.filter-tags').within(() => {
       cy.get('.filter-tag-name').should('read', ['@main', '@user', '@alpha'])
     })
+  })
+
+  it('includes the test object', () => {
+    cy.window()
+      .should('have.property', 'findCypressSpecs')
+      .should('have.keys', ['tests', 'tags', 'selectedTags', 'render'])
+    cy.get('input[value="@user"]').check()
+    cy.step('Check filtered tests')
+    // TODO: finish the spec
+    // cy.get('ul.specs')
+    //   .find('li.spec')
+    //   .should('have.length', 2)
+    //   .find('.name')
+    //   .should('read', [])
   })
 })
