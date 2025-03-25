@@ -88,9 +88,9 @@ if (args['--test-counts']) {
   console.log(
     '%d e2e %s, %d component %s',
     nE2E,
-    pluralize('test', nE2E, true),
+    pluralize('test', nE2E, false),
     nComponent,
-    pluralize('test', nComponent, true),
+    pluralize('test', nComponent, false),
   )
   if (args['--update-badge']) {
     debug('updating the README test count badge')
