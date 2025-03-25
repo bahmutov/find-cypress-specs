@@ -140,9 +140,15 @@ describe('HTML output', () => {
       cy.contains('.test', 'deep test')
     })
 
-    cy.step('Filter tags')
+    cy.step('Has filter tags')
     cy.get('.filter-tags').within(() => {
-      cy.get('.filter-tag-name').should('read', ['@main', '@user', '@alpha'])
+      cy.get('.filter-tag-name').should('have.length', 3)
+    })
+  })
+
+  it('shows filter tags in alphabetical order', () => {
+    cy.get('.filter-tags').within(() => {
+      cy.get('.filter-tag-name').should('read', ['@alpha', '@main', '@user'])
     })
   })
 
