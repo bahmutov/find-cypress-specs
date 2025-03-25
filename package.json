@@ -73,7 +73,7 @@
     "arg": "^5.0.1",
     "console.table": "^0.10.0",
     "debug": "^4.3.3",
-    "find-test-names": "1.29.6",
+    "find-test-names": "1.29.7",
     "globby": "^11.1.0",
     "minimatch": "^3.0.4",
     "pluralize": "^8.0.0",
