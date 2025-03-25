@@ -1,3 +1,4 @@
+import 'cypress-map'
 import { toHtml } from '../../src/output-html'
 
 describe('HTML output', () => {
@@ -93,6 +94,23 @@ describe('HTML output', () => {
     })
     cy.get('main').within(() => {
       cy.get('ul.specs').find('li.spec').should('have.length', 3)
+    })
+
+    cy.contains('.spec', 'cypress/e2e/featureA/user.cy.ts').within(() => {
+      cy.get('.tests .test').should('have.length', 2)
+      cy.get('.tests .test')
+        .first()
+        .within(() => {
+          cy.get('.name').should('have.text', 'works')
+          cy.get('.tag').should('read', ['@user'])
+        })
+      cy.get('.tests .test')
+        .last()
+        .should('have.class', 'pending')
+        .within(() => {
+          cy.get('.name').should('have.text', 'needs to be written')
+          cy.get('.tag').should('read', ['@alpha'])
+        })
     })
   })
 })
