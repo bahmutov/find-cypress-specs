@@ -119,6 +119,7 @@ function toHtml(testsJson, tagTestCounts = {}) {
           window.findCypressSpecs = ${JSON.stringify({
             tests: testsJson,
             tags: tagTestCounts,
+            allTags,
             selectedTags: [],
           })}
           window.findCypressSpecs.render = () => {
@@ -126,11 +127,17 @@ function toHtml(testsJson, tagTestCounts = {}) {
             const selectedTags = Array.from(document.querySelectorAll('input.filter-tag:checked'))
               .map((checkbox) => checkbox.value)
             // filter the tests based on the selected tags
-            const testCopy = structuredClone(window.findCypressSpecs.tests)
-            const filtered = pickTaggedTestsFrom(testCopy, selectedTags)
-            const { specsN, testsN } = countTheseTests(filtered)
-            document.querySelector('#specs-count').textContent = specsN
-            document.querySelector('#tests-count').textContent = testsN
+            if (selectedTags.length === 0) {
+              const { specsN, testsN } = countTheseTests(window.findCypressSpecs.tests)
+              document.querySelector('#specs-count').textContent = specsN
+              document.querySelector('#tests-count').textContent = testsN
+            } else {
+              const testCopy = structuredClone(window.findCypressSpecs.tests)
+              const filtered = pickTaggedTestsFrom(testCopy, selectedTags.length ? selectedTags : allTags)
+              const { specsN, testsN } = countTheseTests(filtered)
+              document.querySelector('#specs-count').textContent = specsN
+              document.querySelector('#tests-count').textContent = testsN
+            }
           }
         </script>
       </head>

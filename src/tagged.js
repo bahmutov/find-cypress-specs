@@ -141,11 +141,6 @@ function removeEmptyNodes(json) {
  * @param {string|string[]} tag Tag or array of tags to filter by
  */
 function pickTaggedTestsFrom(json, tag = []) {
-  if (tag.length === 0) {
-    // no tags, return all tests
-    return json
-  }
-
   // console.log(JSON.stringify(json, null, 2))
   Object.keys(json).forEach((filename) => {
     const fileTests = json[filename].tests

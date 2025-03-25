@@ -149,7 +149,13 @@ describe('HTML output', () => {
   it('includes the test object', () => {
     cy.window()
       .should('have.property', 'findCypressSpecs')
-      .should('have.keys', ['tests', 'tags', 'selectedTags', 'render'])
+      .should('have.keys', [
+        'tests',
+        'tags',
+        'selectedTags',
+        'allTags',
+        'render',
+      ])
   })
 
   it('filters tests by a tag', () => {
@@ -171,6 +177,9 @@ describe('HTML output', () => {
   })
 
   it('shows all tests if no tag is selected', () => {
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+
     cy.step('Filter by @user')
     cy.get('input[value="@user"]').check()
     cy.get('#specs-count').should('have.text', '2')
