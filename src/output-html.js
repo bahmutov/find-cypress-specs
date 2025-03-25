@@ -41,6 +41,8 @@ const htmlScripts = `
   ${pickTaggedTests.toString()}
 
   ${pickTaggedTestsFrom.toString()}
+
+  ${testsToHtml.toString()}
 `
 
 function testsToHtml(tests) {
@@ -141,7 +143,7 @@ function toHtml(testsJson, tagTestCounts = {}) {
             specsElement.innerHTML = ''
             Object.keys(filtered).forEach(function (filename) {
               const tests = filtered[filename].tests
-              specsElement.innerHTML += '<li class="spec"><h2 class="filename">' + filename + '</h2></li>\\n'
+              specsElement.innerHTML += '<li class="spec"><h2 class="filename">' + filename + '</h2>' + testsToHtml(tests) + '</li>'
             })
           }
         </script>
