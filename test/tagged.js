@@ -94,6 +94,13 @@ test('filters a single array of tests using some tags', (t) => {
   ])
 })
 
+test('if the tag is empty, all tests are returned', (t) => {
+  t.plan(1)
+  const json = JSON.parse(JSON.stringify(input))
+  const result = pickTaggedTestsFrom(json)
+  t.deepEqual(result, input)
+})
+
 test('filters tests tagged @alpha', (t) => {
   t.plan(2)
   const json = JSON.parse(JSON.stringify(input))

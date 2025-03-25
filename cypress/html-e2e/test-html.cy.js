@@ -150,13 +150,48 @@ describe('HTML output', () => {
     cy.window()
       .should('have.property', 'findCypressSpecs')
       .should('have.keys', ['tests', 'tags', 'selectedTags', 'render'])
+  })
+
+  it('filters tests by a tag', () => {
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+
     cy.get('input[value="@user"]').check()
+
     cy.step('Check filtered tests')
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '2')
+
     // TODO: finish the spec
     // cy.get('ul.specs')
     //   .find('li.spec')
     //   .should('have.length', 2)
     //   .find('.name')
     //   .should('read', [])
+  })
+
+  it('shows all tests if no tag is selected', () => {
+    cy.step('Filter by @user')
+    cy.get('input[value="@user"]').check()
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '2')
+
+    cy.step('Back to all tests')
+    cy.get('input[value="@user"]').uncheck()
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+  })
+
+  it('uses OR to combine tags', () => {
+    cy.step('Filter by @user')
+    cy.get('input[value="@user"]').check()
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '2')
+
+    cy.step('Add  filter @alpha')
+    cy.get('input[value="@alpha"]').check()
+    cy.get('input[value="@user"]').should('be.checked')
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '3')
   })
 })

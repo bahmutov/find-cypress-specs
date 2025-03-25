@@ -1,5 +1,48 @@
 // @ts-check
 
+import {
+  pickTaggedTestsFrom,
+  pickTaggedTests,
+  removeEmptyNodes,
+  doTagsMatch,
+  combineTags,
+  preprocessAndTags,
+} from './tagged'
+const { addCounts, countTests, countPendingTests } = require('./count')
+
+function countTheseTests(testsJson) {
+  const specsN = Object.keys(testsJson).length
+  let testsN = 0
+  Object.keys(testsJson).forEach((filename) => {
+    const n = testsJson[filename].counts.tests
+    testsN += n
+  })
+  return { specsN, testsN }
+}
+
+// poor man's bundle
+const htmlScripts = `
+  ${countTheseTests.toString()}
+
+  ${countPendingTests.toString()}
+
+  ${addCounts.toString()}
+
+  ${countTests.toString()}
+
+  ${preprocessAndTags.toString()}
+
+  ${doTagsMatch.toString()}
+
+  ${combineTags.toString()}
+
+  ${removeEmptyNodes.toString()}
+
+  ${pickTaggedTests.toString()}
+
+  ${pickTaggedTestsFrom.toString()}
+`
+
 function testsToHtml(tests) {
   if (!Array.isArray(tests)) {
     return ''
@@ -43,12 +86,7 @@ function testsToHtml(tests) {
  * @returns {string} - The HTML string
  */
 function toHtml(testsJson, tagTestCounts = {}) {
-  const specsN = Object.keys(testsJson).length
-  let testsN = 0
-  Object.keys(testsJson).forEach((filename) => {
-    const n = testsJson[filename].counts.tests
-    testsN += n
-  })
+  const { specsN, testsN } = countTheseTests(testsJson)
 
   const allTags = Object.keys(tagTestCounts)
 
@@ -76,6 +114,8 @@ function toHtml(testsJson, tagTestCounts = {}) {
           }
         </style>
         <script>
+          ${htmlScripts}
+
           window.findCypressSpecs = ${JSON.stringify({
             tests: testsJson,
             tags: tagTestCounts,
@@ -85,8 +125,12 @@ function toHtml(testsJson, tagTestCounts = {}) {
             // get the selected tags from the checkboxes
             const selectedTags = Array.from(document.querySelectorAll('input.filter-tag:checked'))
               .map((checkbox) => checkbox.value)
-            console.log('selectedTags', selectedTags)
             // filter the tests based on the selected tags
+            const testCopy = structuredClone(window.findCypressSpecs.tests)
+            const filtered = pickTaggedTestsFrom(testCopy, selectedTags)
+            const { specsN, testsN } = countTheseTests(filtered)
+            document.querySelector('#specs-count').textContent = specsN
+            document.querySelector('#tests-count').textContent = testsN
           }
         </script>
       </head>
@@ -94,7 +138,7 @@ function toHtml(testsJson, tagTestCounts = {}) {
         <header>
           <h1>Cypress Tests</h1>
           <p>
-            ${specsN} specs, ${testsN} tests
+            <span id="specs-count">${specsN}</span> specs, <span id="tests-count">${testsN}</span> tests
           </p>
           <p class="filter-tags">
             ${allTags

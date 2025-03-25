@@ -1,4 +1,6 @@
-const debug = require('debug')('find-cypress-specs:tagged')
+// @ts-check
+
+// const debug = require('debug')('find-cypress-specs:tagged')
 const { addCounts } = require('./count')
 
 function arraysOverlap(a, b) {
@@ -46,7 +48,7 @@ function preprocessAndTags(tagExpressions) {
 function doTagsMatch(effectiveTestTags, tagExpressions) {
   const orTags = preprocessAndTags(tagExpressions)
 
-  debug('doTagsMatch', { effectiveTestTags, orTags })
+  // debug('doTagsMatch', { effectiveTestTags, orTags })
 
   return orTags.some((orTag) => {
     if (Array.isArray(orTag)) {
@@ -90,7 +92,7 @@ function pickTaggedTests(tests, tag, effectiveTags = []) {
       // maybe there is some test inside this suite
       // with the tag? Filter all other tests
       // make sure the copy is non-destructive to the current array
-      const suiteTags = [...effectiveTestTags]
+      const suiteTags = [...(effectiveTestTags || [])]
       return (
         pickTaggedTests(test.tests, tags, suiteTags) ||
         pickTaggedTests(test.suites, tags, suiteTags)
@@ -138,11 +140,16 @@ function removeEmptyNodes(json) {
  * @param {object} json Processed tests as a json tree
  * @param {string|string[]} tag Tag or array of tags to filter by
  */
-function pickTaggedTestsFrom(json, tag) {
+function pickTaggedTestsFrom(json, tag = []) {
+  if (tag.length === 0) {
+    // no tags, return all tests
+    return json
+  }
+
   // console.log(JSON.stringify(json, null, 2))
   Object.keys(json).forEach((filename) => {
     const fileTests = json[filename].tests
-    debug('picking tagged tests from %s', filename)
+    // debug('picking tagged tests from %s', filename)
     pickTaggedTests(fileTests, tag)
   })
 
@@ -175,4 +182,5 @@ module.exports = {
   leavePendingTestsOnly,
   preprocessAndTags,
   doTagsMatch,
+  combineTags,
 }
