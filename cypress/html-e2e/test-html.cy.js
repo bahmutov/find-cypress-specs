@@ -84,9 +84,10 @@ describe('HTML output', () => {
       ],
     },
   }
+  const tagTestCounts = { '@main': 2, '@user': 2, '@alpha': 1 }
 
   it('should output HTML', () => {
-    const html = toHtml(json)
+    const html = toHtml(json, tagTestCounts)
     cy.document({ log: false }).invoke('write', html)
 
     cy.step('Title and header')
@@ -135,6 +136,11 @@ describe('HTML output', () => {
     cy.step('Another suite')
     cy.contains('.suite', 'Another suite').within(() => {
       cy.contains('.test', 'deep test')
+    })
+
+    cy.step('Filter tags')
+    cy.get('.filter-tags').within(() => {
+      cy.get('.filter-tag-name').should('read', ['@main', '@user', '@alpha'])
     })
   })
 })

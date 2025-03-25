@@ -36,14 +36,19 @@ function testsToHtml(tests) {
  * Takes the test JSON object with specs and tags
  * and returns a full static self-contained HTML file
  * that can be used to display the tests in a browser.
+ * @param {Object} testsJson - The test JSON object with specs and tags
+ * @param {Object} tagTestCounts - The tag test counts
+ * @returns {string} - The HTML string
  */
-function toHtml(testsJson) {
+function toHtml(testsJson, tagTestCounts) {
   const specsN = Object.keys(testsJson).length
   let testsN = 0
   Object.keys(testsJson).forEach((filename) => {
     const n = testsJson[filename].counts.tests
     testsN += n
   })
+
+  const allTags = Object.keys(tagTestCounts)
 
   const html = `
     <html>
@@ -74,6 +79,14 @@ function toHtml(testsJson) {
           <h1>Cypress Tests</h1>
           <p>
             ${specsN} specs, ${testsN} tests
+          </p>
+          <p class="filter-tags">
+            ${allTags
+              .map(
+                (tag) =>
+                  `<input type="checkbox" class="filter-tag" value="${tag}" /> <span class="filter-tag-name">${tag}</span>`,
+              )
+              .join(' ')}
           </p>
         </header>
         <main>
