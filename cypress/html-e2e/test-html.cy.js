@@ -1,4 +1,5 @@
 import 'cypress-map'
+import 'cypress-plugin-steps'
 import { toHtml } from '../../src/output-html'
 
 describe('HTML output', () => {
@@ -111,6 +112,12 @@ describe('HTML output', () => {
           cy.get('.name').should('have.text', 'needs to be written')
           cy.get('.tag').should('read', ['@alpha'])
         })
+    })
+
+    cy.step('Inner suite')
+    cy.contains('.suite', 'parent suite').within(() => {
+      // a suite has a test inside
+      cy.contains('.test', 'works well enough')
     })
   })
 })
