@@ -86,6 +86,13 @@ describe('HTML output', () => {
   it('should output HTML', () => {
     const html = toHtml(json)
     cy.document({ log: false }).invoke('write', html)
-    cy.contains('h1', 'Tests')
+    cy.title().should('eq', 'Cypress Tests')
+    cy.get('header').within(() => {
+      cy.contains('h1', 'Cypress Tests')
+      cy.contains('p', '3 specs, 6 tests')
+    })
+    cy.get('main').within(() => {
+      cy.get('ul.specs').find('li.spec').should('have.length', 3)
+    })
   })
 })
