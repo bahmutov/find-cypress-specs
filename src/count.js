@@ -72,4 +72,4 @@ function sumTestCounts(allInfo) {
   return counts
 }
 
-module.exports = { addCounts, sumTestCounts }
+module.exports = { addCounts, countTests, sumTestCounts, countPendingTests }

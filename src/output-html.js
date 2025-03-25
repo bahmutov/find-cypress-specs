@@ -1,5 +1,50 @@
 // @ts-check
 
+import {
+  pickTaggedTestsFrom,
+  pickTaggedTests,
+  removeEmptyNodes,
+  doTagsMatch,
+  combineTags,
+  preprocessAndTags,
+} from './tagged'
+const { addCounts, countTests, countPendingTests } = require('./count')
+
+function countTheseTests(testsJson) {
+  const specsN = Object.keys(testsJson).length
+  let testsN = 0
+  Object.keys(testsJson).forEach((filename) => {
+    const n = testsJson[filename].counts.tests
+    testsN += n
+  })
+  return { specsN, testsN }
+}
+
+// poor man's bundle
+const htmlScripts = `
+  ${countTheseTests.toString()}
+
+  ${countPendingTests.toString()}
+
+  ${addCounts.toString()}
+
+  ${countTests.toString()}
+
+  ${preprocessAndTags.toString()}
+
+  ${doTagsMatch.toString()}
+
+  ${combineTags.toString()}
+
+  ${removeEmptyNodes.toString()}
+
+  ${pickTaggedTests.toString()}
+
+  ${pickTaggedTestsFrom.toString()}
+
+  ${testsToHtml.toString()}
+`
+
 function testsToHtml(tests) {
   if (!Array.isArray(tests)) {
     return ''
@@ -18,11 +63,13 @@ function testsToHtml(tests) {
           } else if (test.type === 'suite') {
             const suitesHtml = testsToHtml(test.suites)
             const testsHtml = testsToHtml(test.tests)
-            return `<li class="suite">
-                      <span class="name">${test.name}</span> ${tagList}
-                      ${suitesHtml}
-                      ${testsHtml}
-                    </li>`
+            return `
+              <li class="suite">
+                <span class="name">${test.name}</span> ${tagList}
+                ${suitesHtml}
+                ${testsHtml}
+              </li>
+            `
           } else {
             throw new Error(`Unknown test type: ${test.type}`)
           }
@@ -36,14 +83,14 @@ function testsToHtml(tests) {
  * Takes the test JSON object with specs and tags
  * and returns a full static self-contained HTML file
  * that can be used to display the tests in a browser.
+ * @param {Object} testsJson - The test JSON object with specs and tags
+ * @param {Object} tagTestCounts - The tag test counts
+ * @returns {string} - The HTML string
  */
-function toHtml(testsJson) {
-  const specsN = Object.keys(testsJson).length
-  let testsN = 0
-  Object.keys(testsJson).forEach((filename) => {
-    const n = testsJson[filename].counts.tests
-    testsN += n
-  })
+function toHtml(testsJson, tagTestCounts = {}) {
+  const { specsN, testsN } = countTheseTests(testsJson)
+
+  const allTags = Object.keys(tagTestCounts)
 
   const html = `
     <html>
@@ -68,12 +115,53 @@ function toHtml(testsJson) {
             opacity: 0.5;
           }
         </style>
+        <script>
+          ${htmlScripts}
+
+          window.findCypressSpecs = ${JSON.stringify({
+            tests: testsJson,
+            tags: tagTestCounts,
+            allTags,
+            selectedTags: [],
+          })}
+          window.findCypressSpecs.render = () => {
+            // get the selected tags from the checkboxes
+            const selectedTags = Array.from(document.querySelectorAll('input.filter-tag:checked'))
+              .map((checkbox) => checkbox.value)
+            // filter the tests based on the selected tags
+
+            let filtered = window.findCypressSpecs.tests
+            if (selectedTags.length) {
+              const testCopy = structuredClone(window.findCypressSpecs.tests)
+              filtered = pickTaggedTestsFrom(testCopy, selectedTags)
+            }
+            const { specsN, testsN } = countTheseTests(filtered)
+            document.querySelector('#specs-count').textContent = specsN
+            document.querySelector('#tests-count').textContent = testsN
+
+            const specsElement = document.querySelector('.specs')
+            specsElement.innerHTML = ''
+            Object.keys(filtered).forEach(function (filename) {
+              const tests = filtered[filename].tests
+              specsElement.innerHTML += '<li class="spec"><h2 class="filename">' + filename + '</h2>' + testsToHtml(tests) + '</li>'
+            })
+          }
+        </script>
       </head>
       <body>
         <header>
           <h1>Cypress Tests</h1>
           <p>
-            ${specsN} specs, ${testsN} tests
+            <span id="specs-count">${specsN}</span> specs, <span id="tests-count">${testsN}</span> tests
+          </p>
+          <p class="filter-tags">
+            ${allTags
+              .map(
+                (tag) =>
+                  `<input type="checkbox" class="filter-tag" value="${tag}" onchange="window.findCypressSpecs.render()"/>
+                     <span class="filter-tag-name">${tag}</span>`,
+              )
+              .join(' ')}
           </p>
         </header>
         <main>

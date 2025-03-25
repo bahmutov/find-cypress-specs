@@ -84,11 +84,14 @@ describe('HTML output', () => {
       ],
     },
   }
+  const tagTestCounts = { '@main': 2, '@user': 2, '@alpha': 1 }
+
+  beforeEach(() => {
+    const html = toHtml(json, tagTestCounts)
+    cy.document({ log: false }).invoke('write', html)
+  })
 
   it('should output HTML', () => {
-    const html = toHtml(json)
-    cy.document({ log: false }).invoke('write', html)
-
     cy.step('Title and header')
     cy.title().should('eq', 'Cypress Tests')
     cy.get('header').within(() => {
@@ -136,5 +139,100 @@ describe('HTML output', () => {
     cy.contains('.suite', 'Another suite').within(() => {
       cy.contains('.test', 'deep test')
     })
+
+    cy.step('Filter tags')
+    cy.get('.filter-tags').within(() => {
+      cy.get('.filter-tag-name').should('read', ['@main', '@user', '@alpha'])
+    })
+  })
+
+  it('includes the test object', () => {
+    cy.window()
+      .should('have.property', 'findCypressSpecs')
+      .should('have.keys', [
+        'tests',
+        'tags',
+        'selectedTags',
+        'allTags',
+        'render',
+      ])
+  })
+
+  it('filters tests by a tag', () => {
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+
+    cy.get('input[value="@user"]').check()
+
+    cy.step('Check filtered tests')
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '2')
+
+    cy.step('Shows the specs')
+
+    cy.get('ul.specs')
+      .find('li.spec')
+      .should('have.length', 2)
+      .find('.filename')
+      .should('read', [
+        'cypress/e2e/spec.cy.js',
+        'cypress/e2e/featureA/user.cy.ts',
+      ])
+
+    cy.step('Shows the tests names')
+    cy.contains('li.spec', 'spec.cy.js').within(() => {
+      cy.contains('li.test', 'shows something!')
+    })
+
+    cy.step('Check the second spec')
+    cy.contains('li.spec', 'featureA/user.cy.ts').within(() => {
+      cy.contains('li.test', 'works')
+    })
+  })
+
+  it('shows all tests if no tag is selected', () => {
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+
+    cy.step('Filter by @user')
+    cy.get('input[value="@user"]').check()
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '2')
+    cy.get('li.test').should('have.length', 2)
+
+    cy.step('Back to all tests')
+    cy.get('input[value="@user"]').uncheck()
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+    cy.get('li.test').should('have.length', 6)
+  })
+
+  it('uses OR to combine tags', () => {
+    cy.step('Filter by @user')
+    cy.get('input[value="@user"]').check()
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '2')
+    cy.get('li.test').should('have.length', 2)
+
+    cy.step('Add filter @alpha')
+    cy.get('input[value="@alpha"]').check()
+    cy.get('input[value="@user"]').should('be.checked')
+    cy.get('#specs-count').should('have.text', '2')
+    cy.get('#tests-count').should('have.text', '3')
+    cy.get('li.test').should('have.length', 3)
+  })
+
+  it('applies the parent suite tags', () => {
+    cy.get('#specs-count').should('have.text', '3')
+    cy.get('#tests-count').should('have.text', '6')
+
+    cy.step('Filter by @main')
+    cy.get('input[value="@main"]').check()
+    cy.get('#specs-count').should('have.text', '1')
+    cy.get('#tests-count').should('have.text', '2')
+    cy.get('li.test')
+      .should('have.length', 2)
+      .find('.name')
+      .should('read', ['shows something!', 'works well enough'])
   })
 })

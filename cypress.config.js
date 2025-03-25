@@ -4,6 +4,7 @@ const { getSpecs, getTests } = require('.')
 module.exports = defineConfig({
   fixturesFolder: false,
   defaultBrowser: 'electron',
+  defaultCommandTimeout: 500,
   e2e: {
     setupNodeEvents(on, config) {
       console.log('e2e setupNodeEvents')

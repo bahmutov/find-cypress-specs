@@ -323,7 +323,7 @@ if (args['--test-counts']) {
         if (args['--write-html-filename']) {
           const outputFile = args['--write-html-filename']
           debug('writing HTML file %s', outputFile)
-          const html = toHtml(jsonResults)
+          const html = toHtml(jsonResults, tagTestCounts)
           // create the directory if it does not exist
           const dir = path.dirname(outputFile)
           if (!fs.existsSync(dir)) {

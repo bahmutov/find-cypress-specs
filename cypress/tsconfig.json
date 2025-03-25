@@ -1,3 +1,6 @@
 {
-  "files": ["e2e/featureA/user.cy.ts"]
+  "files": ["e2e/featureA/user.cy.ts"],
+  "compilerOptions": {
+    "types": ["cypress", "cypress-map", "cypress-plugin-steps"]
+  }
 }
