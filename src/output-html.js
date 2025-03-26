@@ -45,6 +45,117 @@ const htmlScripts = `
   ${testsToHtml.toString()}
 `
 
+const styles = `
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #f8f9fa;
+    --text-color: #2c3e50;
+    --border-color: #e9ecef;
+    --tag-bg: #e3f2fd;
+    --tag-color: #1976d2;
+    --pending-color: #9e9e9e;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 2rem;
+  }
+
+  header {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    margin: 0 0 1rem 0;
+    color: var(--primary-color);
+  }
+
+  .filter-tags {
+    margin: 1rem 0;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-tag {
+    margin-right: 0.5rem;
+  }
+
+  .filter-tag-name {
+    color: var(--secondary-color);
+    font-weight: 500;
+  }
+
+  .specs {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .spec {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .filename {
+    color: var(--primary-color);
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+  }
+
+  .tests {
+    list-style-type: none;
+    padding-left: 1.5rem;
+    margin: 0;
+  }
+
+  .suite {
+    margin: 0.5rem 0;
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+
+  .test {
+    margin: 0.25rem 0;
+    color: var(--text-color);
+  }
+
+  .tag {
+    background-color: var(--tag-bg);
+    color: var(--tag-color);
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-left: 0.5rem;
+    font-weight: normal;
+  }
+
+  .pending {
+    color: var(--pending-color);
+    font-style: italic;
+  }
+
+  .name {
+    font-weight: 500;
+  }
+`
+
 function testsToHtml(tests) {
   if (!Array.isArray(tests)) {
     return ''
@@ -98,23 +209,7 @@ function toHtml(testsJson, tagTestCounts = {}) {
       <head>
         <title>Cypress Tests</title>
         <style>
-          .specs {
-            list-style-type: none;
-          }
-          .tag {
-            background-color: #f0f0f0;
-            padding: 0.1em 0.2em;
-            border-radius: 0.2em;
-          }
-          .suite {
-            list-style-type: square;
-          }
-          .test {
-            list-style-type: circle;
-          }
-          .pending {
-            opacity: 0.5;
-          }
+          ${styles}
         </style>
         <script>
           ${htmlScripts}
