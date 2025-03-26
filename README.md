@@ -398,7 +398,9 @@ You can generate a static self-contained HTML report with all specs, tests, and 
 $ npx find-cypress-specs --write-html-filename report/index.html
 ```
 
-Open the HTML report in your browser.
+Open the HTML report in your browser. The report should show the tests organized by spec / suite plus all test tags and allow filtering tests by the checked tags.
+
+![The report](./images/report.png)
 
 ## Details
 
