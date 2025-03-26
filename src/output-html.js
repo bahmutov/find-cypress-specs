@@ -104,6 +104,11 @@ const styles = `
     font-weight: 500;
   }
 
+  .filter-tag-count {
+    color: var(--pending-color);
+    font-weight: 300;
+  }
+
   .specs {
     list-style-type: none;
     padding: 0;
@@ -270,7 +275,9 @@ function toHtml(testsJson, tagTestCounts = {}) {
               .map(
                 (tag) =>
                   `<span class="filter-tag-container"><input type="checkbox" class="filter-tag" value="${tag}" onchange="window.findCypressSpecs.render()"/>
-                     <span class="filter-tag-name">${tag}</span></span>`,
+                     <span class="filter-tag-name">${tag}</span>
+                     <span class="filter-tag-count">(${tagTestCounts[tag]})</span>
+                  </span>`,
               )
               .join(' ')}
           </p>
