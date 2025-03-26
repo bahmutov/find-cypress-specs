@@ -91,7 +91,7 @@ describe('HTML output', () => {
     cy.document({ log: false }).invoke('write', html)
   })
 
-  it.only('should output HTML', () => {
+  it('should output HTML', () => {
     cy.step('Title and header')
     cy.title().should('eq', 'Cypress Tests')
     cy.get('header').within(() => {
