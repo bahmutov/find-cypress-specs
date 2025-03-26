@@ -174,4 +174,14 @@ describe('HTML output', () => {
       .find('.name')
       .should('read', ['shows something!', 'works well enough'])
   })
+
+  it('shows the tag counts', () => {
+    cy.get('.filter-tag-container').should('have.length', 3)
+    cy.get('.filter-tag-container')
+      .find('.filter-tag-name')
+      .should('read', ['@alpha', '@main', '@user'])
+    cy.get('.filter-tag-container')
+      .find('.filter-tag-count')
+      .should('read', ['(1)', '(2)', '(2)'])
+  })
 })
