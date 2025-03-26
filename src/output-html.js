@@ -88,8 +88,15 @@ const styles = `
     align-items: center;
   }
 
+  .filter-tag-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
   .filter-tag {
-    margin-right: 0.5rem;
+    margin-right: 0.1rem;
   }
 
   .filter-tag-name {
@@ -153,6 +160,10 @@ const styles = `
 
   .name {
     font-weight: 500;
+  }
+
+  .test .name {
+    font-weight: 300;
   }
 `
 
@@ -258,8 +269,8 @@ function toHtml(testsJson, tagTestCounts = {}) {
             ${allTags
               .map(
                 (tag) =>
-                  `<input type="checkbox" class="filter-tag" value="${tag}" onchange="window.findCypressSpecs.render()"/>
-                     <span class="filter-tag-name">${tag}</span>`,
+                  `<span class="filter-tag-container"><input type="checkbox" class="filter-tag" value="${tag}" onchange="window.findCypressSpecs.render()"/>
+                     <span class="filter-tag-name">${tag}</span></span>`,
               )
               .join(' ')}
           </p>
