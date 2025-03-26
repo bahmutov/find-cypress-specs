@@ -140,12 +140,16 @@ function toHtml(testsJson, tagTestCounts = {}) {
             document.querySelector('#specs-count').textContent = specsN
             document.querySelector('#tests-count').textContent = testsN
 
-            const specsElement = document.querySelector('.specs')
-            specsElement.innerHTML = ''
+            // form the entire HTML first
+            // then attach it to the DOM for speed
+            let specsHtml = ''
             Object.keys(filtered).forEach(function (filename) {
               const tests = filtered[filename].tests
-              specsElement.innerHTML += '<li class="spec"><h2 class="filename">' + filename + '</h2>' + testsToHtml(tests) + '</li>'
+              specsHtml += '<li class="spec"><h2 class="filename">' + filename + '</h2>' + testsToHtml(tests) + '</li>'
             })
+
+            const specsElement = document.querySelector('.specs')
+            specsElement.innerHTML = specsHtml
           }
         </script>
       </head>
