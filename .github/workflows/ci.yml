@@ -124,13 +124,24 @@ jobs:
           echo '${{ steps.find-tagged.outputs.taggedSpecsN }} Specs with tests tagged user' >> "$GITHUB_STEP_SUMMARY"
           echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Show HTML test report
+      - name: Create HTML test report
         run: npm run test-report
       - name: Save HTML test report
         uses: actions/upload-artifact@v4
         with:
           name: report
           path: report/index.html
+
+      - name: Deploy HTML test report to GH Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: report
+
+      - name: Publish the static report as static page
+        if: github.ref == 'refs/heads/main'
+        id: deployment
+        uses: actions/deploy-pages@v4
 
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v4
