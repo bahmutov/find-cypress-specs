@@ -402,6 +402,8 @@ Open the HTML report in your browser. The report should show the tests organized
 
 ![The report](./images/report.png)
 
+See an example report at [https://glebbahmutov.com/find-cypress-specs/](https://glebbahmutov.com/find-cypress-specs/)
+
 ## Details
 
 Cypress uses the resolved [configuration values](https://on.cypress.io/configuration) to find the spec files to run. It searches the `integrationFolder` for all patterns listed in `testFiles` and removes any files matching the `ignoreTestFiles` patterns.
