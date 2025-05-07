@@ -49,7 +49,8 @@
     "version-badge": "update-badge cypress",
     "count-all-tags": "npm run count-all-tags --prefix test-required-tags",
     "html-e2e": "cypress open --config specPattern=cypress/html-e2e/**/*.cy.js",
-    "test-report": "node ./bin/find --write-html-filename report/index.html"
+    "test-report": "node ./bin/find --write-html-filename report/index.html",
+    "audit": "npm audit --report --omit dev"
   },
   "repository": {
     "type": "git",
@@ -82,13 +83,13 @@
     "arg": "^5.0.1",
     "console.table": "^0.10.0",
     "debug": "^4.3.3",
-    "find-test-names": "1.29.7",
+    "find-test-names": "1.29.11",
     "globby": "^11.1.0",
     "minimatch": "^3.0.4",
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.0.1",
     "shelljs": "^0.8.5",
-    "spec-change": "^1.11.0",
+    "spec-change": "^1.11.17",
     "tsx": "^4.19.3"
   }
 }
