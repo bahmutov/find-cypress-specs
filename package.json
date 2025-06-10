@@ -2,13 +2,12 @@
   "name": "find-cypress-specs",
   "version": "0.0.0-development",
   "description": "Find Cypress spec files using the config settings",
-  "main": "src",
+  "main": "dist/index.js",
   "files": [
-    "bin",
-    "src"
+    "dist"
   ],
   "bin": {
-    "find-cypress-specs": "bin/find.js"
+    "find-cypress-specs": "dist/bin/find.js"
   },
   "engines": {
     "node": ">=18"
@@ -19,11 +18,13 @@
     ]
   },
   "scripts": {
+    "build:lib": "ncc build -o dist src/index.js",
+    "build:bin": "ncc build -o dist/bin/find.js bin/find.js",
     "test": "ava",
     "prod-deps": "npm audit --report --omit dev",
     "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
-    "demo": "DEBUG=find-cypress-specs node ./bin/find",
-    "demo-names": "DEBUG=find-cypress-specs node ./bin/find --names",
+    "demo": "DEBUG=find-cypress-specs node ./dist/bin/find.js",
+    "demo-names": "DEBUG=find-cypress-specs node ./dist/bin/find.js --names",
     "demo-sorted-by-modified": "DEBUG=find-cypress-specs node ./bin/find --sort-by-modified --set-gha-outputs",
     "demo-names-markdown": "node ./bin/find --names --markdown",
     "demo-skipped-tests": "DEBUG=find-cypress-specs node ./bin/find --names --skipped",
@@ -66,6 +67,7 @@
   },
   "homepage": "https://github.com/bahmutov/find-cypress-specs#readme",
   "devDependencies": {
+    "@vercel/ncc": "^0.38.3",
     "ava": "^6.2.0",
     "cypress": "14.2.0",
     "cypress-map": "^1.46.0",
