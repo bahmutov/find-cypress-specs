@@ -88,7 +88,7 @@
     "minimatch": "^3.0.4",
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.0.1",
-    "shelljs": "^0.8.5",
+    "shelljs": "^0.10.0",
     "spec-change": "^1.11.17",
     "tsx": "^4.19.3"
   }
