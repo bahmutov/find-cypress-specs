@@ -85,7 +85,7 @@
     "debug": "^4.3.3",
     "find-test-names": "1.29.11",
     "globby": "^11.1.0",
-    "minimatch": "^3.0.4",
+    "minimatch": "^5.1.4",
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.0.1",
     "shelljs": "^0.10.0",
