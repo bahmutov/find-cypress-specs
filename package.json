@@ -67,7 +67,7 @@
   "homepage": "https://github.com/bahmutov/find-cypress-specs#readme",
   "devDependencies": {
     "ava": "^6.2.0",
-    "cypress": "15.1.0",
+    "cypress": "15.2.0",
     "cypress-map": "^1.46.0",
     "cypress-plugin-steps": "^1.1.1",
     "dependency-version-badge": "^1.11.0",
