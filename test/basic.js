@@ -11,9 +11,9 @@ test('string ignore pattern v9', (t) => {
     version: '9.7.0',
   })
   t.deepEqual(specs, [
+    'cypress/e2e/featureA/user.cy.ts',
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
-    'cypress/e2e/featureA/user.cy.ts',
   ])
 })
 
@@ -29,9 +29,9 @@ test('array string ignore pattern v10', (t) => {
   })
 
   t.deepEqual(specs, [
+    'cypress/e2e/featureA/user.cy.ts',
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
-    'cypress/e2e/featureA/user.cy.ts',
   ])
 })
 
@@ -45,9 +45,9 @@ test('string ignore pattern v10', (t) => {
     },
   })
   t.deepEqual(specs, [
+    'cypress/e2e/featureA/user.cy.ts',
     'cypress/e2e/spec-b.cy.js',
     'cypress/e2e/spec.cy.js',
-    'cypress/e2e/featureA/user.cy.ts',
   ])
 })
 
