@@ -6,7 +6,7 @@ const debug = require('debug')('find-cypress-specs')
 const debugGit = require('debug')('find-cypress-specs:git')
 const fs = require('fs')
 const path = require('path')
-const globby = require('globby')
+const globby = require('tinyglobby')
 const minimatch = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
@@ -117,12 +117,11 @@ function findCypressSpecsV9(opts = {}, returnAbsolute = false) {
   }
   debug('options %o', options)
 
-  const files = globby.sync(options.testFiles, {
-    sort: true,
+  const files = globby.globSync(options.testFiles, {
     cwd: options.integrationFolder,
     ignore: options.ignoreTestFiles,
     absolute: returnAbsolute,
-  })
+  }).sort()
   debug('found %d file(s) %o', files.length, files)
 
   // go through the files again and eliminate files that match
@@ -206,7 +205,6 @@ function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
   }
 
   const globbyOptions = {
-    sort: true,
     ignore,
     absolute: returnAbsolute,
   }
@@ -216,7 +214,7 @@ function findCypressSpecsV10(opts = {}, type = 'e2e', returnAbsolute = false) {
   debug('globby options %s %o', options.specPattern, globbyOptions)
 
   /** @type string[] */
-  const files = globby.sync(options.specPattern, globbyOptions)
+  const files = globby.globSync(options.specPattern, globbyOptions).sort()
   debug('found %d file(s) %o', files.length, files)
 
   // go through the files again and eliminate files that match
