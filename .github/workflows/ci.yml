@@ -157,6 +157,20 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+  release:
+    needs: test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+
+      - name: Run tests 🧪
+        # https://github.com/cypress-io/github-action
+        uses: cypress-io/github-action@v6
+        with:
+          # install the dependencies only
+          runTests: false
+
       - name: Semantic Release 🚀
         # https://github.com/cycjimmy/semantic-release-action
         uses: cycjimmy/semantic-release-action@v6
