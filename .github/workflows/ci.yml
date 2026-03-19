@@ -23,7 +23,7 @@ jobs:
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         env:
           DEBUG: 'cypress:server:specs'
 
@@ -121,7 +121,7 @@ jobs:
         run: npm run demo-subfolder
 
       - name: Confirm we can run specs in subfolder
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           # we have already installed all dependencies above
           install: false
@@ -166,7 +166,7 @@ jobs:
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           # install the dependencies only
           runTests: false

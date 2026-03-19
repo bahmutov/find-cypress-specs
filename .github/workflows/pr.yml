@@ -12,7 +12,7 @@ jobs:
 
       - name: Install dependencies 📦
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           runTests: false
 
@@ -80,7 +80,7 @@ jobs:
           echo '${{ steps.find-tagged.outputs.taggedSpecs }}' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Confirm we can run specs in subfolder
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           # we have already installed all dependencies above
           install: false
@@ -95,7 +95,7 @@ jobs:
           path: report/index.html
 
       - name: Test HTML output
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           install: false
           config: specPattern=cypress/html-e2e/**/*.cy.js

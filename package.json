@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "ava",
-    "prod-deps": "npm audit --report --omit dev",
+    "prod-deps": "npm audit --omit dev",
     "cy:run": "DEBUG=cypress:cli,cypress:server:specs cypress run",
     "demo": "DEBUG=find-cypress-specs node ./bin/find",
     "demo-names": "DEBUG=find-cypress-specs node ./bin/find --names",
@@ -50,7 +50,7 @@
     "count-all-tags": "npm run count-all-tags --prefix test-required-tags",
     "html-e2e": "cypress open --config specPattern=cypress/html-e2e/**/*.cy.js",
     "test-report": "node ./bin/find --write-html-filename report/index.html",
-    "audit": "npm audit --report --omit dev"
+    "audit": "npm audit --omit dev"
   },
   "repository": {
     "type": "git",
@@ -66,7 +66,7 @@
   },
   "homepage": "https://github.com/bahmutov/find-cypress-specs#readme",
   "devDependencies": {
-    "ava": "^6.2.0",
+    "ava": "^7.0.0",
     "cypress": "15.12.0",
     "cypress-map": "^1.46.0",
     "cypress-plugin-steps": "^1.1.1",
