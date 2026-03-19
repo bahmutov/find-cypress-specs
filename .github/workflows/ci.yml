@@ -4,14 +4,13 @@ on:
     branches:
       - main
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
   test:
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     runs-on: ubuntu-22.04
     # Deploy to the github-pages environment
     environment:
@@ -159,10 +158,19 @@ jobs:
 
   release:
     needs: test
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
 
       - name: Run tests 🧪
         # https://github.com/cypress-io/github-action
