@@ -88,7 +88,7 @@
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.0.1",
     "shelljs": "^0.10.0",
-    "spec-change": "^1.11.17",
+    "spec-change": "^1.11.21",
     "tinyglobby": "^0.2.15",
     "tsx": "^4.19.3"
   }
