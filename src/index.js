@@ -10,13 +10,16 @@ const globby = require('tinyglobby')
 const { minimatch } = require('minimatch')
 const shell = require('shelljs')
 const pluralize = require('pluralize')
-const requireEveryTime = require('require-and-forget')
+
+// do we need to use the "require and forget" at all?
+// const requireEveryTime = require('require-and-forget')
 
 // Require CJS loader to resolve:
 // https://github.com/bahmutov/find-cypress-specs/issues/228
 // https://github.com/bahmutov/find-cypress-specs/issues/222
 // https://github.com/privatenumber/tsx
-require('tsx/cjs')
+// https://github.com/bahmutov/find-cypress-specs/issues/424
+const tsxEnhancedRequire = require('tsx/cjs/api').require
 
 const MINIMATCH_OPTIONS = { dot: true, matchBase: true }
 
@@ -38,14 +41,14 @@ function getConfigJson(filename = 'cypress.json') {
 function getConfigJs(filename) {
   const jsFile = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', jsFile)
-  const definedConfig = requireEveryTime(jsFile)
+  const definedConfig = tsxEnhancedRequire(jsFile, __filename)
   return definedConfig
 }
 
 function getConfigTs(filename) {
   const configFilename = path.join(process.cwd(), filename)
   debug('loading Cypress config from %s', configFilename)
-  const definedConfig = requireEveryTime(configFilename)
+  const definedConfig = tsxEnhancedRequire(configFilename, __filename)
   debug('loaded config %o', definedConfig)
   if (definedConfig && definedConfig.default) {
     // due to TS / ES6 module transpile we got the default export
@@ -117,11 +120,13 @@ function findCypressSpecsV9(opts = {}, returnAbsolute = false) {
   }
   debug('options %o', options)
 
-  const files = globby.globSync(options.testFiles, {
-    cwd: options.integrationFolder,
-    ignore: options.ignoreTestFiles,
-    absolute: returnAbsolute,
-  }).sort()
+  const files = globby
+    .globSync(options.testFiles, {
+      cwd: options.integrationFolder,
+      ignore: options.ignoreTestFiles,
+      absolute: returnAbsolute,
+    })
+    .sort()
   debug('found %d file(s) %o', files.length, files)
 
   // go through the files again and eliminate files that match

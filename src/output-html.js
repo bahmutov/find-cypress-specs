@@ -1,13 +1,13 @@
 // @ts-check
 
-import {
+const {
   pickTaggedTestsFrom,
   pickTaggedTests,
   removeEmptyNodes,
   doTagsMatch,
   combineTags,
   preprocessAndTags,
-} from './tagged'
+} = require('./tagged')
 const { addCounts, countTests, countPendingTests } = require('./count')
 
 function countTheseTests(testsJson) {

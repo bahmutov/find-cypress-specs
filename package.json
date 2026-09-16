@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "Find Cypress spec files using the config settings",
   "main": "src",
+  "type": "commonjs",
   "files": [
     "bin",
     "src"
