@@ -86,10 +86,10 @@
     "find-test-names": "1.29.19",
     "minimatch": "^10.2.4",
     "pluralize": "^8.0.0",
-    "require-and-forget": "^1.0.1",
+    "require-and-forget": "^1.1.0",
     "shelljs": "^0.10.0",
     "spec-change": "^1.11.21",
     "tinyglobby": "^0.2.15",
-    "tsx": "^4.19.3"
+    "tsx": "^4.23.13"
   }
 }
