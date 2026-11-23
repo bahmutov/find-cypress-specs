@@ -85,7 +85,7 @@
     "console.table": "^0.10.0",
     "debug": "^4.3.3",
     "find-test-names": "1.29.19",
-    "minimatch": "^10.2.4",
+    "minimatch": "^11.0.7",
     "pluralize": "^8.0.0",
     "require-and-forget": "^1.1.0",
     "shelljs": "^0.10.0",
